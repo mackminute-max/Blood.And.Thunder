@@ -71,7 +71,7 @@ export function chooseIntents(config: DeepReadonly<InitialConfiguration>, state:
       if (!rejected && mode !== 'brake' && (risk >= t.safetyCollisionRisk || conditions && ru.speedMps > conditions.safeSpeed * t.safetyOverspeedRatio && speed > conditions.safeSpeed)) rejected = 'safety_braking_required';
       const personality = (t.aggressionRisk * trait(p.aggression) + t.riskToleranceRisk * trait(p.riskTolerance)) * risk + (mode === 'conserve' ? t.patienceConserve * trait(p.patience) : 0) + t.competitiveOvertake * trait(p.competitiveness) * overtake;
       const strategy = t.strategies[entry.preRaceStrategy][mode] + (entry.preRaceStrategy === 'opportunistic' && risk < t.safetyCollisionRisk ? t.opportunisticOvertake * overtake : 0) - (entry.preRaceStrategy === 'defensive' && delta !== 0 ? t.defendRisk * risk : 0);
-      let sign = ru.activeSignId ? t.signs[ru.activeSignId][mode] : 0;
+      let sign = ru.activeSignId && !(ru.activeSignId === 'attack' && config.scenario.rules.competitionStyle === 'pure') ? t.signs[ru.activeSignId][mode] : 0;
       if (ru.activeSignId === 'push-hard') sign += t.pushOvertake * overtake;
       if (ru.activeSignId === 'defend-position') sign += delta === 0 && ahead ? t.defendStay : -t.defendRisk * risk;
       sign *= 1 + t.disciplineSign * trait(p.discipline);

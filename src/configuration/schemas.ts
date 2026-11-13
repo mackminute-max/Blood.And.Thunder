@@ -146,6 +146,7 @@ export const scenarioSchema = z.strictObject({
   weatherId: id, eventIntensity: z.enum(['disabled', 'rare', 'occasional', 'frequent', 'chaotic']),
   lethalityProfileId: id, tuningProfileId: id,
   rules: z.strictObject({
+    competitionStyle: z.enum(['combat', 'pure']).default('combat'),
     format: z.literal('circuit'), countdownTicks: count.max(10000), finishTieToleranceSeconds: finite.min(0).max(0.001), laps: count.positive(), maxTicks: count.positive(),
     finishCutoffTicks: count, disabledRemovalTicks: count,
     combatAllowed: z.boolean(), beastTargetingAllowed: z.boolean(),

@@ -111,6 +111,7 @@ export function validateSetup(scenarioInput: unknown, contentInput: unknown): { 
   unique(scenario.scriptedCommands.map(command => command.commandId), 'scenario.scriptedCommands');
   scenario.scriptedCommands.forEach((command, index) => {
     reference(command.ruId, ruIds, `scenario.scriptedCommands.${index}.ruId`);
+    if (scenario.rules.competitionStyle === 'pure' && command.type === 'raiseSign' && command.signId === 'attack') issue(`scenario.scriptedCommands.${index}`, 'Attack sign is incompatible with Pure Racing; remove it before importing');
     if (command.effectiveTick > scenario.rules.maxTicks + scenario.rules.countdownTicks) issue(`scenario.scriptedCommands.${index}.effectiveTick`, 'Command exceeds race horizon');
   });
   if (scenario.scriptedCommands.length > scenario.rules.maxCommandSubmissions) issue('scenario.scriptedCommands', 'Too many scripted commands');

@@ -14,7 +14,7 @@ export interface RaceClassification {
   components: ComponentState[]; stats: import('./combat.ts').CombatStats & import('./environment.ts').EnvironmentStats & { averageFatigue: number } & import('../simulation/rules/statistics.ts').RaceStatistics & { acceptedTransitions: number; blockedTransitions: number; startLineCrossings: number; signsUsed: number };
 }
 export interface RaceResult {
-  schemaVersion: string; simulationVersion: string; scenarioId: string; seed: string;
+  competitionStyle: 'combat' | 'pure'; schemaVersion: string; simulationVersion: string; scenarioId: string; seed: string;
   outcome: 'classified' | 'simulation_error'; finalStateHash: string; endTick: number; elapsedRaceSeconds: number;
   winnerIds: string[]; classification: RaceClassification[];
   environment: { activatedEvents: number; skippedEvents: number; scheduledExternalEvents: number };

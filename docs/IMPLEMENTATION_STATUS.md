@@ -130,3 +130,7 @@ Implemented fractional contact repair (.90→.95 controlled reproduction), own-k
 Validation: typecheck/lint/build passed; 15 focused correctness/scheduler tests passed; full suite executed 242 tests with 240 passing and two full-reference wall-clock timeouts. Those two test files then passed all 30 tests with explicit 15s/30s budgets and unchanged behavioral assertions. Browser initialization/results/export and analysis/integrity smoke scripts passed. Existing Phaser bundle-size warning remains.
 
 Owner explicitly authorized proceeding without the unavailable full audit. This gate verifies supplied-brief requirements; unseen audit acceptance criteria and four unspecified Low findings remain unverified, as recorded in V03_AUDIT_REMEDIATION.md.
+
+## v0.3 G
+
+Implemented shared-engine Combat/Pure rulesets, default Combat, persisted selector/result/batch labels, AI candidate suppression plus authoritative enforcement, Attack sign rejection and explicit intentional/incidental diagnostic classification. Four paired/negative/contact tests and browser selector/sign enforcement passed; typecheck/lint/build passed. Existing combat checks retain their assertions; full final regression follows I/J.

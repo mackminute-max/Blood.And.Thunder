@@ -39,7 +39,7 @@ export function mountRacePresentation() {
       commentary.append(next.state.tick, next.events, positionChanges(previous, next));
       const state = next.state; const dt = config.content.tuningProfiles.find(p => p.id === config!.scenario.tuningProfileId)!.tickDurationSeconds;
       get('status').textContent = `${'elapsedRaceTicks' in state ? 'Circuit race' : 'Movement harness'} · ${state.phase} · tick ${state.tick} · ${fixed(('elapsedRaceTicks' in state ? state.elapsedRaceTicks : state.tick) * dt)} s · ${config.content.weather.find(w => w.id === state.activeWeatherId)!.name}`;
-      get('race-context').textContent = `${config.scenario.name} · ${config.scenario.rules.laps} laps · ${config.scenario.lethalityProfileId} · ${config.scenario.eventIntensity} external incidents`;
+      get('race-context').textContent = `${config.scenario.rules.competitionStyle === 'pure' ? 'Pure Racing' : 'Combat Racing'} · ${config.scenario.name} · ${config.scenario.rules.laps} laps · ${config.scenario.lethalityProfileId} · ${config.scenario.eventIntensity} external incidents`;
       const rows = get('live-standings'); rows.replaceChildren();
       for (const row of standings(config, state)) {
         const tr = document.createElement('tr'); for (const text of [String(row.officialRank ?? row.order), row.name, row.status, String(row.laps), fixed(row.progress), row.finishTime === null ? `${fixed(row.gapNcu)} NCU` : `${row.finishTime.toFixed(3)} s`]) { const td = document.createElement('td'); td.textContent = text; tr.append(td); } rows.append(tr);

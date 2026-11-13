@@ -27,7 +27,7 @@ export function buildResult(config: DeepReadonly<InitialConfiguration>, state: R
   updateStandings(state);
   const dt = config.content.tuningProfiles.find(profile => profile.id === config.scenario.tuningProfileId)!.tickDurationSeconds;
   return {
-    schemaVersion: config.scenario.schemaVersion, simulationVersion: config.scenario.simulationVersion,
+    competitionStyle: config.scenario.rules.competitionStyle, schemaVersion: config.scenario.schemaVersion, simulationVersion: config.scenario.simulationVersion,
     scenarioId: config.scenario.id, seed: config.scenario.seed, outcome, finalStateHash: stateHash({ ...state, result: null }), endTick: state.tick,
     elapsedRaceSeconds: state.elapsedRaceTicks * dt,
     winnerIds: outcome === 'classified' ? state.finishRecords.filter(record => record.rank === 1).map(record => record.ruId).sort() : [],

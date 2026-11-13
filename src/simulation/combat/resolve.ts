@@ -59,7 +59,7 @@ export function resolveCombatPhase(config: DeepReadonly<InitialConfiguration>, s
     const visible = perceive(config, snapshot, target.id).objects.some(object => object.id === actor.id);
     const activeGuard = guards.has(target.id) && visible && !guarded.has(target.id) && (target.cooldowns.defense ?? 0) === 0;
     const attackId = `${state.tick}:${phase}:${plan.ruId}:${plan.weaponId}:${plan.targetRuId}`;
-    emit({ type: weapon.channel === 'ram' ? 'ram_attempt' : 'attack_attempt', ruId: actor.id, fraction: phase === 'preMove' ? 0 : phase === 'contact' ? 0 : 1, details: { ...plan, phase, attackId, channel: weapon.channel } });
+    emit({ type: weapon.channel === 'ram' ? 'ram_attempt' : 'attack_attempt', ruId: actor.id, fraction: phase === 'preMove' ? 0 : phase === 'contact' ? 0 : 1, details: { ...plan, phase, attackId, channel: weapon.channel, actionKind: weapon.channel === 'ram' ? 'deliberate_ram' : 'intentional_attack' } });
     if (activeGuard) {
       guarded.add(target.id); state.ruStates[target.id]!.cooldowns.defense = t.defenseCooldownTicks; state.ruStates[target.id]!.combatStats.defenses++;
       emit({ type: 'defense_used', ruId: target.id, fraction: phase === 'postMove' ? 1 : 0, details: { against: actor.id, attackId, phase, cooldownTicks: t.defenseCooldownTicks } });
@@ -88,7 +88,7 @@ export function resolveCombatPhase(config: DeepReadonly<InitialConfiguration>, s
       if (!Number.isFinite(impactEnergyIndex)) throw new Error('Nonfinite impact energy');
       severity = impactEnergyIndex < t.minorImpactEnergy ? 'minor' : impactEnergyIndex < t.majorImpactEnergy ? 'moderate' : 'major';
       impacts.push({ actor: actor.id, target: target.id, factor: t.impactSpeedFactor[severity] });
-      emit({ type: 'contact', ruId: actor.id, fraction: 0, details: { ...plan, attackId, phase, severity, impactEnergyIndex, deliberateLateralRam: true } });
+      emit({ type: 'contact', ruId: actor.id, fraction: 0, details: { ...plan, attackId, phase, severity, impactEnergyIndex, deliberateLateralRam: true, actionKind: 'deliberate_ram' } });
     }
     const protection = config.content.chariots.find(cart => cart.id === targetEntry.chariotId)!.protection * conditionFactor(target.chariot.band);
     const amount = Math.max(t.minimumDamage, Math.round(rawDamage * (weapon.channel === 'ram' ? t.impactDamageFactor[severity] : 1)) - Math.round(protection / t.protectionDivisor));

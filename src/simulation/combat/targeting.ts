@@ -18,10 +18,10 @@ export function targetComponents(config: DeepReadonly<InitialConfiguration>, sta
 }
 /** Pure positional predicate: no damage or cooldown changes. */
 export function attackEligibility(config: DeepReadonly<InitialConfiguration>, state: DeepReadonly<CombatState>, plan: AttackPlan): string | null {
-  const actor = state.ruStates[plan.ruId]; const target = state.ruStates[plan.targetRuId];
+  const actor = Object.hasOwn(state.ruStates, plan.ruId) ? state.ruStates[plan.ruId] : undefined; const target = Object.hasOwn(state.ruStates, plan.targetRuId) ? state.ruStates[plan.targetRuId] : undefined;
   const weapon = config.content.weapons.find(weapon => weapon.id === plan.weaponId);
   const tuning = config.content.tuningProfiles.find(profile => profile.id === config.scenario.tuningProfileId)!.combat;
-  if (!config.scenario.rules.combatAllowed) return 'combat_prohibited';
+  if (config.scenario.rules.competitionStyle === 'pure' || !config.scenario.rules.combatAllowed) return 'combat_prohibited';
   if (!actor || actor.status !== 'active') return 'actor_inactive';
   if (!target || target.status !== 'active' || target.id === actor.id) return 'target_ineligible';
   if (!weapon) return 'unknown_weapon';

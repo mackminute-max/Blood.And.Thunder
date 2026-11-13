@@ -71,6 +71,7 @@ export function mountSetupInspector(scenarioJson: string, contentJson: string, r
       const planRU = get<HTMLSelectElement>('maneuver-ru'); const priorRU = planRU.value; planRU.replaceChildren();
       for (const entry of setup.scenario.entries) planRU.add(new Option(entry.id, entry.id));
       if (setup.scenario.entries.some(entry => entry.id === priorRU)) planRU.value = priorRU;
+      get<HTMLSelectElement>('competition-style').value = setup.scenario.rules.competitionStyle;
       const controller = get<HTMLSelectElement>('controller-mode'); controller.value = setup.scenario.controller;
       const overrideRU = get<HTMLSelectElement>('override-ru'); const priorOverride = overrideRU.value; overrideRU.replaceChildren();
       for (const entry of setup.scenario.entries) overrideRU.add(new Option(entry.id, entry.id));
@@ -166,6 +167,7 @@ export function mountSetupInspector(scenarioJson: string, contentJson: string, r
   get('lower-sign').addEventListener('click', () => submit('lowerSign'));
   get('queue-override').addEventListener('click', () => submit('developerOverride'));
   get('clear-override').addEventListener('click', () => submit('developerOverride', true));
+  get('competition-style').addEventListener('change', () => void attempt(() => { const draft = savedDraft(); draft.scenario.rules.competitionStyle = get<HTMLSelectElement>('competition-style').value as 'combat' | 'pure'; const validated = validateSetup(draft.scenario, draft.content); scenario.value = JSON.stringify(validated.scenario, null, 2); refreshNumeric(); get('draft-status').textContent = 'Ruleset draft changed. Reinitialize to apply.'; }));
   get('controller-mode').addEventListener('change', () => void attempt(() => { const draft = parseSetupJson(scenario.value, 'scenario') as Record<string, unknown>; draft.controller = get<HTMLSelectElement>('controller-mode').value; scenario.value = JSON.stringify(draft, null, 2); refreshNumeric(); get('draft-status').textContent = 'Controller draft changed. Reinitialize to apply.'; }));
   get('add-maneuver').addEventListener('click', () => void attempt(() => {
     const setup = validateSetup(parseSetupJson(scenario.value, 'scenario'), parseSetupJson(content.value, 'content'));

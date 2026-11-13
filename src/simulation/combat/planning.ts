@@ -29,7 +29,7 @@ export function planCombat(config: DeepReadonly<InitialConfiguration>, state: Co
         if (!reason) { selected.push({ ruId, targetRuId: plan.targetRuId, weaponId: plan.weaponId }); slots.add(weapon.channel); }
         else emit({ type: 'attack_rejected', ruId, fraction: 0, details: { ...plan, reason, phase: 'planning', cooldownConsumed: false } });
       }
-    } else {
+    } else if (config.scenario.rules.competitionStyle !== 'pure') {
       for (const weaponId of availableWeapons(config, state, ruId)) {
         const weapon = config.content.weapons.find(weapon => weapon.id === weaponId)!;
         for (const target of visible) {

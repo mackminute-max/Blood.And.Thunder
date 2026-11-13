@@ -29,7 +29,7 @@ export function resolveContacts(config: DeepReadonly<InitialConfiguration>, stat
     const energy = (cart.weightKg + actor.beasts.length * tuning.combat.beastMassEquivalentKg) * relativeSpeed * relativeSpeed / 2;
     const severity = energy < tuning.combat.minorImpactEnergy ? 'minor' : energy < tuning.combat.majorImpactEnergy ? 'moderate' : 'major';
     impacts.push({ ids: [actor.id, target.id], factor: tuning.combat.impactSpeedFactor[severity] });
-    emit({ type: 'contact', ruId: actor.id, fraction: request.fraction, details: { ...request, accidental: true, probability, roll, perceived, energy, severity } });
+    emit({ type: 'contact', ruId: actor.id, fraction: request.fraction, details: { ...request, accidental: true, actionKind: 'incidental_contact', probability, roll, perceived, energy, severity } });
     for (const id of [actor.id, target.id]) {
       const ru = frozen.ruStates[id]!; state.ruStates[id]!.environmentStats.collisions++;
       const entry = config.scenario.entries.find(e => e.id === id)!; const protection = config.content.chariots.find(c => c.id === entry.chariotId)!.protection;

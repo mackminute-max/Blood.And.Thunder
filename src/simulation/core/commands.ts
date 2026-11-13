@@ -20,6 +20,7 @@ export function createCommandQueue(config: DeepReadonly<InitialConfiguration>) {
     else if (command.effectiveTick <= state.tick) error = 'effectiveTick must target an unprocessed tick';
     else if (command.effectiveTick > config.scenario.rules.maxTicks + config.scenario.rules.countdownTicks) error = 'Command exceeds race horizon';
     else if (!Object.hasOwn(state.ruStates, command.ruId)) error = 'Unknown RU';
+    else if (command.type === 'raiseSign' && command.signId === 'attack' && config.scenario.rules.competitionStyle === 'pure') error = 'Attack sign is incompatible with Pure Racing';
     else if (command.type === 'developerOverride' && (command.source !== 'developer' || !paused || origin === 'live' && command.effectiveTick !== state.tick + 1)) error = 'Developer overrides require paused submission for the next tick';
     else if (command.type !== 'developerOverride' && !config.scenario.entries.find(entry => entry.id === command.ruId)!.isPlayer && !(command.source === 'developer' && config.scenario.rules.allowDeveloperSignCommands)) error = 'Sign target is not the controlled RU';
     const receipt: CommandReceipt = { accepted: error === null, reason: error ?? 'queued', effectiveTick: command?.effectiveTick ?? null };
