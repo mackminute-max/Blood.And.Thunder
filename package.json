@@ -1,0 +1,38 @@
+{
+  "name": "blood-and-thunder",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.engine.json",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "build": "npm run typecheck && vite build",
+    "headless": "node scripts/headless.ts",
+    "test:browser": "node scripts/browser-smoke.mjs && node scripts/developer-smoke.mjs && node scripts/movement-smoke.mjs && node scripts/ai-smoke.mjs && node scripts/combat-smoke.mjs && node scripts/environment-smoke.mjs && node scripts/presentation-smoke.mjs && node scripts/analysis-smoke.mjs",
+    "movement": "node scripts/movement.ts",
+    "race": "node scripts/race.ts",
+    "replay": "node scripts/replay.ts",
+    "batch": "node scripts/batch.ts",
+    "compare": "node scripts/compare.ts"
+  },
+  "dependencies": {
+    "phaser": "3.90.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "26.6.6",
+    "eslint": "10.14.0",
+    "playwright": "1.65.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.2",
+    "vite": "8.3.8",
+    "vitest": "5.1.0"
+  },
+  "packageManager": "npm@11.9.0"
+}

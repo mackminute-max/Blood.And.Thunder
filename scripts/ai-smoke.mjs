@@ -1,0 +1,36 @@
+/* global document */
+import { chromium } from 'playwright';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true, args: ['--no-sandbox'] });
+try {
+  const page = await browser.newPage(); const errors = []; page.on('pageerror', error => errors.push(error.message));
+  await page.goto('http://127.0.0.1:5173'); await page.waitForFunction(() => document.documentElement.dataset.initializationReady === 'true');
+  const output = async () => JSON.parse(await page.locator('#initial-state').innerText());
+  await page.locator('#load-race-sample').click();
+  await page.locator('#sign-choice').selectOption('conserve'); await page.locator('#raise-sign').click();
+  assert.match(await page.locator('#command-feedback').innerText(), /Queued/); assert.equal((await output()).state.ruStates['ru-player'].activeSignId, null);
+  await page.locator('#step-tick').click();
+  const first = await output(); assert.equal(first.state.ruStates['ru-player'].activeSignId, 'conserve'); assert.equal(first.state.ruStates['ru-player'].signOpportunitiesRemaining, 2);
+  assert.equal(first.state.ruStates['ru-player'].aiDecision.chosen.mode, 'conserve');
+  await page.getByRole('tab', { name: 'AI', exact: true }).click(); assert.match(await page.locator('#ai-inspection').innerText(), /candidates/); assert.match(await page.locator('#ai-inspection').innerText(), /outcome/);
+  await page.getByRole('tab', { name: 'RUs', exact: true }).click(); await page.locator('#override-ru').selectOption('ru-player'); await page.locator('#override-value').fill('8');
+  await page.locator('#queue-override').click(); assert.deepEqual((await output()).state.ruStates['ru-player'].derivedOverrides, {});
+  await page.locator('#step-tick').click(); assert.equal((await output()).state.ruStates['ru-player'].derivedOverrides.maxSpeedMps, 8);
+  await page.clock.install({ time: new Date('2026-11-12T12:00:00Z') }); await page.clock.pauseAt(new Date('2026-11-12T12:00:01Z'));
+  await page.locator('#play-pause').click(); assert.equal(await page.locator('#queue-override').isDisabled(), true);
+  await page.locator('#sign-choice').selectOption('push-hard'); await page.locator('#raise-sign').click();
+  await page.locator('#play-pause').click(); await page.locator('#step-tick').click(); assert.equal((await output()).state.ruStates['ru-player'].signOpportunitiesRemaining, 1);
+  await page.locator('#sign-choice').selectOption('attack'); await page.locator('#raise-sign').click();
+  await page.locator('#sign-choice').selectOption('conserve'); await page.locator('#raise-sign').click();
+  await page.locator('#step-tick').click(); assert.equal((await output()).state.ruStates['ru-player'].signOpportunitiesRemaining, 0); assert.match(await page.locator('#command-feedback').innerText(), /No sign opportunities/);
+  assert.equal(await page.locator('#raise-sign').isDisabled(), true);
+  await page.locator('#lower-sign').click(); await page.locator('#step-tick').click(); assert.equal((await output()).state.ruStates['ru-player'].activeSignId, null);
+  await page.locator('#clear-override').click(); await page.locator('#step-tick').click(); assert.deepEqual((await output()).state.ruStates['ru-player'].derivedOverrides, {});
+  const downloading = page.waitForEvent('download'); await page.locator('#export-latest').click(); const path = await (await downloading).path();
+  const bundle = JSON.parse(readFileSync(path, 'utf8')); assert.ok(bundle.commandJournal.length >= 7);
+  const replay = JSON.parse(execFileSync(process.execPath, ['scripts/replay.ts', path], { encoding: 'utf8' })); assert.equal(replay.matchesExportedHash, true);
+  assert.deepEqual(errors, []);
+  console.log('B2 AI inspector, queued/player sign state, exhaustion/free lowering, paused labeled overrides, exported command journal and Node replay: PASS');
+} finally { await browser.close(); }

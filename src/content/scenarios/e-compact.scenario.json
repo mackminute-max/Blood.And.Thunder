@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "c2-1",
+  "simulationVersion": "0.7.0",
+  "id": "e-compact-stress",
+  "name": "E compact engineering stress circuit",
+  "seed": "BT-OVAL-SIX-001",
+  "mode": "interactive",
+  "trackId": "oval-48-4",
+  "entries": [
+    {
+      "id": "ru-player",
+      "name": "Player",
+      "isPlayer": true,
+      "driverId": "driver-player",
+      "chariotId": "chariot-player",
+      "beastIds": [
+        "beast-player-1",
+        "beast-player-2"
+      ],
+      "preRaceStrategy": "balanced",
+      "weaponIds": [
+        "short-sword"
+      ]
+    },
+    {
+      "id": "ru-iron",
+      "name": "Iron",
+      "isPlayer": false,
+      "driverId": "driver-iron",
+      "chariotId": "chariot-iron",
+      "beastIds": [
+        "beast-iron-1",
+        "beast-iron-2"
+      ],
+      "preRaceStrategy": "aggressive",
+      "weaponIds": [
+        "short-sword"
+      ]
+    },
+    {
+      "id": "ru-vulture",
+      "name": "Vulture",
+      "isPlayer": false,
+      "driverId": "driver-vulture",
+      "chariotId": "chariot-vulture",
+      "beastIds": [
+        "beast-vulture-1",
+        "beast-vulture-2"
+      ],
+      "preRaceStrategy": "sprint",
+      "weaponIds": [
+        "short-sword",
+        "short-bow"
+      ]
+    }
+  ],
+  "startingGrid": {
+    "ru-player": {
+      "segmentId": "seg-00",
+      "lane": 0
+    },
+    "ru-iron": {
+      "segmentId": "seg-00",
+      "lane": 1
+    },
+    "ru-vulture": {
+      "segmentId": "seg-00",
+      "lane": 2
+    }
+  },
+  "gridRows": [
+    {
+      "id": "front",
+      "segmentId": "seg-00",
+      "ruIds": [
+        "ru-player",
+        "ru-iron",
+        "ru-vulture"
+      ]
+    }
+  ],
+  "weatherId": "clear",
+  "eventIntensity": "occasional",
+  "lethalityProfileId": "dangerous",
+  "tuningProfileId": "baseline-a1",
+  "rules": {
+    "format": "circuit",
+    "laps": 3,
+    "maxTicks": 12,
+    "finishCutoffTicks": 100,
+    "disabledRemovalTicks": 10,
+    "combatAllowed": true,
+    "beastTargetingAllowed": true,
+    "maxSignOpportunities": 3,
+    "allowStationaryLaneChange": false,
+    "countdownTicks": 0,
+    "finishTieToleranceSeconds": 1e-06,
+    "allowDeveloperSignCommands": false,
+    "maxCommandSubmissions": 10000
+  },
+  "scriptedCommands": [],
+  "targetSpeedRatios": {
+    "ru-player": 1,
+    "ru-iron": 1,
+    "ru-vulture": 1
+  },
+  "maneuvers": [],
+  "controller": "ai",
+  "combatPlans": [],
+  "guardPlans": [],
+  "environmentPlans": []
+}

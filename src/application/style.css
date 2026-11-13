@@ -1,0 +1,36 @@
+:root { color-scheme: dark; font-family: system-ui, sans-serif; background: #101820; color: #e6e9ed; }
+body { margin: 0; } main { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+h1 { color: #e5bb79; } canvas { max-width: 100%; height: auto; }
+section { margin: 2rem 0; border-top: 1px solid #53616f; padding-top: 1rem; }
+label { display: block; margin-top: 1rem; } textarea { box-sizing: border-box; width: 100%; min-height: 18rem; font-family: monospace; }
+button { margin-top: 1rem; padding: .65rem 1rem; cursor: pointer; } pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 32rem; overflow: auto; }
+.controls { display: flex; flex-wrap: wrap; align-items: end; gap: .6rem; }
+.controls label { margin: 0; } input, select, button { font: inherit; padding: .45rem; }
+nav { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1rem 0; } nav [aria-selected=true] { background: #785022; }
+.numeric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .6rem; }
+.numeric-grid label { font-size: .85rem; overflow-wrap: anywhere; } .numeric-grid input { display: block; width: 90%; }
+.log-row { display: block; text-align: left; width: 100%; font: .8rem monospace; margin: .2rem 0; }
+#log-rows { max-height: 26rem; overflow: auto; } [hidden] { display: none !important; }
+button:disabled { cursor: default; opacity: .5; } #history-summary { overflow-wrap: anywhere; }
+main { max-width: 1440px; }
+.race-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr); gap: 1.2rem; align-items: start; }
+#viewer { width: 100%; border: 1px solid #53616f; border-radius: .5rem; overflow: hidden; }
+#viewer { aspect-ratio: 960 / 500; }
+#viewer canvas { display: block; }
+.radio { background: #1c2b35; border: 1px solid #72674d; border-radius: .5rem; padding: 0 1rem 1rem; min-height: 22rem; }
+#commentary-feed { max-height: 30rem; overflow: auto; padding-left: 1.5rem; }
+#commentary-feed li { margin: .85rem 0; line-height: 1.45; }
+[data-priority=critical] { color: #ffe18a; font-weight: 700; }
+[data-priority=high] { color: #f6c59a; }
+.race-dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.muted { color: #b3c2ca; font-size: .85rem; }
+table { border-collapse: collapse; width: 100%; } th, td { padding: .5rem; text-align: left; border-bottom: 1px solid #53616f; }
+.table-scroll { overflow-x: auto; }
+#race-results { background: #22322d; padding: 1.25rem; border: 1px solid #b4a05a; border-radius: .5rem; }
+@media (max-width: 850px) { .race-layout, .race-dashboard { grid-template-columns: 1fr; } .radio { min-height: 12rem; } }
+.race-dashboard > div { min-width: 0; }
+.race-controls { border-bottom: 1px solid #53616f; padding-bottom: .75rem; }
+section[aria-label="Player Strategy Signs"] { margin: .75rem 0; padding: .75rem; background: #1c2931; border: 1px solid #53616f; border-radius: .5rem; }
+section[aria-label="Player Strategy Signs"] h2 { font-size: 1rem; margin: 0; }
+section[aria-label="Player Strategy Signs"] p { margin: .4rem 0; font-size: .9rem; }
+section[aria-label="Player Strategy Signs"] button { margin-top: .3rem; }

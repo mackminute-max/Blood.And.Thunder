@@ -1,0 +1,36 @@
+{
+  "kind": "blood-thunder-batch-plan-e1",
+  "seeds": [
+    "E-OVAL-000",
+    "E-OVAL-001",
+    "E-OVAL-002",
+    "E-OVAL-003",
+    "E-OVAL-004",
+    "E-OVAL-005",
+    "E-OVAL-006",
+    "E-OVAL-007",
+    "E-OVAL-008",
+    "E-OVAL-009",
+    "E-OVAL-010",
+    "E-OVAL-011"
+  ],
+  "variants": [
+    {
+      "id": "baseline",
+      "scenarioFile": "src/content/oval-six-v1.scenario.json",
+      "contentFile": "src/content/reference.content.json"
+    },
+    {
+      "id": "conserve",
+      "scenarioFile": "src/content/oval-six-v1.scenario.json",
+      "contentFile": "src/content/reference.content.json",
+      "sign": "conserve"
+    },
+    {
+      "id": "attack",
+      "scenarioFile": "src/content/oval-six-v1.scenario.json",
+      "contentFile": "src/content/reference.content.json",
+      "sign": "attack"
+    }
+  ]
+}

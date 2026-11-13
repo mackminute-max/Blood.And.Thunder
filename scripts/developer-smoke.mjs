@@ -1,0 +1,86 @@
+/* global document */
+import { chromium } from 'playwright';
+import assert from 'node:assert/strict';
+import { Buffer } from 'node:buffer';
+import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true, args: ['--no-sandbox'] });
+try {
+  const page = await browser.newPage(); const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('http://127.0.0.1:5173');
+  await page.waitForFunction(() => document.documentElement.dataset.initializationReady === 'true');
+  const output = async () => JSON.parse(await page.locator('#initial-state').innerText());
+  const tab = async name => page.getByRole('tab', { name, exact: true }).click();
+  await page.locator('#engine-mode').selectOption('movement');
+  const initial = await output();
+  await tab('RUs'); await page.locator('#asset-id').selectOption('beast-player-1');
+  const previewBefore = JSON.parse(await page.locator('#derived-preview').innerText());
+  await page.locator('[data-field="speed"]').fill('90'); await page.locator('[data-field="speed"]').press('Tab');
+  const previewAfter = JSON.parse(await page.locator('#derived-preview').innerText());
+  assert.ok(previewAfter['ru-player'].maxSpeedMps > previewBefore['ru-player'].maxSpeedMps);
+  assert.deepEqual(await output(), initial); // Draft edit cannot mutate active simulation.
+  await page.getByRole('button', { name: 'Reset speed', exact: true }).click();
+  assert.equal(JSON.parse(await page.locator('#derived-preview').innerText())['ru-player'].maxSpeedMps, previewBefore['ru-player'].maxSpeedMps);
+  await page.locator('[data-field="speed"]').fill('90'); await page.locator('[data-field="speed"]').press('Tab');
+  await tab('Scenario'); await page.locator('#configuration-name').fill('A4 regression');
+  await page.locator('#save-configuration').click();
+  await page.waitForFunction(() => document.querySelector('#setup-feedback').textContent.includes('saved locally'));
+  const downloading = page.waitForEvent('download'); await page.locator('#export-configuration').click();
+  const saved = JSON.parse(readFileSync(await (await downloading).path(), 'utf8'));
+  assert.equal(saved.content.beasts.find(beast => beast.id === 'beast-player-1').speed, 90);
+  await page.reload();
+  await page.waitForFunction(() => [...document.querySelector('#saved-configurations').options].some(option => option.value === 'A4 regression'));
+  await page.locator('#saved-configurations').selectOption('A4 regression'); await page.locator('#load-configuration').click();
+  await page.waitForFunction(() => document.querySelector('#configuration-name').value === 'A4 regression');
+  assert.ok((await output()).state.ruStates['ru-player'].derived.maxSpeedMps > initial.state.ruStates['ru-player'].derived.maxSpeedMps);
+  saved.scenario.seed = 'IMPORTED-A4';
+  await page.locator('#import-configuration').setInputFiles({ name: 'scenario.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(saved)) });
+  await page.waitForFunction(() => JSON.parse(document.querySelector('#initial-state').textContent).state.seed === 'IMPORTED-A4');
+  const beforeInvalid = await output();
+  await page.locator('#import-configuration').setInputFiles({ name: 'bad.json', mimeType: 'application/json', buffer: Buffer.from('{broken') });
+  await page.waitForFunction(() => document.querySelector('#setup-feedback').textContent.includes('Invalid JSON syntax'));
+  assert.deepEqual(await output(), beforeInvalid);
+  await page.locator('#reset-configuration').click();
+  assert.equal((await output()).state.seed, initial.state.seed);
+  await page.clock.install({ time: new Date('2026-11-12T12:00:00Z') });
+  await page.clock.pauseAt(new Date('2026-11-12T12:00:01Z'));
+  await page.locator('#play-pause').click(); await page.clock.runFor(600); await page.locator('#play-pause').click();
+  const normal = await output(); assert.equal(normal.state.tick, 3);
+  await page.clock.runFor(500); assert.deepEqual(await output(), normal);
+  await page.locator('#selected-tick').selectOption('1'); assert.equal((await output()).state.tick, 1);
+  assert.match(await page.locator('#viewing-tick').innerText(), /live tick 3/);
+  await page.locator('#step-tick').click(); assert.equal((await output()).state.tick, 4); // No rewind.
+  for (const multiplier of ['2', '4']) {
+    await page.locator('#initialize').click(); await page.locator('#playback-speed').selectOption(multiplier);
+    await page.locator('#play-pause').click(); await page.clock.runFor(600 / Number(multiplier)); await page.locator('#play-pause').click();
+    assert.equal((await output()).state.tick, 3); assert.equal((await output()).stateHash, normal.stateHash);
+  }
+  const headless = JSON.parse(execFileSync(process.execPath, ['scripts/movement.ts', '3'], { encoding: 'utf8' }));
+  assert.equal(headless.latestTick.stateHash, normal.stateHash);
+  await tab('Logs'); await page.locator('#filter-ru').fill('ru-player'); await page.locator('#filter-subsystem').fill('movement');
+  await page.locator('#filter-level').selectOption('trace');
+  assert.ok(await page.locator('.log-row').count() > 0);
+  await page.locator('.log-row').first().click(); assert.match(await page.locator('#log-detail').innerText(), /ru-player/);
+  await page.locator('#filter-search').fill('no-such-event'); assert.equal(await page.locator('.log-row').count(), 0);
+  await tab('Scenario'); await page.locator('#history-limit').fill('2'); await page.locator('#record-limit').fill('4');
+  await page.locator('#initialize').click(); for (let i = 0; i < 3; i++) await page.locator('#step-tick').click();
+  const summary = JSON.parse(await page.locator('#history-summary').innerText());
+  assert.equal(summary.retainedFrames, 2); assert.equal(summary.retainedRecords, 4); assert.ok(summary.droppedFrames > 0); assert.ok(summary.droppedRecords > 0);
+  const beforeSaveFailure = await output();
+  await page.evaluate(() => Object.defineProperty(globalThis, 'indexedDB', { configurable: true, value: { open() { throw new Error('Storage unavailable'); } } }));
+  await page.locator('#save-configuration').click();
+  await page.waitForFunction(() => document.querySelector('#setup-feedback').textContent.includes('Storage unavailable'));
+  assert.deepEqual(await output(), beforeSaveFailure);
+  await page.locator('#step-tick').click(); assert.equal((await output()).state.tick, 4);
+  const exporting = page.waitForEvent('download'); await page.locator('#export-diagnostics').click();
+  const trace = JSON.parse(readFileSync(await (await exporting).path(), 'utf8'));
+  assert.equal(trace.developerRecording.frames.length, 2); assert.equal(trace.developerRecording.records.length, 4);
+  assert.equal(trace.initialConfiguration.scenario.seed, initial.state.seed);
+  const latestDownloading = page.waitForEvent('download'); await page.locator('#export-latest').click();
+  const latest = JSON.parse(readFileSync(await (await latestDownloading).path(), 'utf8'));
+  assert.equal(latest.state.tick, 4); assert.equal(latest.developerRecording, undefined);
+  assert.equal(latest.lastValidState.tick, 4);
+  assert.deepEqual(errors, []);
+  console.log('A4 numeric preview, IndexedDB reload, configuration import/export, invalid-import isolation, playback/headless determinism, storage-failure isolation, historical inspection, filters and bounded trace export: PASS');
+} finally { await browser.close(); }

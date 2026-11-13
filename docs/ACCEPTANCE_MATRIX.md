@@ -1,0 +1,35 @@
+# Prototype acceptance and regression map
+
+Simulation 0.7.0 / schema c2-1. Each reference below points to executable coverage; no single seed is treated as balance proof. `npm test` runs the unit/integration suite (including prior 1,000-seed batches). With the dev server running, `npm run test:browser` runs actual Chromium controls/export/replay checks. Batch plans and limitations are in BALANCE_REVIEW.md.
+
+| Specification D.4 | Evidence |
+|---|---|
+| 1 empty/multi-tile track movement | movement.test.ts, scheduler.test.ts |
+| 2 blocked travel discard | movement.test.ts, scheduler.test.ts, lanes.test.ts |
+| 3 accepted vacated destinations | scheduler.test.ts, lanes.test.ts |
+| 4 contested tiles/order invariance | scheduler.test.ts, lanes.test.ts |
+| 5 reciprocal swaps | scheduler.test.ts, lanes.test.ts |
+| 6 inside/outside corner tradeoff | lanes.test.ts, movement.test.ts |
+| 7 aligned/no-stagger grid | initialization.test.ts, race.test.ts |
+| 8 routine free adjacent maneuver | lanes.test.ts |
+| 9 difficult seeded control | lanes.test.ts; movement-smoke.mjs |
+| 10 melee range/arc | combat.test.ts |
+| 11 preMove disablement | combat.test.ts |
+| 12 postMove escape/no default cooldown | combat.test.ts |
+| 13 lateral ram and occupancy | combat.test.ts, environment.test.ts |
+| 14 fatigue/next-tick effects | environment.test.ts |
+| 15 damage bands/disablement | movement.test.ts, combat.test.ts |
+| 16 signs/cost/pause | ai.test.ts; ai-smoke.mjs, presentation-smoke.mjs |
+| 17 disabled/occasional event absence | environment.test.ts |
+| 18 legal hazard placement | environment.test.ts; environment-smoke.mjs |
+| 19 wreck delay/early safety/retained condition | environment.test.ts; environment-smoke.mjs |
+| 20 fractional finishes/ties/rear approach | race.test.ts |
+| 21 replay/cadence/headless | ai.test.ts, analysis.test.ts, presentation.test.ts; developer/ai/presentation/analysis smoke scripts |
+| 22 semantic input-order invariance | initialization/race/ai/combat/environment/analysis tests |
+| 23 registered paused overrides | ai.test.ts; ai-smoke.mjs |
+| 24 crash/last-valid capture | movement/race/ai/analysis tests; existing diagnostic exports |
+| 25 1,000-seed safety | lanes/ai/combat/environment test batches; e-stress.plan.json with measured 1,000-race report |
+
+Gate E additions: analysis.test.ts covers audit corruption detection, full-journal verification, initial/command-caused/failed-tick/unequal-length divergence, noncanonical versions, bounded changed paths, real lap/lane metrics, derived counters, paired quantiles, CSV escaping and CLI workflows. analysis-smoke.mjs covers actual import/audit/first-divergence, incompatible-version labels, worker batch/cancel/export and live-race isolation.
+
+Remaining limitations are explicit: compact batches are not full-reference balance proof; snapshot progress reversals are not sub-tick overtake truth; differing versions receive static noncanonical inspection only; mutable saved-state restoration and cinematic replay remain deferred. All ordinary tuning remains editable through validated pre-race configuration. No approved mechanic was changed in E.
