@@ -47,3 +47,15 @@ it('derives editor bounds from schemas rather than duplicating validation consta
   expect(fieldMetadata(['chariots', '0', 'weightKg'])).toMatchObject({ exclusiveMin: 0 });
   expect(fieldMetadata(['$scenario', 'rules', 'laps'])).toMatchObject({ exclusiveMin: 0, integer: true });
 });
+
+it('includes explicit combat and contact targets in RU filters without matching unrelated payload strings', () => {
+  const recording = createRecording();
+  recording.append({ state: { tick: 1 }, diagnostics: [], events: [
+    { type: 'attack_hit', ruId: 'ru-player', details: { ruId: 'ru-player', targetRuId: 'ru-iron' } },
+    { type: 'contact', ruId: 'ru-player', details: { actorId: 'ru-player', targetId: 'ru-iron' } },
+    { type: 'defense_used', ruId: 'ru-iron', details: { against: 'ru-player' } },
+    { type: 'command_rejected', ruId: 'ru-player', details: { reason: 'ru-iron' } },
+  ] });
+  expect(filterLogs(recording.rows(), { ruId: 'ru-iron' }).map(row => row.type)).toEqual(['attack_hit', 'contact', 'defense_used']);
+  expect(filterLogs(recording.rows(), { ruId: 'ru-player', type: 'defense_used' })).toHaveLength(1);
+});

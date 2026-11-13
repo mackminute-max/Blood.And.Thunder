@@ -28,7 +28,13 @@ export function createRecording(frameLimit = 200, recordLimit = 50000) {
       if (frames.length > frameLimit) { frames.shift(); droppedFrames++; }
       for (const [kind, records] of [['event', frame.events], ['diagnostic', frame.diagnostics]] as const) for (const detail of records) {
         const record = object(detail); const type = String(record.type ?? 'diagnostic');
-        rows.push(freezeDeep({ index: index++, kind, tick: Number(record.tick ?? frameTick(frame)), substep: Number(record.substep ?? 0), ruId: String(record.ruId ?? ''), actorIds: Array.isArray(record.actorIds) ? record.actorIds.filter((actor): actor is string => typeof actor === 'string') : [], subsystem: String(record.subsystem ?? (/^(movement_|lane_change_|handling_|collision_)/.test(type) ? 'movement' : /^(attack_|ram_|combat_|defense_|component_|ru_disabled)/.test(type) ? 'combat' : /^(hazard_|fatigue_|wreck_)/.test(type) ? 'environment' : type.startsWith('ai_') ? 'ai' : /^(command_|sign_|developer_override)/.test(type) ? 'commands' : 'rules')), level: String(record.level ?? 'info'), type, message: String(record.message ?? type), detail: copyJson(detail) }));
+        const payload = object(record.details);
+        const actorIds = [...new Set([
+          ...(Array.isArray(record.actorIds) ? record.actorIds : []),
+          record.actorId, record.targetRuId, record.targetId,
+          payload.ruId, payload.actorId, payload.targetRuId, payload.targetId, payload.against,
+        ].filter((id): id is string => typeof id === 'string' && id.length > 0))];
+        rows.push(freezeDeep({ index: index++, kind, tick: Number(record.tick ?? frameTick(frame)), substep: Number(record.substep ?? 0), ruId: String(record.ruId ?? ''), actorIds, subsystem: String(record.subsystem ?? (/^(movement_|lane_change_|handling_|collision_)/.test(type) ? 'movement' : /^(attack_|ram_|combat_|defense_|component_|ru_disabled)/.test(type) ? 'combat' : /^(hazard_|fatigue_|wreck_)/.test(type) ? 'environment' : type.startsWith('ai_') ? 'ai' : /^(command_|sign_|developer_override)/.test(type) ? 'commands' : 'rules')), level: String(record.level ?? 'info'), type, message: String(record.message ?? type), detail: copyJson(detail) }));
       }
       if (rows.length > recordLimit) { const count = rows.length - recordLimit; rows.splice(0, count); droppedRecords += count; }
     },

@@ -9,13 +9,15 @@ export function commitDamage(config: DeepReadonly<InitialConfiguration>, state: 
   for (const key of [...damage.keys()].sort()) {
     const hit = damage.get(key)!; const ru = state.ruStates[hit.ruId]!;
     const component = [ru.driver, ru.chariot, ...ru.beasts].find(component => component.id === hit.componentId && component.kind === hit.kind)!;
-    const oldHealth = component.health; component.health = Math.max(0, oldHealth - hit.total);
+    const cart = config.content.chariots.find(cart => cart.id === ru.chariot.id)!;
+    const durabilityFactor = hit.kind === 'chariot' ? Math.max(.1, 1 + (cart.durability - tuning.attributes.durabilityReference) * tuning.attributes.durabilityPerPoint) : 1;
+    const oldHealth = component.health; component.health = Math.max(0, oldHealth - hit.total / durabilityFactor);
     const percent = component.health / component.maxHealth * 100;
     component.band = percent <= 0 ? 'disabled' : percent <= tuning.condition.criticalMaxPercent ? 'critical' : percent <= tuning.condition.damagedMaxPercent ? 'damaged' : 'functional';
     const actual = oldHealth - component.health; ru.combatStats.damageReceived += actual;
     // Attribute actual HP loss across simultaneous contributors proportionally, without overkill credit.
     for (const contributor of hit.contributors) state.ruStates[contributor.ruId]!.combatStats.damageDealt += actual * contributor.amount / hit.total;
-    emit({ type: 'component_damaged', ruId: ru.id, fraction: fraction, details: { phase, componentId: component.id, componentKind: component.kind, oldHealth, newHealth: component.health, amount: actual, band: component.band, attackIds: hit.attacks } });
+    emit({ type: 'component_damaged', ruId: ru.id, fraction: fraction, details: { phase, durabilityFactor, componentId: component.id, componentKind: component.kind, oldHealth, newHealth: component.health, amount: actual, band: component.band, attackIds: hit.attacks } });
     if (oldHealth > 0 && component.health === 0) {
       const profile = config.content.lethalityProfiles.find(profile => profile.id === config.scenario.lethalityProfileId)!;
       if (component.kind === 'chariot') component.destroyed = rng.next() < profile.destructionChance;

@@ -72,16 +72,23 @@ export function moveTick(config: DeepReadonly<InitialConfiguration>, state: Pick
       const cost = segment.meters * lane.lengthMultiplier;
       if (!Number.isFinite(cost) || cost <= 0) throw new Error(`Invalid traversal cost for ${id}`);
       const needed = (1 - ru.progressInSegment) * cost;
-      if (budget.remaining < needed || budget.remaining === 0) {
-        ru.progressInSegment += budget.remaining / cost;
-        diagnostics.push({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', ruId: id, message: 'Retained ordinary fractional progress', details: { meters: budget.remaining, tileCost: cost, progressInSegment: ru.progressInSegment } });
-        budgets.delete(id);
-      } else {
+      // Keep sub-tile budgets live: an earlier contact may change their remaining travel.
+      if (budget.remaining >= needed && budget.remaining > 0) {
         if (budget.transitions >= tuning.movement.maxTransitionsPerTick) throw new Error(`Transition cap exceeded for ${id}`);
         candidates.push({ ruId: id, from: { ...ru.tile }, to: { ...lane.next }, needed, fraction: budget.timeBase + (budget.spentSinceBase + needed) / budget.baseBudget * (1 - budget.timeBase) });
       }
     }
-    if (!candidates.length) break;
+    if (!candidates.length) {
+      for (const [id, budget] of budgets) {
+        const ru = state.ruStates[id]!;
+        const segment = track.segments.find(segment => segment.id === ru.tile.segmentId)!;
+        const lane = segment.lanes.find(lane => lane.index === ru.tile.lane)!;
+        const cost = segment.meters * lane.lengthMultiplier;
+        ru.progressInSegment += budget.remaining / cost;
+        diagnostics.push({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', ruId: id, message: 'Retained ordinary fractional progress', details: { meters: budget.remaining, tileCost: cost, progressInSegment: ru.progressInSegment } });
+      }
+      break;
+    }
     candidates.sort((a, b) => a.fraction - b.fraction || (a.ruId < b.ruId ? -1 : 1));
     const earliest = candidates[0]!.fraction;
     const group = candidates.filter(candidate => candidate.fraction - earliest <= tuning.movement.arrivalEpsilon).sort((a, b) => a.ruId < b.ruId ? -1 : 1);
@@ -133,7 +140,23 @@ export function moveTick(config: DeepReadonly<InitialConfiguration>, state: Pick
         diagnostics.push({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', ruId: candidate.ruId, message: 'Accepted intermediate transition', details: { ...candidate, remainingMeters: budget.remaining, tieValue: tieValues.get(candidate.ruId) ?? null } });
       }
     }
-      const beforeContact = new Map(ids.map(id => [id, state.ruStates[id]!.speedMps]));
+    // Other RUs have travelled up to this group's timestamp, even if they have
+    // not reached a tile boundary. Account for that travel before contact can
+    // change their speed; only the remaining interval receives the speed factor.
+    const groupIds = new Set(group.map(candidate => candidate.ruId));
+    for (const [id, budget] of budgets) {
+      if (groupIds.has(id) || !tuning.environment.collision.enabled || !contacts.some(contact => contact.actorId === id || contact.targetId === id)) continue;
+      const ru = state.ruStates[id]!;
+      const segment = track.segments.find(segment => segment.id === ru.tile.segmentId)!;
+      const lane = segment.lanes.find(lane => lane.index === ru.tile.lane)!;
+      const elapsedMeters = budget.timeBase < 1
+        ? Math.max(0, Math.min(budget.remaining, budget.baseBudget * (earliest - budget.timeBase) / (1 - budget.timeBase) - budget.spentSinceBase)) : 0;
+      ru.progressInSegment += elapsedMeters / (segment.meters * lane.lengthMultiplier);
+      if (elapsedMeters > 0) emit({ type: 'movement_sample', ruId: id, fraction: earliest, progress: ru.progressInSegment });
+      budget.remaining -= elapsedMeters; budget.spent += elapsedMeters;
+      budget.timeBase = earliest; budget.baseBudget = budget.remaining; budget.spentSinceBase = 0;
+    }
+    const beforeContact = new Map(ids.map(id => [id, state.ruStates[id]!.speedMps]));
     resolveContacts(config, state, contacts, movementRng.next, emit, diagnostics, substep);
     for (const [id, budget] of budgets) {
       const ru = state.ruStates[id]!;

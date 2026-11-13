@@ -34,7 +34,8 @@ export function deriveStats(config: DeepReadonly<InitialConfiguration>, ru: Deep
   const lane = track.segments.find(segment => segment.id === ru.tile.segmentId)!.lanes.find(lane => lane.index === ru.tile.lane)!;
   const weather = config.content.weather.find(weather => weather.id === config.scenario.weatherId)!;
   const roughness = hazards.filter(h => h.type === 'track_roughness' && h.tile.segmentId === ru.tile.segmentId && h.tile.lane === ru.tile.lane).length * tuning.environment.events.roughnessTractionDelta;
-  const traction = clamp((lane.traction + roughness) * weather.traction * traitFactors(config, ru.id).traction, t.braking.tractionMin, t.braking.tractionMax);
+  const intrinsicFactor = 1 / (1 + lane.roughness * tuning.attributes.roughnessTractionWeight);
+  const traction = clamp((lane.traction * intrinsicFactor + roughness) * weather.traction * traitFactors(config, ru.id).traction, t.braking.tractionMin, t.braking.tractionMax);
   const rollingFactor = t.speed.rollingBase + t.speed.rollingScale * chariot.rollingEfficiency * chariotFactor / 100;
   const disabled = ru.status !== 'active';
   const combine = (weights: typeof t.handling, beast: number, cart: number) => clamp(weights.beast * beast + weights.chariot * cart + weights.driver * driving + weights.beastHandling * beastHandling, 0, 100);
@@ -45,7 +46,7 @@ export function deriveStats(config: DeepReadonly<InitialConfiguration>, ru: Deep
     handling: combine(t.handling, teamAgility, chariot.maneuverability * chariotFactor),
     stability: combine(t.stability, teamToughness, chariot.stability * chariotFactor),
     endurance: combine(t.endurance, teamEndurance, 0),
-    breakdown: { coordination, teamSpeed, teamPower, teamAgility, teamEndurance, teamToughness, loadFactor, fatigueFactor, teamDamage, weightedConditionDamage, damageFactor, rollingFactor, traction, driving, beastHandling, chariotFactor, ...Object.fromEntries(beasts.map(({ state }) => [`conditionFactor.${state.id}`, factor(state.band)])) },
+    breakdown: { coordination, teamSpeed, teamPower, teamAgility, teamEndurance, teamToughness, loadFactor, fatigueFactor, teamDamage, weightedConditionDamage, damageFactor, rollingFactor, traction, intrinsicFactor, nerve: driver.nerve, durability: chariot.durability, driving, beastHandling, chariotFactor, ...Object.fromEntries(beasts.map(({ state }) => [`conditionFactor.${state.id}`, factor(state.band)])) },
   };
   if (!disabled && ru.derivedOverrides?.maxSpeedMps !== undefined) { derived.breakdown['original.maxSpeedMps'] = derived.maxSpeedMps; derived.maxSpeedMps = ru.derivedOverrides.maxSpeedMps; derived.breakdown['override.maxSpeedMps'] = derived.maxSpeedMps; }
   derived.breakdown.safeCornerSpeedMps = laneConditions(config, ru.tile, derived.maxSpeedMps, derived.handling, hazards, ru.id).safeSpeed;

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "c2-1",
-  "simulationVersion": "0.7.0",
+  "simulationVersion": "0.8.0",
   "id": "oval-front-four-a3",
   "name": "Four front-row A3 lifecycle fixture",
   "seed": "BT-OVAL-SIX-001",

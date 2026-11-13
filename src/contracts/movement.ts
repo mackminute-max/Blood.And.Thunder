@@ -21,7 +21,8 @@ export type MovementState = Omit<InitialRaceState, 'tick' | 'phase' | 'ruStates'
 export type MovementEvent = {
   id: string; tick: number; substep: number; ruId: string; fraction: number;
 } & (
-  { type: 'fatigue_changed'; details: Record<string, unknown> }
+  { type: 'movement_sample'; progress: number }
+  | { type: 'fatigue_changed'; details: Record<string, unknown> }
   | { type: 'hazard_activated'; details: Record<string, unknown> }
   | { type: 'hazard_expired'; details: Record<string, unknown> }
   | { type: 'hazard_moved'; details: Record<string, unknown> }

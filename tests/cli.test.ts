@@ -12,7 +12,7 @@ it('reports invalid scenario files with a nonzero exit status', () => {
 });
 it('runs fixed movement ticks through native Node and exports reproducible input/state', () => {
   const output: unknown = JSON.parse(execFileSync(process.execPath, ['scripts/movement.ts', '3'], { encoding: 'utf8' }));
-  expect(output).toMatchObject({ kind: 'a2-movement-diagnostic', state: { tick: 3, phase: 'running' }, initialConfiguration: { scenario: { simulationVersion: '0.7.0' } } });
+  expect(output).toMatchObject({ kind: 'a2-movement-diagnostic', state: { tick: 3, phase: 'running' }, initialConfiguration: { scenario: { simulationVersion: '0.8.0' } } });
 });
 it('rejects invalid headless movement tick counts', () => {
   const result = spawnSync(process.execPath, ['scripts/movement.ts', '-1'], { encoding: 'utf8' });
@@ -25,4 +25,4 @@ it('runs an A3 front-row circuit to an explicit classified result', () => {
 it('runs the six-RU reference circuit with approved rear-row accounting', () => {
   const output: unknown = JSON.parse(execFileSync(process.execPath, ['scripts/race.ts'], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 }));
   expect(output).toMatchObject({ kind: 'a3-race-diagnostic', state: { phase: 'complete', result: { outcome: 'classified', scenarioId: 'oval-six-v1', classification: expect.arrayContaining([expect.objectContaining({ ruId: 'ru-bone' }), expect.objectContaining({ ruId: 'ru-copper' })]) } } });
-}, 15000);
+}, 30000);

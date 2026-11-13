@@ -81,3 +81,26 @@ it('rejects reciprocal exchanges in a two-segment circuit', () => {
   expect(moveTick(config, state).events.every(event => event.type === 'movement_blocked' && event.reason === 'reciprocal')).toBe(true);
   assertMovementState(state);
 });
+it.each([[2, .8], [1.25, .8], [4, .8], [2, .4]])('integrates impact time for actor speed %s and target progress %s', (speed, progress) => {
+  const setup = groupFixture(); const tuning = setup.content.tuningProfiles[0]!;
+  tuning.stats.braking.base = .1; tuning.stats.braking.perTeamAgility = 0; tuning.stats.braking.perDriving = 0;
+  tuning.environment.collision.enabled = true;
+  tuning.environment.collision.minimumClosingSpeed = 0;
+  tuning.environment.collision.avoidanceBase = 0;
+  tuning.environment.collision.avoidanceMin = 0;
+  tuning.environment.collision.avoidanceMax = 0;
+  tuning.environment.collision.damage = { minor: 0, moderate: 0, major: 0 };
+  tuning.combat.impactSpeedFactor = { minor: .5, moderate: .5, major: .5 };
+  const { config, state } = prepared(setup);
+  const actor = state.ruStates['ru-player']!; const target = state.ruStates['ru-iron']!;
+  actor.speedMps = speed!; actor.targetSpeedMps = speed!;
+  target.progressInSegment = progress!; target.speedMps = .2; target.targetSpeedMps = .2;
+  const reordered = copyJson(state); reordered.ruStates = Object.fromEntries(Object.entries(reordered.ruStates).reverse());
+  const result = moveTick(config, state); const other = moveTick(config, reordered);
+  expect(result.events.find(event => event.type === 'contact')).toMatchObject({ fraction: 1 / speed! });
+  expect(target.progressInSegment).toBeCloseTo(progress! + .2 / speed! + .1 * (1 - 1 / speed!), 12);
+  expect(target.tile.segmentId).toBe('seg-01');
+  expect(actor.progressInSegment).toBe(0);
+  expect(result.events).toEqual(other.events); expect(state).toEqual(reordered);
+  assertMovementState(state);
+});

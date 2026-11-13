@@ -122,3 +122,11 @@ Gate D presentation checks cover state alignment, factual commentary, paused sig
 - No gameplay defaults/mechanics or engine/input versions changed (0.7.0/c2-1); D-089–D-096 document provisional analysis conventions. Broad baseline finish-rate concerns remain a tuning-review question, not a claim of finished balance.
 
 Gate E tools complete the planned prototype regression/inspection workflow. Next work should review concrete pacing/attrition experiments against larger controlled samples. Full mutable snapshot restoration, campaign progression/recovery, audio/cinematic replay and unrelated mechanics remain deferred. No new gameplay canon is implied by milestone completion.
+
+## v0.3 F — supplied-brief gate (2026-11-13)
+
+Implemented fractional contact repair (.90→.95 controlled reproduction), own-key command validation/shared ID schema, mechanical attribute tuning, shared per-RU result counters, actor/target filtering and capture-authenticity comparison. Simulation version is now 0.8.0; old 0.7.0 diagnostic replays are not canonical under this engine. Historical v0.2 reports remain intact.
+
+Validation: typecheck/lint/build passed; 15 focused correctness/scheduler tests passed; full suite executed 242 tests with 240 passing and two full-reference wall-clock timeouts. Those two test files then passed all 30 tests with explicit 15s/30s budgets and unchanged behavioral assertions. Browser initialization/results/export and analysis/integrity smoke scripts passed. Existing Phaser bundle-size warning remains.
+
+Owner explicitly authorized proceeding without the unavailable full audit. This gate verifies supplied-brief requirements; unseen audit acceptance criteria and four unspecified Low findings remain unverified, as recorded in V03_AUDIT_REMEDIATION.md.

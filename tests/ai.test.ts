@@ -195,3 +195,17 @@ it('reproduces a failed tick and distinguishes later submissions at the same com
   const replayed = replayRace(JSON.parse(engine.exportBundle())); expect(replayed.latest()).toEqual(engine.latest());
   expect(replayed.commandJournal()).toEqual(engine.commandJournal());
 });
+
+it.each(['constructor', '__proto__', 'toString', 'hasOwnProperty'])('rejects inherited command target %s without mutation or replay divergence', ruId => {
+  const setup = setupAI(); const engine = createRaceEngine(setup.scenario, setup.content);
+  const before = engine.snapshot();
+  for (const source of ['player', 'developer'] as const) {
+    const input = { ...sign(`invalid-${source}`, 'conserve', 1, ruId), source };
+    expect(engine.submit(input, { paused: true }).accepted).toBe(false);
+  }
+  expect(engine.snapshot()).toEqual(before);
+  const frame = engine.step();
+  expect(frame.events.filter(event => event.type === 'command_rejected')).toHaveLength(2);
+  expect(frame.state.ruStates['ru-player']!.signOpportunitiesRemaining).toBe(3);
+  expect(replayRace(JSON.parse(engine.exportBundle())).latest()).toEqual(engine.latest());
+});

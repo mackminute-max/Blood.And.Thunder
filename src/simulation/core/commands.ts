@@ -19,7 +19,7 @@ export function createCommandQueue(config: DeepReadonly<InitialConfiguration>) {
     else if (['complete', 'error', 'halted'].includes(state.phase)) error = 'Simulation is terminal';
     else if (command.effectiveTick <= state.tick) error = 'effectiveTick must target an unprocessed tick';
     else if (command.effectiveTick > config.scenario.rules.maxTicks + config.scenario.rules.countdownTicks) error = 'Command exceeds race horizon';
-    else if (!state.ruStates[command.ruId]) error = 'Unknown RU';
+    else if (!Object.hasOwn(state.ruStates, command.ruId)) error = 'Unknown RU';
     else if (command.type === 'developerOverride' && (command.source !== 'developer' || !paused || origin === 'live' && command.effectiveTick !== state.tick + 1)) error = 'Developer overrides require paused submission for the next tick';
     else if (command.type !== 'developerOverride' && !config.scenario.entries.find(entry => entry.id === command.ruId)!.isPlayer && !(command.source === 'developer' && config.scenario.rules.allowDeveloperSignCommands)) error = 'Sign target is not the controlled RU';
     const receipt: CommandReceipt = { accepted: error === null, reason: error ?? 'queued', effectiveTick: command?.effectiveTick ?? null };
@@ -39,7 +39,7 @@ export function createCommandQueue(config: DeepReadonly<InitialConfiguration>) {
         const item = pending[index]!;
         if (!item.rejected && item.command && item.command.effectiveTick > state.tick) { index++; continue; }
         pending.splice(index, 1); state.commandCursor++;
-        const command = item.command; const ru = command ? state.ruStates[command.ruId] : undefined;
+        const command = item.command; const ru = command && Object.hasOwn(state.ruStates, command.ruId) ? state.ruStates[command.ruId] : undefined;
         let reason = item.rejected;
         if (!reason && (!ru || ru.status !== 'active')) reason = 'RU is not active';
         if (!reason && command?.type === 'raiseSign' && ru!.signOpportunitiesRemaining === 0) reason = 'No sign opportunities remaining';

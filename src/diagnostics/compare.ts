@@ -48,6 +48,8 @@ export function auditDiagnostic(input: Diagnostic) {
 /** Re-execute inputs, store only one side's compact hash trace, then recover the first mismatching frames. */
 export function compareDiagnostics(left: Diagnostic, right: Diagnostic) {
   if (left.kind !== right.kind) throw new Error('Choose two diagnostics from the same engine kind');
+  const captureAudits = { left: auditDiagnostic(left), right: auditDiagnostic(right) };
+  const capturesValid = captureAudits.left.valid && captureAudits.right.valid;
   const trace: { stateHash: string; eventHash: string }[] = [];
   execute(left, frame => trace.push({ stateHash: frame.stateHash, eventHash: stateHash(frame.events) }));
   let index = 0; let first = -1; let rightFrame: Frame | null = null;
@@ -58,7 +60,7 @@ export function compareDiagnostics(left: Diagnostic, right: Diagnostic) {
   // The checksum is the established rounded-eight prototype comparison contract.
   const a = leftFrame as Frame | null; const b = rightFrame as Frame | null;
   return { kind: 'blood-thunder-comparison-e1', canonical: true, simulationVersion: left.initialConfiguration.scenario.simulationVersion, configurationChanges: changedPaths(left.initialConfiguration, right.initialConfiguration), framesCompared: Math.min(trace.length, index), leftFrames: trace.length, rightFrames: index,
-    identical: first < 0, firstDifference: first < 0 ? null : { frameIndex: first, leftTick: a?.state.tick ?? null, rightTick: b?.state.tick ?? null, leftPhase: a?.state.phase ?? null, rightPhase: b?.state.phase ?? null, stateChanges: changedPaths(a?.state ?? null, b?.state ?? null), leftEvents: a?.events ?? [], rightEvents: b?.events ?? [], leftDiagnostics: a?.diagnostics ?? [], rightDiagnostics: b?.diagnostics ?? [] } };
+    capturesValid, captureAudits, reconstructedIdentical: first < 0, identical: capturesValid && first < 0, firstDifference: first < 0 ? null : { frameIndex: first, leftTick: a?.state.tick ?? null, rightTick: b?.state.tick ?? null, leftPhase: a?.state.phase ?? null, rightPhase: b?.state.phase ?? null, stateChanges: changedPaths(a?.state ?? null, b?.state ?? null), leftEvents: a?.events ?? [], rightEvents: b?.events ?? [], leftDiagnostics: a?.diagnostics ?? [], rightDiagnostics: b?.diagnostics ?? [] } };
 }
 
 /** Different/unsupported engine versions permit labeled static inspection only, never replay. */

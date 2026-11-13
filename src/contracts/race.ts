@@ -1,6 +1,7 @@
 import type { MovementRU, MovementState, MovementEvent, MovementDiagnostic, InvariantEvent } from './movement.ts';
 import type { DeepReadonly, ComponentState } from './initialization.ts';
 export interface RaceRU extends MovementRU {
+  raceStats: import('../simulation/rules/statistics.ts').RaceStatistics;
   initialUnwrappedCoursePosition: number; hasStartedLap: boolean; firstLapStartedAtSeconds: number | null;
   startLineCrossings: number; normalizedCoursePosition: number; acceptedTransitions: number;
   blockedTransitions: number; finishTimeSeconds: number | null;
@@ -10,7 +11,7 @@ export interface Standing { ruId: string; status: MovementRU['status']; normaliz
 export interface RaceClassification {
   ruId: string; status: MovementRU['status']; reason: string | null; rank: number | null;
   finishTimeSeconds: number | null; firstLapStartedAtSeconds: number | null; completedLaps: number; normalizedCoursePosition: number;
-  components: ComponentState[]; stats: import('./combat.ts').CombatStats & import('./environment.ts').EnvironmentStats & { averageFatigue: number } & { acceptedTransitions: number; blockedTransitions: number; startLineCrossings: number; signsUsed: number };
+  components: ComponentState[]; stats: import('./combat.ts').CombatStats & import('./environment.ts').EnvironmentStats & { averageFatigue: number } & import('../simulation/rules/statistics.ts').RaceStatistics & { acceptedTransitions: number; blockedTransitions: number; startLineCrossings: number; signsUsed: number };
 }
 export interface RaceResult {
   schemaVersion: string; simulationVersion: string; scenarioId: string; seed: string;
@@ -27,7 +28,7 @@ export type RaceState = Omit<MovementState, 'phase' | 'finishRecords' | 'ruState
 };
 export interface RaceRuleEvent {
   id: string; tick: number; substep: number;
-  type: 'race_started' | 'race_countdown' | 'lap_started' | 'lap_crossed' | 'ru_finished' | 'ru_retired' | 'ru_dnf' | 'race_finished';
+  type: 'ru_overtake' | 'race_started' | 'race_countdown' | 'lap_started' | 'lap_crossed' | 'ru_finished' | 'ru_retired' | 'ru_dnf' | 'race_finished';
   ruId: string | null; timeSeconds: number; details: Record<string, unknown>;
 }
 export type RaceEvent = MovementEvent | InvariantEvent | RaceRuleEvent;

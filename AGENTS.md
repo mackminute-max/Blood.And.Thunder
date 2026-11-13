@@ -192,3 +192,7 @@ End each coding task with a compact, factual report:
 4. **Remaining:** Known limitations, unresolved questions, and next suggested small task.
 
 Never claim a feature is finished, tested, or playable without corresponding implementation and evidence. The project owner makes final design decisions; the coding agent is responsible for implementation discipline and transparent reporting.
+
+## v0.3 task authority
+
+For owner-authorized v0.3 work, also read `Blood_and_Thunder_v0.3_Codex_Development_Instructions.md`. Its explicit owner decisions supersede earlier rules only where stated. Implement gated milestones F–J; preserve the v0.2 specification and its approved rules otherwise. Track unresolved full-audit requirements in `docs/V03_AUDIT_REMEDIATION.md`. Provisional defaults remain provisional.

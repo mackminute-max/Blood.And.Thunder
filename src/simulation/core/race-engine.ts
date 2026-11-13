@@ -1,3 +1,4 @@
+import { recordRaceStatistics } from '../rules/statistics.ts';
 import { advanceEnvironment, markDisabled, occupiesRu, assertEnvironmentState } from '../environment/lifecycle.ts';
 import { applyFatigue } from '../environment/fatigue.ts';
 import { advanceCooldowns, resolveCombatPhase, assertCombatState } from '../combat/resolve.ts';
@@ -51,7 +52,7 @@ export function createRaceEngine(scenarioInput: unknown, contentInput: unknown) 
     const relativeOrder = (segmentOrder - boundary.order + track.segments.length) % track.segments.length;
     const origin = relativeOrder === 0 ? 0 : relativeOrder - track.segments.length;
     initial.ruStates[ru.id] = {
-      ...ru, initialUnwrappedCoursePosition: origin, hasStartedLap: origin === 0,
+      ...ru, raceStats: { overtakes: 0, timeLeadingSeconds: 0, penalties: 0, incidents: 0 }, initialUnwrappedCoursePosition: origin, hasStartedLap: origin === 0,
       firstLapStartedAtSeconds: origin === 0 ? 0 : null,
       startLineCrossings: 0, normalizedCoursePosition: origin, acceptedTransitions: 0, blockedTransitions: 0, finishTimeSeconds: null,
     };
@@ -149,6 +150,7 @@ export function createRaceEngine(scenarioInput: unknown, contentInput: unknown) 
           ru.status = 'dnf'; ru.statusReason = cutoff ? 'finish_cutoff' : 'race_timeout'; ru.speedMps = 0; ru.targetSpeedMps = 0;
           ruleEvent(finalSubstep, { type: 'ru_dnf', ruId: ru.id, timeSeconds: next.elapsedRaceTicks * tuning.tickDurationSeconds, details: { reason: ru.statusReason } });
         }
+        for (const pass of recordRaceStatistics(current, next, events, tuning.tickDurationSeconds)) ruleEvent(finalSubstep, { type: 'ru_overtake', ruId: pass.ruId, timeSeconds: (next.elapsedRaceTicks - 1 + pass.fraction) * tuning.tickDurationSeconds, details: { ...pass } });
         if (Object.values(next.ruStates).every(ru => ru.status !== 'active')) {
           next.phase = 'complete'; next.result = buildResult(config, next, 'classified');
           ruleEvent(finalSubstep, { type: 'race_finished', ruId: null, timeSeconds: next.elapsedRaceTicks * tuning.tickDurationSeconds, details: { winnerIds: next.result.winnerIds } });

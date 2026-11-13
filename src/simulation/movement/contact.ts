@@ -22,7 +22,7 @@ export function resolveContacts(config: DeepReadonly<InitialConfiguration>, stat
     const entry = config.scenario.entries.find(e => e.id === actor.id)!; const driver = config.content.drivers.find(d => d.id === entry.driverId)!;
     const perceived = perceive(config, frozen, actor.id).objects.some(object => object.id === target.id);
     const awareness = driver.awareness * (actor.driver.band === 'functional' ? 1 : tuning.stats.conditionFactors[actor.driver.band]);
-    const probability = perceived ? clamp(t.avoidanceBase + (actor.derived.handling - t.skillCenter) / t.handlingDivisor + (awareness - t.skillCenter) / t.awarenessDivisor, t.avoidanceMin, t.avoidanceMax) : 0;
+    const probability = perceived ? clamp(t.avoidanceBase + (actor.derived.handling - t.skillCenter) / t.handlingDivisor + (awareness - t.skillCenter) / t.awarenessDivisor + (driver.nerve - t.skillCenter) * tuning.attributes.nerveAvoidancePerPoint, t.avoidanceMin, t.avoidanceMax) : 0;
     const roll = draw();
     if (roll < probability) { emit({ type: 'collision_avoided', ruId: actor.id, fraction: request.fraction, details: { ...request, probability, roll, perceived } }); continue; }
     const cart = config.content.chariots.find(c => c.id === entry.chariotId)!;

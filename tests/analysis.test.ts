@@ -71,3 +71,15 @@ it('runs batch JSON/CSV and first-divergence CLIs with reproducible explicit pla
     const f=compact();const e=createRaceEngine(f.scenario,f.content);e.step();const a=join(dir,'a.json');const b=join(dir,'b.json');writeFileSync(a,e.exportBundle());e.step();writeFileSync(b,e.exportBundle());const compared=JSON.parse(execFileSync(process.execPath,['scripts/compare.ts',a,b],{encoding:'utf8'}));expect(compared.identical).toBe(false);expect(compared.firstDifference.frameIndex).toBe(2);
   }finally{rmSync(dir,{recursive:true,force:true});}
 },15000);
+
+it('cannot claim capture identity when reconstructed inputs hide tampered historical evidence', () => {
+  const f = fixture(); const engine = createRaceEngine(f.scenario, f.content); engine.step();
+  const good = importDiagnostic(engine.exportBundle());
+  const altered = copyJson(good); altered.state.phase = 'complete';
+  const result = compareDiagnostics(good, altered);
+  expect(result.identical).toBe(false);
+  expect(result.reconstructedIdentical).toBe(true);
+  expect(result.capturesValid).toBe(false);
+  expect(result.captureAudits.left.valid).toBe(true);
+  expect(result.captureAudits.right.valid).toBe(false);
+});

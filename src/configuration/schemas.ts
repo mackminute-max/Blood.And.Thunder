@@ -1,9 +1,10 @@
 import { z } from 'zod';
 import { commandSchema } from './commands.ts';
+import { idSchema } from './ids.ts';
 
 export const SCHEMA_VERSION = 'c2-1' as const;
-export const SIMULATION_VERSION = '0.7.0' as const;
-const id = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/).refine(value => !['constructor', 'prototype', '__proto__'].includes(value), 'Reserved ID');
+export const SIMULATION_VERSION = '0.8.0' as const;
+const id = idSchema;
 const finite = z.number().finite();
 const stat = finite.min(0).max(100);
 const count = z.number().int().nonnegative();
@@ -90,6 +91,7 @@ const tuningSchema = z.strictObject({
   schemaVersion: version, ...named, tickDurationSeconds: positive,
   condition: z.strictObject({ criticalMaxPercent: stat, damagedMaxPercent: stat }),
   stats: statsSchema, ai: aiSchema,
+  attributes: z.strictObject({ nerveAvoidancePerPoint: finite.min(0).max(.01), durabilityPerPoint: finite.min(0).max(.01), durabilityReference: stat, roughnessTractionWeight: finite.min(0).max(1), severitySpeedWeight: finite.min(0).max(1), severityReference: finite.nonnegative() }).default({ nerveAvoidancePerPoint: .001, durabilityPerPoint: .002, durabilityReference: 70, roughnessTractionWeight: .2, severitySpeedWeight: .15, severityReference: 1 }),
   environment: z.strictObject({
     traitModifiers: z.array(z.strictObject({ traitId: id, weatherIds: ids, tractionMultiplier: positive, fatigueMultiplier: positive })),
     fatigue: z.strictObject({ basePerSecond: finite.nonnegative(), exertionBase: finite.nonnegative(), speedWeight: finite.nonnegative(), accelerationWeight: finite.nonnegative(), accelerationDivisor: positive, exertionMin: finite.nonnegative(), exertionMax: positive, enduranceBase: positive, enduranceDivisor: positive, recoverySpeedRatio: finite.min(0).max(1), recoveryPerSecond: finite.nonnegative() }),

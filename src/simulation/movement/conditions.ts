@@ -10,9 +10,12 @@ export function laneConditions(config: DeepReadonly<InitialConfiguration>, tile:
   const weather = config.content.weather.find(weather => weather.id === config.scenario.weatherId)!;
   const tuning = config.content.tuningProfiles.find(profile => profile.id === config.scenario.tuningProfileId)!.movement.handling;
   const roughness = hazards.filter(h => h.type === 'track_roughness' && h.tile.segmentId === tile.segmentId && h.tile.lane === tile.lane).length * config.content.tuningProfiles.find(p => p.id === config.scenario.tuningProfileId)!.environment.events.roughnessTractionDelta;
-  const traction = clamp((lane.traction + roughness) * weather.traction * traitFactors(config, ruId).traction, tuning.cornerTractionMin, tuning.cornerTractionMax);
-  const safeSpeed = segment.kind === 'corner' ? maxSpeed * lane.cornerSpeedFactor * traction * (tuning.cornerHandlingBase + tuning.cornerHandlingScale * handling / 100) : maxSpeed;
-  return { traction, safeSpeed, corner: segment.kind === 'corner', turn: segment.turn };
+  const attributes = config.content.tuningProfiles.find(p => p.id === config.scenario.tuningProfileId)!.attributes;
+  const intrinsicFactor = 1 / (1 + lane.roughness * attributes.roughnessTractionWeight);
+  const severityFactor = 1 / Math.max(.1, 1 + (segment.severity - attributes.severityReference) * attributes.severitySpeedWeight);
+  const traction = clamp((lane.traction * intrinsicFactor + roughness) * weather.traction * traitFactors(config, ruId).traction, tuning.cornerTractionMin, tuning.cornerTractionMax);
+  const safeSpeed = segment.kind === 'corner' ? maxSpeed * lane.cornerSpeedFactor * severityFactor * traction * (tuning.cornerHandlingBase + tuning.cornerHandlingScale * handling / 100) : maxSpeed;
+  return { traction, intrinsicFactor, severityFactor, safeSpeed, corner: segment.kind === 'corner', turn: segment.turn };
 }
 export function handlingCheck(config: DeepReadonly<InitialConfiguration>, handling: number, speed: number, conditions: ReturnType<typeof laneConditions>, draw: () => number) {
   const t = config.content.tuningProfiles.find(profile => profile.id === config.scenario.tuningProfileId)!.movement.handling;

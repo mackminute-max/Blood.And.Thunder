@@ -1,6 +1,6 @@
 {
   "schemaVersion": "c2-1",
-  "simulationVersion": "0.7.0",
+  "simulationVersion": "0.8.0",
   "id": "e-compact-stress",
   "name": "E compact engineering stress circuit",
   "seed": "BT-OVAL-SIX-001",

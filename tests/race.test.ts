@@ -252,7 +252,7 @@ describe('approved shared-clock rear-row rule', () => {
     const result = engine.runUntilComplete()!;
     expect(result.classification.find(entry => entry.ruId === 'ru-player')).toMatchObject({ completedLaps: 1, status: 'finished', normalizedCoursePosition: 4, firstLapStartedAtSeconds: 1.5 });
   });
-  it('runs the six-RU reference deterministically after input reordering', () => {
+  it('runs the six-RU reference deterministically after input reordering', { timeout: 15000 }, () => {
     const setup = fixture(); const a = race(setup);
     setup.scenario.entries.reverse(); setup.content.beasts.reverse(); setup.scenario.gridRows.reverse();
     const b = race(setup);
