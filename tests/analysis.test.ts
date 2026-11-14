@@ -23,7 +23,7 @@ it('detects altered journal receipts and latest event payloads without trusting 
 });
 it('finds the first command-caused divergent frame and changed paths/events',()=>{
   const f=fixture();const a=createRaceEngine(f.scenario,f.content);const b=createRaceEngine(f.scenario,f.content);b.submit({commandId:'s',type:'raiseSign',source:'player',effectiveTick:2,ruId:'ru-player',signId:'conserve'});
-  for(let i=0;i<3;i++){a.step();b.step();}const result=compareDiagnostics(importDiagnostic(a.exportBundle()),importDiagnostic(b.exportBundle()));expect(result.identical).toBe(false);expect(result.firstDifference?.leftTick).toBe(2);expect(result.firstDifference?.stateChanges.some(p=>p.path.endsWith('/activeSignId'))).toBe(true);expect(result.firstDifference?.rightEvents.some(e=>e.type==='sign_raised')).toBe(true);
+  for(let i=0;i<3;i++){a.step();b.step();}const result=compareDiagnostics(importDiagnostic(a.exportBundle()),importDiagnostic(b.exportBundle()));expect(result.identical).toBe(false);expect(result.firstDifference?.leftTick).toBe(2);expect(result.firstDifference?.stateChanges.some(p=>p.path.includes('/pendingSign'))).toBe(true);expect(result.firstDifference?.rightEvents.some(e=>e.type==='sign_queued')).toBe(true);
 });
 it('reconstructs canonical comparisons independently of uploaded trace ring retention',()=>{
   const f=fixture();const e=createRaceEngine(f.scenario,f.content);e.step();e.step();const a=importDiagnostic(e.exportBundle());const b=copyJson(a);b.initialConfiguration.scenario.entries.reverse();b.initialConfiguration.content.weapons.reverse();expect(compareDiagnostics(a,importDiagnostic(JSON.stringify(b))).identical).toBe(true);

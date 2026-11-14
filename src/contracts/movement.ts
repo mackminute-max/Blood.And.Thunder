@@ -45,6 +45,9 @@ export type MovementEvent = {
   | { type: 'ai_outcome'; details: Record<string, unknown> }
   | { type: 'command_accepted'; details: Record<string, unknown> }
   | { type: 'command_rejected'; details: Record<string, unknown> }
+  | { type: 'sign_queued'; details: Record<string, unknown> }
+  | { type: 'sign_activated'; details: Record<string, unknown> }
+  | { type: 'sign_cancelled'; details: Record<string, unknown> }
   | { type: 'sign_raised'; details: Record<string, unknown> }
   | { type: 'sign_lowered'; details: Record<string, unknown> }
   | { type: 'developer_override'; details: Record<string, unknown> }

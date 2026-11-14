@@ -1,3 +1,4 @@
+import { activatePendingSign } from './signs.ts';
 import { recordRaceStatistics } from '../rules/statistics.ts';
 import { advanceEnvironment, markDisabled, occupiesRu, assertEnvironmentState } from '../environment/lifecycle.ts';
 import { applyFatigue } from '../environment/fatigue.ts';
@@ -85,6 +86,7 @@ export function createRaceEngine(scenarioInput: unknown, contentInput: unknown) 
           next.raceStartedTick = countdownOnly ? next.tick : current.tick;
           next.phase = 'running';
           ruleEvent(0, { type: 'race_started', ruId: null, timeSeconds: 0, details: { raceStartedTick: next.raceStartedTick } });
+          for(const ru of Object.values(next.ruStates)) activatePendingSign(ru,next.tick,0,'starting_signal',controlEvent);
         }
       }
       if (!countdownOnly) {
@@ -116,6 +118,7 @@ export function createRaceEngine(scenarioInput: unknown, contentInput: unknown) 
           onTransition: event => {
             const ru = next.ruStates[event.ruId]!; ru.acceptedTransitions++;
             if (!event.crossedStartLine) return;
+            activatePendingSign(ru,next.tick,event.fraction,'line_crossing',activation => emit({...activation,id:'',tick:next.tick,substep:event.substep}));
             ru.startLineCrossings++;
             const timeSeconds = (next.elapsedRaceTicks - 1 + event.fraction) * tuning.tickDurationSeconds;
             if (!ru.hasStartedLap) {

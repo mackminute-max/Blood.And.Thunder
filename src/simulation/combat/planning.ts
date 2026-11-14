@@ -44,7 +44,7 @@ export function planCombat(config: DeepReadonly<InitialConfiguration>, state: Co
           const variation = noise(`${ruId}:${weaponId}:${target.id}`);
           const utility = a.attackBase + personality + sign + strategy - conditionRisk - recovery - (guard ? a.guardAttackPenalty : 0) + variation;
           if (!Number.isFinite(utility)) throw new Error('Nonfinite combat utility');
-          candidates.push({ ...plan, channel: weapon.channel, rejected, utility, factors: { personality, sign, strategy, conditionRisk, recovery, variation, guardCost: guard ? a.guardAttackPenalty : 0 } });
+          candidates.push({ ...plan, channel: weapon.channel, rejected, utility, factors: { effectiveSignMultiplier: signStrength(config,ru.activeSignId), personality, sign, strategy, conditionRisk, recovery, variation, guardCost: guard ? a.guardAttackPenalty : 0 } });
         }
       }
       for (const channel of ['driver', 'beast', 'mounted', 'ram'] as CombatChannel[]) {

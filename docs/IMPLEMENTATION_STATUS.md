@@ -138,3 +138,9 @@ Implemented shared-engine Combat/Pure rulesets, default Combat, persisted select
 ## v0.3 H
 
 All-RU numeric/nested personality/beast/strategy edits support validated old/new preview, atomic apply, guarded restoration and unsaved-draft status; per-RU controls remain. Sign utility influence has dedicated global/per-sign controls with effective values/reset, persisted in configuration; additional attribute tuning is materialized in shipped content for normal editors. Nine bulk/developer tests passed; Chromium verified 12 beasts across six RUs, apply/restore/invalid rejection, influence edits/reset and active-race isolation. Typecheck/lint/build passed.
+
+## v0.3 I
+
+Implemented pending/active sign state, line/common-start activation, retained active replacements, no-refund cancellation, free lowering with pending retained, second-pending rejection, opportunity counters, final/late crossing ordering and preserved terminal pending state. Global sign utility strength defaults to provisional 2×. Per-RU results export queued/activated/replaced/lowered/cancelled counts and final sign states. AI traces show effective utility multipliers.
+
+Validation: 61 relevant tests passed (one existing seeded batch intentionally excluded for this targeted run); typecheck/lint/build passed. Chromium AI/v0.3 checks passed, covering pending UI, cancellation accounting, tuning, live isolation, queue journal export and Node replay. Three old immediate-activation assertions were replaced with explicit v0.3 pending/crossing assertions; golden mechanics were not blindly accepted.

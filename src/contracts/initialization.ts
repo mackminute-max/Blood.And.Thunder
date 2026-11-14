@@ -6,6 +6,8 @@ export interface InitialRUState {
   id: string; tile: TileRef; progressInSegment: 0; completedLaps: 0;
   speedMps: 0; targetSpeedMps: 0; teamFatigue: 0; blockedTicks: 0;
   status: 'active' | 'disabled'; statusReason?: 'component_disabled';
+  pendingSign: { signId: import('../configuration/commands.ts').SignId; queuedAtTick: number; commandId: string; source: 'player' | 'developer' } | null;
+  signUsage: { queued: number; activated: number; replacements: number; lowered: number; cancelled: number };
   activeSignId: null; signOpportunitiesRemaining: number;
   driver: ComponentState; chariot: ComponentState; beasts: ComponentState[];
   cooldowns: Record<string, number>;

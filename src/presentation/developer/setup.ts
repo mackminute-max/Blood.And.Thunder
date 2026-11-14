@@ -131,15 +131,15 @@ export function mountSetupInspector(scenarioJson: string, contentJson: string, r
     const selected = frames.find(frame => frame.captureId === selectedTick) ?? frames.at(-1);
     if (selected) { ticks.value = String(selected.captureId); display(selected); }
     if (live) {
-      const state = live.state as { ruStates: Record<string, { status: string; activeSignId: string | null; signOpportunitiesRemaining: number; aiDecision: { chosen: { mode: string } } | null }> };
+      const state = live.state as { ruStates: Record<string, { status: string; pendingSign: {signId:string;queuedAtTick:number} | null; activeSignId: string | null; signOpportunitiesRemaining: number; aiDecision: { chosen: { mode: string } } | null }> };
       const controlled = session?.controlledRuId ? state.ruStates[session.controlledRuId] : undefined;
-      get('sign-status').textContent = controlled ? `Active sign: ${controlled.activeSignId ?? 'none'} · Opportunities: ${controlled.signOpportunitiesRemaining} · Driver behavior: ${controlled.aiDecision?.chosen.mode ?? 'fixture / awaiting decision'}` : 'No controlled player RU.';
-      for (const id of ['raise-sign', 'lower-sign']) get<HTMLButtonElement>(id).disabled = !controlled || controlled.status !== 'active' || id === 'raise-sign' && controlled.signOpportunitiesRemaining === 0 || ['complete', 'error', 'halted'].includes(framePhase(live));
+      get('sign-status').textContent = controlled ? `Active sign: ${controlled.activeSignId ?? 'none'} · Pending: ${controlled.pendingSign?.signId ?? 'none'}${controlled.pendingSign ? ' (activates at next line crossing; queued tick '+controlled.pendingSign.queuedAtTick+')' : ''} · Opportunities: ${controlled.signOpportunitiesRemaining} · Driver behavior: ${controlled.aiDecision?.chosen.mode ?? 'fixture / awaiting decision'}` : 'No controlled player RU.';
+      for (const id of ['raise-sign', 'lower-sign', 'cancel-pending-sign']) get<HTMLButtonElement>(id).disabled = !controlled || controlled.status !== 'active' || id === 'raise-sign' && (controlled.signOpportunitiesRemaining === 0 || controlled.pendingSign !== null) || ['complete', 'error', 'halted'].includes(framePhase(live));
     }
     get('history-summary').textContent = JSON.stringify(recording.summary()); renderLogs();
   };
   const run = () => {
-    stop(); session = undefined; live = undefined; for (const id of ['raise-sign', 'lower-sign', 'queue-override', 'clear-override']) get<HTMLButtonElement>(id).disabled = true; selectedTick = null; commandSequence = 0; get('command-feedback').textContent = ''; step.disabled = true; play.disabled = true;
+    stop(); session = undefined; live = undefined; for (const id of ['raise-sign', 'lower-sign', 'cancel-pending-sign', 'queue-override', 'clear-override']) get<HTMLButtonElement>(id).disabled = true; selectedTick = null; commandSequence = 0; get('command-feedback').textContent = ''; step.disabled = true; play.disabled = true;
     get<HTMLButtonElement>('export-diagnostics').disabled = true; get<HTMLButtonElement>('export-latest').disabled = true;
     try {
       recording = createRecording(Number(historyLimit.value), Number(recordLimit.value));
@@ -172,12 +172,12 @@ export function mountSetupInspector(scenarioJson: string, contentJson: string, r
       if (playing) schedule();
     }, (session?.tickDurationSeconds ?? .2) * 1000 / Number(speed.value));
   };
-  const submit = (type: 'raiseSign' | 'lowerSign' | 'developerOverride', clear = false) => {
+  const submit = (type: 'raiseSign' | 'lowerSign' | 'cancelPendingSign' | 'developerOverride', clear = false) => {
     if (!session || !live) return;
     const commandId = `ui-${++commandSequence}`; const effectiveTick = frameTick(live) + 1;
     const command = type === 'developerOverride' ? { type, commandId, effectiveTick, source: 'developer', ruId: get<HTMLSelectElement>('override-ru').value, field: get<HTMLSelectElement>('override-field').value, value: clear ? null : get<HTMLInputElement>('override-value').valueAsNumber } : { type, commandId, effectiveTick, source: 'player', ruId: session.controlledRuId, ...(type === 'raiseSign' ? { signId: get<HTMLSelectElement>('sign-choice').value } : {}) };
     const receipt = session.submit(command, { paused: !playing });
-    get('command-feedback').textContent = receipt.accepted ? `Queued ${type} for tick ${effectiveTick}; active state changes only at that boundary.` : receipt.reason;
+    get('command-feedback').textContent = receipt.accepted ? `Queued ${type} for tick ${effectiveTick}; command processes at that boundary; queued signs activate at the starting signal or next line crossing.` : receipt.reason;
   };
   let pendingBulk: ReturnType<typeof previewBulkEdit> | null = null; let bulkBefore: {scenario:string;content:string} | null = null;
   let bulkAfter: {scenario:string;content:string} | null = null;
@@ -203,6 +203,7 @@ export function mountSetupInspector(scenarioJson: string, contentJson: string, r
   }));
   get('raise-sign').addEventListener('click', () => submit('raiseSign'));
   get('lower-sign').addEventListener('click', () => submit('lowerSign'));
+  get('cancel-pending-sign').addEventListener('click', () => submit('cancelPendingSign'));
   get('queue-override').addEventListener('click', () => submit('developerOverride'));
   get('clear-override').addEventListener('click', () => submit('developerOverride', true));
   get('competition-style').addEventListener('change', () => void attempt(() => { const draft = savedDraft(); draft.scenario.rules.competitionStyle = get<HTMLSelectElement>('competition-style').value as 'combat' | 'pure'; const validated = validateSetup(draft.scenario, draft.content); scenario.value = JSON.stringify(validated.scenario, null, 2); refreshNumeric(); get('draft-status').textContent = 'Ruleset draft changed. Reinitialize to apply.'; }));

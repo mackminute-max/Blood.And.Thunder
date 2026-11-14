@@ -36,7 +36,7 @@ export function initializeRace(scenarioInput: unknown, contentInput: unknown) {
       id: entry.id, tile: { ...tile }, progressInSegment: 0, completedLaps: 0,
       speedMps: 0, targetSpeedMps: 0, teamFatigue: 0, blockedTicks: 0,
       status: disabled ? 'disabled' : 'active', ...(disabled ? { statusReason: 'component_disabled' as const } : {}),
-      activeSignId: null, signOpportunitiesRemaining: scenario.rules.maxSignOpportunities,
+      pendingSign: null, signUsage: { queued: 0, activated: 0, replacements: 0, lowered: 0, cancelled: 0 }, activeSignId: null, signOpportunitiesRemaining: scenario.rules.maxSignOpportunities,
       driver: component(driver, 'driver'), chariot: component(chariot, 'chariot'), beasts,
       cooldowns: { driver: 0, beast: 0, mounted: 0, ram: 0, defense: 0 },
     };

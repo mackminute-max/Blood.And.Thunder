@@ -10,3 +10,11 @@ F–J are not complete. Baseline and outstanding audit dependency are recorded i
 - Diagnostic comparison exposes `captureAudits`, `capturesValid` and `reconstructedIdentical`. `identical` requires both valid captures and equal reconstructed runs; an invalid capture cannot establish historical equality. Existing independent audits remain available.
 
 No race-format, bulk-edit, queued-sign, balance tuning or campaign changes have been made. No audit finding is claimed closed without the full audit.
+
+## G–I
+
+- `rules.competitionStyle` persists `combat` (default) / `pure`; Pure blocks deliberate attacks/rams in AI and authoritative resolution and rejects Attack signs/imports. Incidental collisions remain physical consequences.
+- Bulk pre-race RU editing previews all old/new asset values, validates atomically, and supports guarded original-value restoration. Beast paths affect every beast in every RU. Dedicated global/per-sign controls expose effective utility strength and default resets.
+- Signs now have separate active/pending state. Accepted raises consume at command processing; activation occurs at the common signal or next forward line crossing. Lowering does not cancel pending. Cancellation gives no refund and second pending submissions reject. Mid-movement activations affect subsequent AI decisions. UI/radio never call a merely pending sign active.
+- Default global influence is provisional 2×; per-sign defaults 1×, ranges 0–8 each. Only utility contributions scale. Existing Push Hard fatigue is separate.
+- Simulation 0.8.0 rejects canonical replay of 0.7.0 diagnostic histories: contact, counters, sign semantics and defaults changed. Do not relabel old histories to pretend replay compatibility. Historical v0.2 reports remain unchanged.

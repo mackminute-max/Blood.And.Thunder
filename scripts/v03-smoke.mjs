@@ -23,5 +23,11 @@ try {
   await page.locator('[data-field="globalStrength"]').fill('3');await page.locator('[data-field="globalStrength"]').press('Tab');
   assert.match(await page.locator('#sign-effective').innerText(),/"effectiveMultiplier": 3/);
   await page.getByRole('button',{name:'Reset globalStrength',exact:true}).click();
-  assert.deepEqual(errors,[]);console.log('v0.3 rulesets, atomic all-RU preview/apply/restore/reject, sign tuning and live isolation: PASS');
+  await page.locator('#sign-choice').selectOption('conserve');await page.locator('#raise-sign').click();await page.locator('#step-tick').click();
+  assert.equal((await output()).state.ruStates['ru-player'].activeSignId,null);assert.equal((await output()).state.ruStates['ru-player'].pendingSign.signId,'conserve');
+  assert.match(await page.locator('#sign-status').innerText(),/Pending: conserve.*next line crossing/);
+  assert.equal(await page.locator('#raise-sign').isDisabled(),true);
+  await page.locator('#lower-sign').click();await page.locator('#step-tick').click();assert.equal((await output()).state.ruStates['ru-player'].pendingSign.signId,'conserve');
+  await page.locator('#cancel-pending-sign').click();await page.locator('#step-tick').click();assert.equal((await output()).state.ruStates['ru-player'].pendingSign,null);assert.equal((await output()).state.ruStates['ru-player'].signOpportunitiesRemaining,2);
+  assert.deepEqual(errors,[]);console.log('v0.3 rulesets, atomic all-RU preview/apply/restore/reject, sign tuning, pending/lower/cancel accounting and live isolation: PASS');
 } finally {await browser.close();}

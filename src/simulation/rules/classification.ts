@@ -36,7 +36,7 @@ export function buildResult(config: DeepReadonly<InitialConfiguration>, state: R
       return { ruId: ru.id, status: ru.status, reason: ru.statusReason ?? null, rank: standing.rank,
         finishTimeSeconds: ru.finishTimeSeconds, firstLapStartedAtSeconds: ru.firstLapStartedAtSeconds, completedLaps: ru.completedLaps, normalizedCoursePosition: ru.normalizedCoursePosition,
         components: [ru.driver, ru.chariot, ...ru.beasts],
-        stats: { ...ru.raceStats, ...ru.combatStats, ...ru.environmentStats, averageFatigue: ru.environmentStats.fatigueSamples ? ru.environmentStats.fatigueTotal / ru.environmentStats.fatigueSamples : 0, acceptedTransitions: ru.acceptedTransitions, blockedTransitions: ru.blockedTransitions, startLineCrossings: ru.startLineCrossings, signsUsed: config.scenario.rules.maxSignOpportunities - ru.signOpportunitiesRemaining } };
+        stats: { ...ru.raceStats, ...ru.combatStats, ...ru.environmentStats, averageFatigue: ru.environmentStats.fatigueSamples ? ru.environmentStats.fatigueTotal / ru.environmentStats.fatigueSamples : 0, acceptedTransitions: ru.acceptedTransitions, blockedTransitions: ru.blockedTransitions, startLineCrossings: ru.startLineCrossings, signUsage: ru.signUsage, activeSignId: ru.activeSignId, pendingSign: ru.pendingSign, signsUsed: config.scenario.rules.maxSignOpportunities - ru.signOpportunitiesRemaining } };
     }),
     environment: { activatedEvents: state.environment.activatedEvents, skippedEvents: state.environment.skippedEvents, scheduledExternalEvents: state.environment.schedule.filter(incident => incident.source === 'external').length },
     unavailableStatistics: [],

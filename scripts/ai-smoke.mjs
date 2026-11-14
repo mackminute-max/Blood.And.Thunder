@@ -22,9 +22,14 @@ try {
   await page.locator('#play-pause').click(); assert.equal(await page.locator('#queue-override').isDisabled(), true);
   await page.locator('#sign-choice').selectOption('push-hard'); await page.locator('#raise-sign').click();
   await page.locator('#play-pause').click(); await page.locator('#step-tick').click(); assert.equal((await output()).state.ruStates['ru-player'].signOpportunitiesRemaining, 1);
+  assert.equal((await output()).state.ruStates['ru-player'].activeSignId,'conserve');
+  assert.equal((await output()).state.ruStates['ru-player'].pendingSign.signId,'push-hard');
+  assert.equal(await page.locator('#raise-sign').isDisabled(),true);
+  await page.locator('#cancel-pending-sign').click();await page.locator('#step-tick').click();
+  assert.equal((await output()).state.ruStates['ru-player'].signOpportunitiesRemaining,1);
   await page.locator('#sign-choice').selectOption('attack'); await page.locator('#raise-sign').click();
   await page.locator('#sign-choice').selectOption('conserve'); await page.locator('#raise-sign').click();
-  await page.locator('#step-tick').click(); assert.equal((await output()).state.ruStates['ru-player'].signOpportunitiesRemaining, 0); assert.match(await page.locator('#command-feedback').innerText(), /No sign opportunities/);
+  await page.locator('#step-tick').click(); assert.equal((await output()).state.ruStates['ru-player'].signOpportunitiesRemaining, 0); assert.match(await page.locator('#command-feedback').innerText(), /already pending/);
   assert.equal(await page.locator('#raise-sign').isDisabled(), true);
   await page.locator('#lower-sign').click(); await page.locator('#step-tick').click(); assert.equal((await output()).state.ruStates['ru-player'].activeSignId, null);
   await page.locator('#clear-override').click(); await page.locator('#step-tick').click(); assert.deepEqual((await output()).state.ruStates['ru-player'].derivedOverrides, {});

@@ -1,3 +1,4 @@
+import { activatePendingSign } from './signs.ts';
 import { initializeEnvironment, advanceEnvironment, markDisabled, occupiesRu, assertEnvironmentState } from '../environment/lifecycle.ts';
 import { applyFatigue } from '../environment/fatigue.ts';
 import { advanceCooldowns, resolveCombatPhase, assertCombatState } from '../combat/resolve.ts';
@@ -50,6 +51,7 @@ export function createMovementEngine(scenarioInput: unknown, contentInput: unkno
       const emit = (event: MovementEventInput) => events.push({ ...event, id: '', tick: next.tick, substep: 0 });
       try {
         commands.apply(next, emit);
+        if(current.tick===0) for(const ru of Object.values(next.ruStates)) activatePendingSign(ru,next.tick,0,'starting_signal',emit);
         advanceCooldowns(next);
         advanceEnvironment(config, next, next.tick, emit, diagnostics);
         const startSpeeds = new Map(Object.values(next.ruStates).filter(ru => ru.status === 'active').map(ru => [ru.id, ru.speedMps]));
@@ -61,7 +63,7 @@ export function createMovementEngine(scenarioInput: unknown, contentInput: unkno
         const plans = config.scenario.controller === 'ai' ? chooseIntents(config, next, next.tick, emit) : undefined;
         const combat = planCombat(config, next, next.tick, emit, diagnostics);
         resolveCombatPhase(config, next, combat.plans, combat.guards, 'preMove', emit, diagnostics);
-        const movement = moveTick(config, next, { ...(plans ? { lanePlans: plans } : {}), afterLateral: (contactEmit, trace) => resolveCombatPhase(config, next, combat.plans, combat.guards, 'contact', contactEmit, trace) });
+        const movement = moveTick(config, next, { onLineCrossing: (event,emit) => activatePendingSign(next.ruStates[event.ruId]!,next.tick,event.fraction,'line_crossing',emit), ...(plans ? { lanePlans: plans } : {}), afterLateral: (contactEmit, trace) => resolveCombatPhase(config, next, combat.plans, combat.guards, 'contact', contactEmit, trace) });
         for (const ru of Object.values(next.ruStates)) if (ru.aiDecision?.movementTick === next.tick) diagnostics.push({ tick: next.tick, substep: 0, level: 'trace', subsystem: 'ai', ruId: ru.id, message: 'Perception, candidate utility and chosen intent', details: { decision: ru.aiDecision } });
         events.push(...movement.events);
         const postSubstep = Math.max(0, ...movement.events.map(event => event.substep)) + 1;

@@ -897,7 +897,7 @@
       },
       "ai": {
         "signInfluence": {
-          "globalStrength": 1,
+          "globalStrength": 2,
           "perSign": {
             "push-hard": 1,
             "defend-position": 1,

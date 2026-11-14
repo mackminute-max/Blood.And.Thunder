@@ -34,6 +34,9 @@ export function createCommentary(config: DeepReadonly<InitialConfiguration>, set
           case 'contact': if (d.accidental === true) add(e, d.severity === 'major' ? 'high' : 'medium', `${actor} makes ${String(d.severity)} contact with ${name(d.targetId)}.`); break;
           case 'hazard_activated': { const hazard = d.hazard as { type: string }; add(e, 'medium', hazard.type === 'animal_crossing' ? 'An animal enters the course—watch that lane!' : hazard.type === 'debris_spawn' ? 'Debris is on the course!' : 'A patch of rough track develops on the course.'); break; }
           case 'wreck_removed': add(e, 'medium', `${actor}'s wreck is cleared from the course.`); break;
+          case 'sign_queued': add(e, 'low', `${actor}'s ${String(d.pendingSign).replaceAll('-', ' ')} sign is queued for the next line crossing.`); break;
+          case 'sign_cancelled': add(e, 'low', `${actor}'s pending sign is cancelled; its opportunity is not refunded.`); break;
+          case 'sign_activated':
           case 'sign_raised': add(e, 'medium', `${actor}'s ${String(d.newValue ?? 'strategy').replaceAll('-', ' ')} sign is active; the driver still chooses the response.`); break;
           case 'sign_lowered': add(e, 'low', `${actor}'s sign is lowered.`); break;
           case 'lane_change_resolved': if (e.accepted) add(e, 'low', `${actor} moves to lane ${e.to.lane + 1}.`); break;

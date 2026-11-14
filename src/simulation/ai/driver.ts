@@ -79,7 +79,7 @@ export function chooseIntents(config: DeepReadonly<InitialConfiguration>, state:
       const draw = noiseBudget[candidateIndex++]!;
       const noise = rejected ? 0 : (draw * 2 - 1) * t.noise;
       const switching = !ru.aiMemory.reevaluate && !ru.aiMemory.lastFailed && ru.aiMemory.targetLane !== null && laneIndex !== ru.aiMemory.targetLane ? -t.switchPenalty : 0;
-      const factors = { hazard: -environment.hazardUtilityPenalty * hazardRisk, progress: t.progressWeight * progress, overtake: t.overtakeWeight * overtake, collision: -t.collisionWeight * risk, fatigue: -t.fatigueWeight * fatigue, corner: -t.cornerWeight * overspeed, personality, strategy, sign, noise, switching, collisionRisk: risk };
+      const factors = { effectiveSignMultiplier: signStrength(config,ru.activeSignId), hazard: -environment.hazardUtilityPenalty * hazardRisk, progress: t.progressWeight * progress, overtake: t.overtakeWeight * overtake, collision: -t.collisionWeight * risk, fatigue: -t.fatigueWeight * fatigue, corner: -t.cornerWeight * overspeed, personality, strategy, sign, noise, switching, collisionRisk: risk };
       const rawUtility = t.base + factors.hazard + factors.progress + factors.overtake + factors.collision + factors.fatigue + factors.corner + personality + strategy + sign + noise + switching;
       if (!Number.isFinite(rawUtility)) throw new Error(`Nonfinite AI utility for ${id}`);
       candidates.push({ id: candidateId, mode, laneDelta: delta, targetLane: laneIndex, targetSpeedMps: speed, rejected, utility: clamp(rawUtility, 0, 100), factors: { ...factors, rawUtility } });

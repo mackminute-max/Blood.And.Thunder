@@ -21,6 +21,8 @@ export function createCommandQueue(config: DeepReadonly<InitialConfiguration>) {
     else if (command.effectiveTick > config.scenario.rules.maxTicks + config.scenario.rules.countdownTicks) error = 'Command exceeds race horizon';
     else if (!Object.hasOwn(state.ruStates, command.ruId)) error = 'Unknown RU';
     else if (command.type === 'raiseSign' && command.signId === 'attack' && config.scenario.rules.competitionStyle === 'pure') error = 'Attack sign is incompatible with Pure Racing';
+    else if (command.type === 'raiseSign' && state.ruStates[command.ruId]!.pendingSign) error = 'A sign is already pending; activate or cancel it first';
+    else if (command.type === 'raiseSign' && state.ruStates[command.ruId]!.signOpportunitiesRemaining === 0) error = 'No sign opportunities remaining';
     else if (command.type === 'developerOverride' && (command.source !== 'developer' || !paused || origin === 'live' && command.effectiveTick !== state.tick + 1)) error = 'Developer overrides require paused submission for the next tick';
     else if (command.type !== 'developerOverride' && !config.scenario.entries.find(entry => entry.id === command.ruId)!.isPlayer && !(command.source === 'developer' && config.scenario.rules.allowDeveloperSignCommands)) error = 'Sign target is not the controlled RU';
     const receipt: CommandReceipt = { accepted: error === null, reason: error ?? 'queued', effectiveTick: command?.effectiveTick ?? null };
@@ -43,6 +45,7 @@ export function createCommandQueue(config: DeepReadonly<InitialConfiguration>) {
         const command = item.command; const ru = command && Object.hasOwn(state.ruStates, command.ruId) ? state.ruStates[command.ruId] : undefined;
         let reason = item.rejected;
         if (!reason && (!ru || ru.status !== 'active')) reason = 'RU is not active';
+        if (!reason && command?.type === 'raiseSign' && ru!.pendingSign) reason = 'A sign is already pending; activate or cancel it first';
         if (!reason && command?.type === 'raiseSign' && ru!.signOpportunitiesRemaining === 0) reason = 'No sign opportunities remaining';
         const base = { ruId: command?.ruId ?? '', fraction: 0 };
         if (reason || !command || !ru) { emit({ ...base, type: 'command_rejected', details: { command: item.entry.input, reason, submittedAtTick: item.entry.submittedAtTick, effectiveTick: state.tick } }); continue; }
@@ -56,10 +59,18 @@ export function createCommandQueue(config: DeepReadonly<InitialConfiguration>) {
           emit({ ...base, type: 'developer_override', details: { commandId: command.commandId, field: command.field, oldValue, newValue: command.field === 'teamFatigue' ? ru.teamFatigue : ru.derivedOverrides.maxSpeedMps ?? null, source: command.source, effectiveTick: state.tick } });
         } else {
           const oldValue = ru.activeSignId;
-          if (command.type === 'raiseSign') { ru.signOpportunitiesRemaining--; ru.activeSignId = command.signId; }
-          else ru.activeSignId = null;
-          if (oldValue !== ru.activeSignId) ru.aiMemory.reevaluate = true;
-          emit({ ...base, type: command.type === 'raiseSign' ? 'sign_raised' : 'sign_lowered', details: { commandId: command.commandId, oldValue, newValue: ru.activeSignId, opportunitiesRemaining: ru.signOpportunitiesRemaining, source: command.source, effectiveTick: state.tick } });
+          if (command.type === 'raiseSign') {
+            ru.signOpportunitiesRemaining--;ru.signUsage.queued++;
+            if(oldValue!==null)ru.signUsage.replacements++;
+            ru.pendingSign={signId:command.signId,queuedAtTick:state.tick,commandId:command.commandId,source:command.source};
+            emit({...base,type:'sign_queued',details:{...ru.pendingSign,oldValue,pendingSign:command.signId,opportunitiesRemaining:ru.signOpportunitiesRemaining,effectiveTick:state.tick}});
+          } else if(command.type === 'cancelPendingSign') {
+            const cancelled=ru.pendingSign;if(cancelled)ru.signUsage.cancelled++;ru.pendingSign=null;
+            emit({...base,type:'sign_cancelled',details:{commandId:command.commandId,cancelled,refunded:false,opportunitiesRemaining:ru.signOpportunitiesRemaining,effectiveTick:state.tick}});
+          } else {
+            ru.activeSignId=null;ru.signUsage.lowered++;ru.aiMemory.reevaluate=true;
+            emit({...base,type:'sign_lowered',details:{commandId:command.commandId,oldValue,newValue:null,pendingSign:ru.pendingSign,opportunitiesRemaining:ru.signOpportunitiesRemaining,effectiveTick:state.tick}});
+          }
         }
       }
     },

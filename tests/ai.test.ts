@@ -76,17 +76,19 @@ it('sign preferences cannot force unsafe movement or bypass combat eligibility',
   ru.activeSignId = 'attack'; chooseIntents(engine.initialConfiguration, state, 2, () => {}); planCombat(engine.initialConfiguration, state, 2, () => {}, []);
   expect(ru.combatDecision!.selected.every(plan => ru.combatDecision!.candidates.some(candidate => candidate.weaponId === plan.weaponId && candidate.targetRuId === plan.targetRuId && candidate.rejected === null))).toBe(true);
 });
-it('queues signs while paused, applies on the next tick, persists, charges replacement and lowers for free', () => {
-  const setup = setupAI(); const engine = createRaceEngine(setup.scenario, setup.content);
-  expect(engine.submit(sign('one')).accepted).toBe(true); expect(engine.snapshot().ruStates['ru-player']!.activeSignId).toBeNull();
-  const one = engine.step(); expect(one.state.ruStates['ru-player']).toMatchObject({ activeSignId: 'conserve', signOpportunitiesRemaining: 2 });
-  engine.step(); expect(engine.snapshot().ruStates['ru-player']!.activeSignId).toBe('conserve');
-  engine.submit(sign('two', 'push-hard', 3)); engine.step(); expect(engine.snapshot().ruStates['ru-player']!.signOpportunitiesRemaining).toBe(1);
-  engine.submit(lower('down', 4)); engine.step(); expect(engine.snapshot().ruStates['ru-player']).toMatchObject({ activeSignId: null, signOpportunitiesRemaining: 1 });
-  engine.submit(sign('three', 'attack', 5)); engine.submit(sign('four', 'conserve', 5));
-  const five = engine.step(); expect(five.state.ruStates['ru-player']).toMatchObject({ activeSignId: 'attack', signOpportunitiesRemaining: 0 });
-  expect(five.events.find(event => event.type === 'command_rejected')).toBeDefined();
-  engine.submit(lower('free', 6)); engine.step(); expect(engine.snapshot().ruStates['ru-player']).toMatchObject({ activeSignId: null, signOpportunitiesRemaining: 0 });
+it('queues replacements until crossing, charges cancellation without refund and lowers active for free', () => {
+  const setup=setupAI();const engine=createRaceEngine(setup.scenario,setup.content);
+  engine.submit(sign('one'));engine.step();engine.step();
+  expect(engine.snapshot().ruStates['ru-player']).toMatchObject({activeSignId:'conserve',signOpportunitiesRemaining:2});
+  engine.submit(sign('two','push-hard',3));engine.step();
+  expect(engine.snapshot().ruStates['ru-player']).toMatchObject({activeSignId:'conserve',pendingSign:{signId:'push-hard'},signOpportunitiesRemaining:1});
+  engine.submit(lower('down',4));engine.step();
+  expect(engine.snapshot().ruStates['ru-player']).toMatchObject({activeSignId:null,pendingSign:{signId:'push-hard'},signOpportunitiesRemaining:1});
+  engine.submit({type:'cancelPendingSign',source:'player',commandId:'cancel',effectiveTick:5,ruId:'ru-player'});engine.step();
+  engine.submit(sign('three','attack',6));engine.submit(sign('four','conserve',6));const six=engine.step();
+  expect(six.state.ruStates['ru-player']).toMatchObject({activeSignId:null,pendingSign:{signId:'attack'},signOpportunitiesRemaining:0});
+  expect(six.events.some(event=>event.type==='command_rejected')).toBe(true);
+  engine.submit(lower('free',7));engine.step();expect(engine.snapshot().ruStates['ru-player']!.signOpportunitiesRemaining).toBe(0);
 });
 it('applies signs at countdown boundaries and preserves replayable order for same-tick commands', () => {
   const setup = setupAI(); setup.scenario.rules.countdownTicks = 3;
@@ -94,8 +96,10 @@ it('applies signs at countdown boundaries and preserves replayable order for sam
   const engine = createRaceEngine(setup.scenario, setup.content);
   engine.submit(sign('replace', 'conserve')); engine.submit(lower('lower', 1));
   const first = engine.step(); expect(first.state.phase).toBe('countdown');
-  expect(first.state.ruStates['ru-player']).toMatchObject({ activeSignId: null, signOpportunitiesRemaining: 1 });
-  expect(first.events.filter(event => event.type === 'command_accepted')).toHaveLength(3);
+  expect(first.state.ruStates['ru-player']).toMatchObject({ activeSignId: null, pendingSign: {signId:'push-hard'}, signOpportunitiesRemaining: 2 });
+  expect(first.events.filter(event => event.type === 'command_accepted')).toHaveLength(2);
+  expect(first.events.filter(event => event.type === 'command_rejected')).toHaveLength(1);
+  engine.step(); expect(engine.step().state.ruStates['ru-player']!.activeSignId).toBe('push-hard');
 });
 it('rejects malformed, stale, duplicate, unauthorized and unknown commands without changing state', () => {
   const setup = setupAI(); const engine = createRaceEngine(setup.scenario, setup.content); const before = engine.snapshot();

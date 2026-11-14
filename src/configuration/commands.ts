@@ -6,6 +6,7 @@ const base = { commandId: z.string().min(1).max(80), effectiveTick: z.number().i
 export const commandSchema = z.discriminatedUnion('type', [
   z.strictObject({ ...base, type: z.literal('raiseSign'), ruId: idSchema, signId: signSchema }),
   z.strictObject({ ...base, type: z.literal('lowerSign'), ruId: idSchema }),
+  z.strictObject({ ...base, type: z.literal('cancelPendingSign'), ruId: idSchema }),
   z.strictObject({ ...base, type: z.literal('developerOverride'), ruId: idSchema, field: z.enum(['teamFatigue', 'maxSpeedMps']), value: z.number().finite().min(0).max(100).nullable() }),
 ]);
 export type SimCommand = z.infer<typeof commandSchema>;

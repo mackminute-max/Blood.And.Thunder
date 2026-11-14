@@ -11,7 +11,7 @@ export interface Standing { ruId: string; status: MovementRU['status']; normaliz
 export interface RaceClassification {
   ruId: string; status: MovementRU['status']; reason: string | null; rank: number | null;
   finishTimeSeconds: number | null; firstLapStartedAtSeconds: number | null; completedLaps: number; normalizedCoursePosition: number;
-  components: ComponentState[]; stats: import('./combat.ts').CombatStats & import('./environment.ts').EnvironmentStats & { averageFatigue: number } & import('../simulation/rules/statistics.ts').RaceStatistics & { acceptedTransitions: number; blockedTransitions: number; startLineCrossings: number; signsUsed: number };
+  components: ComponentState[]; stats: import('./combat.ts').CombatStats & import('./environment.ts').EnvironmentStats & { averageFatigue: number } & import('../simulation/rules/statistics.ts').RaceStatistics & { acceptedTransitions: number; blockedTransitions: number; startLineCrossings: number; signsUsed: number; signUsage: import('./initialization.ts').InitialRUState['signUsage']; activeSignId: import('../configuration/commands.ts').SignId | null; pendingSign: import('./initialization.ts').InitialRUState['pendingSign'] };
 }
 export interface RaceResult {
   competitionStyle: 'combat' | 'pure'; schemaVersion: string; simulationVersion: string; scenarioId: string; seed: string;

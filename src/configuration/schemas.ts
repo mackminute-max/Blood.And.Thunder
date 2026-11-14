@@ -77,7 +77,7 @@ const statsSchema = z.strictObject({
 });
 const speedModes = z.strictObject({ push: finite, cruise: finite, conserve: finite, brake: finite });
 const aiSchema = z.strictObject({
-  signInfluence: z.strictObject({ globalStrength: finite.min(0).max(8), perSign: z.strictObject({ 'push-hard': finite.min(0).max(8), 'defend-position': finite.min(0).max(8), attack: finite.min(0).max(8), conserve: finite.min(0).max(8) }) }).default({ globalStrength: 1, perSign: { 'push-hard': 1, 'defend-position': 1, attack: 1, conserve: 1 } }),
+  signInfluence: z.strictObject({ globalStrength: finite.min(0).max(8), perSign: z.strictObject({ 'push-hard': finite.min(0).max(8), 'defend-position': finite.min(0).max(8), attack: finite.min(0).max(8), conserve: finite.min(0).max(8) }) }).default({ globalStrength: 2, perSign: { 'push-hard': 1, 'defend-position': 1, attack: 1, conserve: 1 } }),
   base: finite, progressWeight: finite, overtakeWeight: finite, collisionWeight: finite, fatigueWeight: finite, cornerWeight: finite,
   noise: finite.nonnegative(), commitmentTicks: count.positive(), switchPenalty: finite.nonnegative(),
   awarenessBase: count, awarenessDivisor: positive, behindRange: count,

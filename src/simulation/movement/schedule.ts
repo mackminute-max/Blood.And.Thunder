@@ -19,6 +19,7 @@ export interface MovementHooks {
   afterLateral?(emit: (event: MovementEventInput) => void, diagnostics: MovementDiagnostic[]): void;
   occupiesTile?(ruId: string): boolean;
   onEvent?(event: MovementEvent): void;
+  onLineCrossing?(event: Extract<MovementEvent, { type: 'movement_transition' }>, emit: (event: MovementEventInput) => void): void;
   onTransition?(event: Extract<MovementEvent, { type: 'movement_transition' }>): void;
 }
 interface Candidate { ruId: string; from: TileRef; to: TileRef; needed: number; fraction: number }
@@ -37,7 +38,7 @@ export function moveTick(config: DeepReadonly<InitialConfiguration>, state: Pick
   const emit = (event: MovementEventInput) => {
     const emitted = { ...event, id: `${state.tick}:${substep}:${sequence++}`, tick: state.tick, substep };
     events.push(emitted); hooks.onEvent?.(emitted);
-    if (emitted.type === 'movement_transition') hooks.onTransition?.(emitted);
+    if (emitted.type === 'movement_transition') { hooks.onTransition?.(emitted); if(emitted.crossedStartLine) hooks.onLineCrossing?.(emitted,emit); }
   };
   for (const id of ids) if (state.ruStates[id]!.status === 'active') state.ruStates[id]!.derived = deriveStats(config, state.ruStates[id]!, state.hazards);
   const lateralOccupancy = new Map(ids.filter(occupies).map(id => [tileKey(state.ruStates[id]!.tile), id]));
