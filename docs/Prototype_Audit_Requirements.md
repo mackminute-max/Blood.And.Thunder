@@ -1,5 +1,8 @@
 # Audit requirement inventory — v0.2 plus v0.3
 
+**Historical baseline audit.** Subsequent implementation responses and current verification are tracked in [AUDIT_REMEDIATION.md](AUDIT_REMEDIATION.md). Findings below are preserved as originally audited.
+
+
 Companion to [the independent audit](Prototype_Implementation_Audit.md), baseline `8b3ea2a205eb5b7a082459eebda54a250ee63dcd`. This inventory decomposes the production documents into independently assessable capabilities; repeated requirements are cross-referenced rather than counted as separate implementations. Illustrative contract names, example events, optional features and explicitly deferred systems are not mandatory mechanics. No source changes were made.
 
 **Status:** Full = capability implemented with supporting inspection/tests; Partial = substantive implementation with a remaining requirement/assurance gap; Missing = no functional implementation; Different = deliberate alternate implementation; Deferred = explicitly future/optional scope; Unverified = evidence unavailable. Full is not formal verification for every valid input. **Authority:** A = approved baseline; V = explicit v0.3 requirement; P = provisional appendix/default; O = optional/deferred. Code paths are under `src/` unless stated otherwise. Findings use the new audit's AUD- identifiers.

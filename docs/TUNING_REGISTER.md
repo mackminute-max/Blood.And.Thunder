@@ -1,6 +1,6 @@
 # Prototype tuning register
 
-All numerical gameplay baselines below remain **PROVISIONAL** unless an explicit approved rule is identified in DECISIONS.md. This register inventories the shipped reference defaults; it does not approve a balance change. Simulation 0.7.0 / schema c2-1.
+All numerical gameplay baselines below remain **PROVISIONAL** unless an explicit approved rule is identified in DECISIONS.md. This register inventories the shipped reference defaults; it does not approve a balance change. Current simulation 0.9.0 / schema c2-1. New provisional defaults (speed blending, race context, wreck mode, weather dimensions, crowd, equipment and logging) are specified in [AUDIT_REMEDIATION.md](AUDIT_REMEDIATION.md); historical baseline rows below remain useful for unchanged coefficients.
 
 Ordinary edits use Developer → RUs / Rules / Environment or validated scenario/content JSON, followed by reinitialization. Compare isolated drafts in Comparison using identical seed lists. Source definitions: [reference content](../src/content/reference.content.json), [reference scenario](../src/content/oval-six-v1.scenario.json).
 

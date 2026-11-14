@@ -31,7 +31,7 @@ export interface RaceRuleEvent {
   type: 'ru_overtake' | 'race_started' | 'race_countdown' | 'lap_started' | 'lap_crossed' | 'ru_finished' | 'ru_retired' | 'ru_dnf' | 'race_finished';
   ruId: string | null; timeSeconds: number; details: Record<string, unknown>;
 }
-export type RaceEvent = MovementEvent | InvariantEvent | RaceRuleEvent;
+export type RaceEvent = MovementEvent | InvariantEvent | RaceRuleEvent | import('./initialization.ts').InitializationEvent;
 export interface RaceTickOutput {
   state: DeepReadonly<RaceState>; events: readonly DeepReadonly<RaceEvent>[];
   diagnostics: readonly DeepReadonly<MovementDiagnostic>[]; stateHash: string;

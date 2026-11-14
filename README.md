@@ -1,6 +1,6 @@
 # Blood and Thunder
 
-Browser-first chariot racing prototype. Read AGENTS.md and Blood_and_Thunder_Prototype_Development_Spec_v0.2.md before development. Approved gameplay and provisional appendix baselines remain distinct. Current v0.3 behavior, presets, migration and playtest instructions are in [V03_DEVELOPER_GUIDE.md](docs/V03_DEVELOPER_GUIDE.md); the owner-directed brief is at the repository root.
+Browser-first chariot racing prototype. Read AGENTS.md and Blood_and_Thunder_Prototype_Development_Spec_v0.2.md before development. Approved gameplay and provisional appendix baselines remain distinct. Current engine **0.9.0** audit repairs, verification and limitations are in [AUDIT_REMEDIATION.md](docs/AUDIT_REMEDIATION.md). General behavior, presets, migration and playtest instructions are in [V03_DEVELOPER_GUIDE.md](docs/V03_DEVELOPER_GUIDE.md); the owner-directed brief is at the repository root.
 
 ## Development
 
@@ -11,6 +11,10 @@ Use Node 24.22.1 (see .node-version) and npm 11.9.0. Install with `npm ci`.
 - `npm run movement -- 10`: execute ten fixed movement ticks and print a diagnostic bundle. Optional arguments: `npm run movement -- 10 scenario.json content.json`. Invalid setup/count or simulation error returns nonzero.
 - `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`: required checks.
 - `npm run test:browser`: functional smoke test against the running development server on port 5173. Requires Chromium; set CHROMIUM_PATH when it is not /usr/bin/chromium.
+
+## Historical milestone notes
+
+The sections below preserve the earlier development history. Statements about future milestones or incomplete presentation describe those earlier increments; use the current remediation record for present capabilities and supported versions.
 
 ## Core movement harness
 

@@ -3,7 +3,7 @@ import { commandSchema } from './commands.ts';
 import { idSchema } from './ids.ts';
 
 export const SCHEMA_VERSION = 'c2-1' as const;
-export const SIMULATION_VERSION = '0.8.0' as const;
+export const SIMULATION_VERSION = '0.9.0' as const;
 const id = idSchema;
 const finite = z.number().finite();
 const stat = finite.min(0).max(100);
@@ -25,7 +25,7 @@ const segmentSchema = z.strictObject({
   turn: z.enum(['none', 'left', 'right']), severity: finite.nonnegative(), meters: positive,
   lanes: z.array(laneSchema).min(1).max(16), startFinishBoundary: z.boolean(),
 });
-const trackSchema = z.strictObject({ schemaVersion: version, ...named, segments: z.array(segmentSchema).min(2) });
+const trackSchema = z.strictObject({ schemaVersion: version, ...named, segments: z.array(segmentSchema).min(2).max(2048) });
 const beastSchema = z.strictObject({
   ...named, speciesId: id, speed: stat, power: stat, agility: stat, endurance: stat,
   discipline: stat, toughness: stat, ...health, traits: ids, naturalAttackIds: ids,
@@ -41,7 +41,7 @@ const driverSchema = z.strictObject({
   ...health,
 }).refine(healthCheck, { path: ['currentHealth'], message: 'Health exceeds maxHealth' });
 const weaponSchema = z.strictObject({
-  ...named, channel: z.enum(['driver', 'beast', 'mounted', 'ram']),
+  ...named, statModifiers: z.strictObject({ maxSpeedMps: finite.min(-20).max(20).default(0), accelMps2: finite.min(-10).max(10).default(0), brakeMps2: finite.min(-10).max(10).default(0), handling: finite.min(-100).max(100).default(0), stability: finite.min(-100).max(100).default(0), endurance: finite.min(-100).max(100).default(0) }).prefault({}), channel: z.enum(['driver', 'beast', 'mounted', 'ram']),
   rangeSegments: count, rangeMode: z.enum(['sameSegmentAdjacentLane', 'forwardTile', 'adjacentTile', 'segmentDistance']),
   allowedArcs: z.array(z.enum(['front', 'side', 'rear'])).min(1),
   eligibleTargets: z.array(z.enum(['driver', 'beast', 'chariot'])).min(1),
@@ -78,6 +78,8 @@ const statsSchema = z.strictObject({
 const speedModes = z.strictObject({ push: finite, cruise: finite, conserve: finite, brake: finite });
 const aiSchema = z.strictObject({
   signInfluence: z.strictObject({ globalStrength: finite.min(0).max(8), perSign: z.strictObject({ 'push-hard': finite.min(0).max(8), 'defend-position': finite.min(0).max(8), attack: finite.min(0).max(8), conserve: finite.min(0).max(8) }) }).default({ globalStrength: 2, perSign: { 'push-hard': 1, 'defend-position': 1, attack: 1, conserve: 1 } }),
+  speedBlendTemperature: positive.max(100).default(8),
+  raceContext: z.strictObject({ finalLapPush: finite.min(0).max(30).default(3), cutoffPush: finite.min(0).max(30).default(6), cutoffUrgencyTicks: count.positive().default(20) }).prefault({}),
   base: finite, progressWeight: finite, overtakeWeight: finite, collisionWeight: finite, fatigueWeight: finite, cornerWeight: finite,
   noise: finite.nonnegative(), commitmentTicks: count.positive(), switchPenalty: finite.nonnegative(),
   awarenessBase: count, awarenessDivisor: positive, behindRange: count,
@@ -94,6 +96,8 @@ const tuningSchema = z.strictObject({
   stats: statsSchema, ai: aiSchema,
   attributes: z.strictObject({ nerveAvoidancePerPoint: finite.min(0).max(.01), durabilityPerPoint: finite.min(0).max(.01), durabilityReference: stat, roughnessTractionWeight: finite.min(0).max(1), severitySpeedWeight: finite.min(0).max(1), severityReference: finite.nonnegative() }).default({ nerveAvoidancePerPoint: .001, durabilityPerPoint: .002, durabilityReference: 70, roughnessTractionWeight: .2, severitySpeedWeight: .15, severityReference: 1 }),
   environment: z.strictObject({
+    crowd: z.strictObject({ morale: finite.min(-1).max(1).default(0), performanceWeight: finite.min(0).max(.05).default(.02) }).prefault({}),
+    weatherEffects: z.strictObject({ windFatiguePerMps: finite.min(0).max(.02).default(.002), temperatureFatiguePerDegree: finite.min(0).max(.02).default(.002), comfortableTemperatureC: finite.min(-50).max(60).default(20), precipitationTractionLoss: finite.min(0).max(.5).default(.1) }).prefault({}),
     traitModifiers: z.array(z.strictObject({ traitId: id, weatherIds: ids, tractionMultiplier: positive, fatigueMultiplier: positive })),
     fatigue: z.strictObject({ basePerSecond: finite.nonnegative(), exertionBase: finite.nonnegative(), speedWeight: finite.nonnegative(), accelerationWeight: finite.nonnegative(), accelerationDivisor: positive, exertionMin: finite.nonnegative(), exertionMax: positive, enduranceBase: positive, enduranceDivisor: positive, recoverySpeedRatio: finite.min(0).max(1), recoveryPerSecond: finite.nonnegative() }),
     events: z.strictObject({ rates: z.strictObject({ disabled: z.literal(0), rare: finite.min(0).max(10), occasional: finite.min(0).max(10), frequent: finite.min(0).max(10), chaotic: finite.min(0).max(10) }), maxEvents: count.max(3), windowStart: finite.min(0).max(1), windowEnd: finite.min(0).max(1), spacingTicks: count.positive(), placementBufferSegments: count, earlyWreckClear: z.boolean(), earlyWreckClearBlockedTicks: count.positive(), animalStepTicks: count.positive(), roughnessTractionDelta: finite.min(-1).max(0), memoryTicks: count.positive(), hazardUtilityPenalty: finite.nonnegative(),
@@ -124,7 +128,7 @@ export const contentSchema = z.strictObject({
   tracks: z.array(trackSchema).min(1), beasts: z.array(beastSchema).min(1),
   chariots: z.array(chariotSchema).min(1), drivers: z.array(driverSchema).min(1), weapons: z.array(weaponSchema),
   speciesIds: ids, traitIds: ids,
-  weather: z.array(z.strictObject({ ...named, traction: positive, visibility: positive, fatigue: positive })).min(1),
+  weather: z.array(z.strictObject({ ...named, precipitation: finite.min(0).max(1).default(0), intensity: finite.min(0).max(1).default(0), windMps: finite.min(-100).max(100).default(0), temperatureC: finite.min(-50).max(60).default(20), traction: positive, visibility: positive, fatigue: positive })).min(1),
   lethalityProfiles: z.array(z.strictObject({ ...named, severeInjuryChance: finite.min(0).max(1), fatalityChance: finite.min(0).max(1), destructionChance: finite.min(0).max(1) })).min(1),
   tuningProfiles: z.array(tuningSchema).min(1),
 });
@@ -136,7 +140,8 @@ export const scenarioSchema = z.strictObject({
   entries: z.array(z.strictObject({
     ...named, isPlayer: z.boolean(), driverId: id, chariotId: id, beastIds: ids.min(1),
     preRaceStrategy: z.enum(['balanced', 'aggressive', 'defensive', 'endurance', 'sprint', 'opportunistic']), weaponIds: ids,
-  })).min(1),
+  })).min(1).max(256),
+  diagnostics: z.strictObject({ level: z.enum(['error','warning','info','trace']).default('trace'), traceEveryTicks: count.positive().max(10000).default(1), snapshotEveryTicks: count.positive().max(10000).default(1) }).prefault({}),
   startingGrid: z.record(id, tileSchema),
   combatPlans: z.array(z.strictObject({ movementTick: count.positive(), ruId: id, targetRuId: id, weaponId: id })),
   environmentPlans: z.array(z.strictObject({ id, movementTick: count.positive(), type: z.enum(['debris_spawn', 'track_roughness', 'animal_crossing']), tile: tileSchema, durationTicks: count.positive() })),
@@ -148,8 +153,8 @@ export const scenarioSchema = z.strictObject({
   lethalityProfileId: id, tuningProfileId: id,
   rules: z.strictObject({
     competitionStyle: z.enum(['combat', 'pure']).default('combat'),
-    format: z.literal('circuit'), countdownTicks: count.max(10000), finishTieToleranceSeconds: finite.min(0).max(0.001), laps: count.positive(), maxTicks: count.positive(),
-    finishCutoffTicks: count, disabledRemovalTicks: count,
+    format: z.literal('circuit'), countdownTicks: count.max(10000), finishTieToleranceSeconds: finite.min(0).max(0.001), laps: count.positive().max(10000), maxTicks: count.positive().max(100000),
+    finishCutoffTicks: count.max(100000), disabledRemovalTicks: count.max(100000), wreckMode: z.enum(['immediate','delayed','persistent']).default('delayed'),
     combatAllowed: z.boolean(), beastTargetingAllowed: z.boolean(),
     maxSignOpportunities: count, allowDeveloperSignCommands: z.boolean(), maxCommandSubmissions: count.positive().max(100000), allowStationaryLaneChange: z.boolean(),
   }),

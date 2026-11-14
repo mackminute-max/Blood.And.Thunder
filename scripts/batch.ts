@@ -1,3 +1,4 @@
+import { assertBatchWorkload } from '../src/configuration/workload.ts';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { z } from 'zod';
 import { parseSetupJson } from '../src/configuration/load.ts';
@@ -11,8 +12,11 @@ try {
   const plan = schema.parse(parseSetupJson(readFileSync(process.argv[2], 'utf8'), 'batch plan'));
   if (new Set(plan.seeds).size !== plan.seeds.length || new Set(plan.variants.map(v=>v.id)).size !== plan.variants.length) throw new Error('Seeds and variant IDs must be unique');
   const variants: { id: string; configuration: ReturnType<typeof validateSetup>; configurationHash: string; seeds: string[]; aggregate: ReturnType<typeof aggregate>; runs: ReturnType<typeof runMeasuredRace>[] }[] = [];
-  for (const variant of plan.variants) {
-    const config = validateSetup(parseSetupJson(readFileSync(variant.scenarioFile, 'utf8'), 'scenario'), parseSetupJson(readFileSync(variant.contentFile, 'utf8'), 'content'));
+  const configurations = plan.variants.map(variant=>validateSetup(parseSetupJson(readFileSync(variant.scenarioFile, 'utf8'), 'scenario'), parseSetupJson(readFileSync(variant.contentFile, 'utf8'), 'content')));
+  assertBatchWorkload(configurations,plan.seeds.length);
+  for (const [index,variant] of plan.variants.entries()) {
+    const config = configurations[index]!;
+
     if (variant.sign) { const player = config.scenario.entries.find(e=>e.isPlayer); if (!player) throw new Error('Sign variant requires a controlled player RU'); config.scenario.scriptedCommands.push({ commandId: 'e-batch-sign', type: 'raiseSign', source: 'player', effectiveTick: 1, ruId: player.id, signId: variant.sign }); }
     const runs = [];
     for (const seed of plan.seeds) { const scenario = copyJson(config.scenario); scenario.seed = seed; const run = runMeasuredRace(scenario,config.content); runs.push(run); if (runs.length % 25 === 0 || runs.length === plan.seeds.length) console.error(`${variant.id}: ${runs.length}/${plan.seeds.length}`); }

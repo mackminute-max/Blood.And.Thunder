@@ -1,3 +1,6 @@
+import { diagnosticBuffer } from './diagnostics.ts';
+import { traceDiagnostic } from './diagnostics.ts';
+import { signExposureForTick } from './sign-exposure.ts';
 import { activatePendingSign } from './signs.ts';
 import { recordRaceStatistics } from '../rules/statistics.ts';
 import { advanceEnvironment, markDisabled, occupiesRu, assertEnvironmentState } from '../environment/lifecycle.ts';
@@ -61,13 +64,13 @@ export function createRaceEngine(scenarioInput: unknown, contentInput: unknown) 
   updateStandings(initial); assertRaceState(initial);
   let current = freezeDeep(initial); let lastValid = current;
   const commands = createCommandQueue(config); commands.initialize(current);
-  let latest: RaceTickOutput = freezeDeep({ state: current, events: [], diagnostics: [], stateHash: stateHash(current) });
+  let latest: RaceTickOutput = freezeDeep({ state: current, events: movement.initializationEvents, diagnostics: [], stateHash: stateHash(current) });
   const step = (): RaceTickOutput => {
     if (current.phase === 'complete' || current.phase === 'error') throw new Error(`Cannot step ${current.phase} race; reinitialize`);
     const next = copyJson(current); next.tick++;
-    const events: RaceEvent[] = []; const diagnostics: MovementDiagnostic[] = [];
+    const events: RaceEvent[] = []; const diagnostics: MovementDiagnostic[] = diagnosticBuffer(config.scenario.diagnostics, next.tick);
     const sequence = new Map<number, number>();
-    const emit = <T extends RaceEvent>(event: T): void => {
+    const emit = <T extends Exclude<RaceEvent, {type: 'race_initialized'}>>(event: T): void => {
       const index = sequence.get(event.substep) ?? 0; sequence.set(event.substep, index + 1);
       events.push({ ...event, id: `${next.tick}:${event.substep}:${index}`, tick: next.tick });
     };
@@ -93,6 +96,7 @@ export function createRaceEngine(scenarioInput: unknown, contentInput: unknown) 
         next.elapsedRaceTicks++;
         advanceCooldowns(next);
         advanceEnvironment(config, next, next.elapsedRaceTicks, controlEvent, diagnostics);
+        const signExposure = signExposureForTick(next.ruStates, tuning.ai.pushFatigueMultiplier);
         const startSpeeds = new Map(Object.values(next.ruStates).filter(ru => ru.status === 'active').map(ru => [ru.id, ru.speedMps]));
         for (const ru of Object.values(next.ruStates)) {
           if (ru.status !== 'active') continue;
@@ -101,7 +105,7 @@ export function createRaceEngine(scenarioInput: unknown, contentInput: unknown) 
             ru.status = 'retired'; ru.statusReason = 'unable_to_continue'; ru.speedMps = 0; ru.targetSpeedMps = 0;
             ruleEvent(0, { type: 'ru_retired', ruId: ru.id, timeSeconds: (next.elapsedRaceTicks - 1) * tuning.tickDurationSeconds, details: { reason: ru.statusReason } });
           } else ru.targetSpeedMps = ru.derived.maxSpeedMps * config.scenario.targetSpeedRatios[ru.id]!;
-          diagnostics.push({ tick: next.tick, substep: 0, level: 'trace', subsystem: 'stats', ruId: ru.id, message: 'Derived race tick-start performance', details: { ...ru.derived } });
+          traceDiagnostic(diagnostics, () => ({ tick: next.tick, substep: 0, level: 'trace', subsystem: 'stats', ruId: ru.id, message: 'Derived race tick-start performance', details: { ...ru.derived } }));
         }
         const plans = config.scenario.controller === 'ai' ? chooseIntents(config, next, next.elapsedRaceTicks, controlEvent) : undefined;
         const combat = planCombat(config, next, next.elapsedRaceTicks, controlEvent, diagnostics);
@@ -118,6 +122,7 @@ export function createRaceEngine(scenarioInput: unknown, contentInput: unknown) 
           onTransition: event => {
             const ru = next.ruStates[event.ruId]!; ru.acceptedTransitions++;
             if (!event.crossedStartLine) return;
+            signExposure.crossing(ru.id,event.fraction,ru.pendingSign?.signId ?? ru.activeSignId);
             activatePendingSign(ru,next.tick,event.fraction,'line_crossing',activation => emit({...activation,id:'',tick:next.tick,substep:event.substep}));
             ru.startLineCrossings++;
             const timeSeconds = (next.elapsedRaceTicks - 1 + event.fraction) * tuning.tickDurationSeconds;
@@ -137,11 +142,11 @@ export function createRaceEngine(scenarioInput: unknown, contentInput: unknown) 
             }
           },
         });
-        for (const ru of Object.values(next.ruStates)) if (ru.aiDecision?.movementTick === next.elapsedRaceTicks) diagnostics.push({ tick: next.tick, substep: 0, level: 'trace', subsystem: 'ai', ruId: ru.id, message: 'Perception, candidate utility and chosen intent', details: { decision: ru.aiDecision } });
+        for (const ru of Object.values(next.ruStates)) if (ru.aiDecision?.movementTick === next.elapsedRaceTicks) traceDiagnostic(diagnostics, () => ({ tick: next.tick, substep: 0, level: 'trace', subsystem: 'ai', ruId: ru.id, message: 'Perception, candidate utility and chosen intent', details: { decision: ru.aiDecision } }));
         diagnostics.push(...advanced.diagnostics);
         const postSubstep = Math.max(0, ...advanced.events.map(event => event.substep)) + 1;
         resolveCombatPhase(config, next, combat.plans, combat.guards, 'postMove', event => emit({ ...event, id: '', tick: next.tick, substep: postSubstep }), diagnostics, postSubstep);
-        applyFatigue(config, next, startSpeeds, event => emit({ ...event, id: '', tick: next.tick, substep: postSubstep })); markDisabled(next, next.elapsedRaceTicks, config, event => emit({ ...event, id: '', tick: next.tick, substep: postSubstep }));
+        applyFatigue(config, next, startSpeeds, event => emit({ ...event, id: '', tick: next.tick, substep: postSubstep }), signExposure.values()); markDisabled(next, next.elapsedRaceTicks, config, event => emit({ ...event, id: '', tick: next.tick, substep: postSubstep }));
         if (config.scenario.controller === 'ai') recordAiOutcomes(next, advanced.events, next.elapsedRaceTicks, event => emit({ ...event, id: '', tick: next.tick, substep: Math.max(0, ...advanced.events.map(event => event.substep)) + 1 }));
         for (const ru of Object.values(next.ruStates)) ru.normalizedCoursePosition = ru.initialUnwrappedCoursePosition + ru.acceptedTransitions + ru.progressInSegment;
         next.finishRecords = rankFinishes(next.finishRecords, rules.finishTieToleranceSeconds);
@@ -160,7 +165,7 @@ export function createRaceEngine(scenarioInput: unknown, contentInput: unknown) 
         } else if (next.firstFinisherRaceTick !== null) next.phase = 'concluding';
       }
       updateStandings(next);
-      diagnostics.push({ tick: next.tick, substep: Math.max(0, ...events.map(event => event.substep)) + 1, level: 'trace', subsystem: 'rules', message: 'Applied circuit lifecycle and classification rules', details: { phase: next.phase, rules, elapsedRaceTicks: next.elapsedRaceTicks, firstFinisherRaceTick: next.firstFinisherRaceTick, finishRecords: next.finishRecords, standings: next.standings } });
+      traceDiagnostic(diagnostics, () => ({ tick: next.tick, substep: Math.max(0, ...events.map(event => event.substep)) + 1, level: 'trace', subsystem: 'rules', message: 'Applied circuit lifecycle and classification rules', details: { phase: next.phase, rules, elapsedRaceTicks: next.elapsedRaceTicks, firstFinisherRaceTick: next.firstFinisherRaceTick, finishRecords: next.finishRecords, standings: next.standings } }));
       assertEnvironmentState(next);
       assertCombatState(config, next);
       assertRaceState(next);

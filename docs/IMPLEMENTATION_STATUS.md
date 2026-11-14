@@ -1,4 +1,11 @@
-# Implementation status
+# Implementation status — current engine 0.9.0
+
+Current entry point: [AUDIT_REMEDIATION.md](AUDIT_REMEDIATION.md). The 16 independent AUD- findings now have code/tooling responses and targeted regressions. Read that document for verification, provisional formulas and explicit limitations. Penalties are not assessed; deferred extension modules have contracts rather than speculative implementations; balance remains unapproved.
+
+## Historical milestone record (0.7/0.8 baselines)
+
+The completion claims, counts and uses of ‘current’ below describe their original milestone dates. They are retained as history and superseded by the current remediation record.
+
 
 Current: v0.3 milestones F–J are implemented against the supplied brief and the owner-directed full-audit waiver. See [V03_DEVELOPER_GUIDE.md](V03_DEVELOPER_GUIDE.md), [V03_BALANCE_REPORT.md](V03_BALANCE_REPORT.md) and [V03_AUDIT_REMEDIATION.md](V03_AUDIT_REMEDIATION.md). Balance approval and unseen audit definitions remain open; the historical A–E notes below are retained.
 

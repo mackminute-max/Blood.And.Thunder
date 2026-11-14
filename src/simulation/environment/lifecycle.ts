@@ -1,3 +1,4 @@
+import { traceDiagnostic } from '../core/diagnostics.ts';
 import type { DeepReadonly, InitialConfiguration } from '../../contracts/initialization.ts';
 import type { MovementState, MovementRU, MovementEventInput, MovementDiagnostic } from '../../contracts/movement.ts';
 import type { HazardType, EnvironmentState } from '../../contracts/environment.ts';
@@ -41,7 +42,7 @@ export function advanceEnvironment(config: DeepReadonly<InitialConfiguration>, s
   const rng = createRng(state.rngStates.events);
   for (const ru of Object.values(state.ruStates)) if (ru.status === 'disabled' && !ru.wreckRemoved) {
     ru.disabledAtMovementTick ??= 0;
-    if (movementTick - ru.disabledAtMovementTick >= config.scenario.rules.disabledRemovalTicks) {
+    if (config.scenario.rules.wreckMode !== 'persistent' && (config.scenario.rules.wreckMode === 'immediate' || movementTick - ru.disabledAtMovementTick >= config.scenario.rules.disabledRemovalTicks)) {
       ru.wreckRemoved = true; emit({ type: 'wreck_removed', ruId: ru.id, fraction: 0, details: { movementTick, disabledAtMovementTick: ru.disabledAtMovementTick, tile: ru.tile, reason: 'cleanup_delay' } });
     }
   }
@@ -56,7 +57,7 @@ export function advanceEnvironment(config: DeepReadonly<InitialConfiguration>, s
     const tile = { ...hazard.tile, lane: hazard.tile.lane + hazard.direction };
     if (segment.lanes.some(lane => lane.index === tile.lane) && !occupied(tile)) { const from = { ...hazard.tile }; hazard.tile = tile; emit({ type: 'hazard_moved', ruId: '', fraction: 0, details: { hazardId: hazard.id, from, to: tile } }); }
   }
-  if (t.earlyWreckClear) for (const ru of Object.values(state.ruStates).sort((a, b) => a.id < b.id ? -1 : 1)) if (ru.status === 'active' && ru.blockedTicks >= t.earlyWreckClearBlockedTicks) {
+  if (t.earlyWreckClear && config.scenario.rules.wreckMode !== 'persistent') for (const ru of Object.values(state.ruStates).sort((a, b) => a.id < b.id ? -1 : 1)) if (ru.status === 'active' && ru.blockedTicks >= t.earlyWreckClearBlockedTicks) {
     const lane = track.segments.find(s => s.id === ru.tile.segmentId)!.lanes.find(l => l.index === ru.tile.lane)!;
     const routes = [lane.next, ...lane.lateralNeighbors.map(index => ({ segmentId: ru.tile.segmentId, lane: index }))];
     const blocked = (tile: { segmentId: string; lane: number }) => Object.values(state.ruStates).some(other => occupiesRu(other) && same(other.tile, tile)) || state.hazards.some(h => h.type !== 'track_roughness' && same(h.tile, tile));
@@ -78,12 +79,12 @@ export function advanceEnvironment(config: DeepReadonly<InitialConfiguration>, s
     emit({ type: 'hazard_activated', ruId: '', fraction: 0, details: { hazard, movementTick } });
   }
   state.hazards.sort((a, b) => a.id < b.id ? -1 : 1); state.rngStates.events = [...rng.snapshot()];
-  diagnostics.push({ tick: state.tick, substep: 0, level: 'trace', subsystem: 'environment', message: 'Advanced incident lifecycles and delayed wreck cleanup', details: { movementTick, hazards: state.hazards, environment: state.environment } });
+  traceDiagnostic(diagnostics, () => ({ tick: state.tick, substep: 0, level: 'trace', subsystem: 'environment', message: 'Advanced incident lifecycles and delayed wreck cleanup', details: { movementTick, hazards: state.hazards, environment: state.environment } }));
 }
 export function markDisabled(state: EnvironmentRace, movementTick: number, config: DeepReadonly<InitialConfiguration>, emit: (event: MovementEventInput) => void) {
   for (const ru of Object.values(state.ruStates)) if (ru.status === 'disabled') {
     ru.disabledAtMovementTick ??= movementTick;
-    if (!ru.wreckRemoved && config.scenario.rules.disabledRemovalTicks === 0) { ru.wreckRemoved = true; emit({ type: 'wreck_removed', ruId: ru.id, fraction: 1, details: { reason: 'zero_delay', movementTick, tile: ru.tile } }); }
+    if (!ru.wreckRemoved && config.scenario.rules.wreckMode !== 'persistent' && (config.scenario.rules.wreckMode === 'immediate' || config.scenario.rules.disabledRemovalTicks === 0)) { ru.wreckRemoved = true; emit({ type: 'wreck_removed', ruId: ru.id, fraction: 1, details: { reason: 'zero_delay', movementTick, tile: ru.tile } }); }
   }
 }
 export function assertEnvironmentState(state: DeepReadonly<EnvironmentRace>) {

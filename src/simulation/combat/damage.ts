@@ -5,6 +5,7 @@ import type { createRng } from '../core/rng.ts';
 export interface ComponentHit { ruId: string; kind: ComponentState['kind']; componentId: string; total: number; attacks: string[]; contributors: { ruId: string; amount: number }[] }
 /** Shared component consequences for combat and physical contact. */
 export function commitDamage(config: DeepReadonly<InitialConfiguration>, state: CombatState, damage: ReadonlyMap<string, ComponentHit>, rng: ReturnType<typeof createRng>, emit: (event: MovementEventInput) => void, phase: string, fraction: number) {
+  const losses = new Map<string, number>();
   const tuning = config.content.tuningProfiles.find(profile => profile.id === config.scenario.tuningProfileId)!;
   for (const key of [...damage.keys()].sort()) {
     const hit = damage.get(key)!; const ru = state.ruStates[hit.ruId]!;
@@ -14,7 +15,7 @@ export function commitDamage(config: DeepReadonly<InitialConfiguration>, state: 
     const oldHealth = component.health; component.health = Math.max(0, oldHealth - hit.total / durabilityFactor);
     const percent = component.health / component.maxHealth * 100;
     component.band = percent <= 0 ? 'disabled' : percent <= tuning.condition.criticalMaxPercent ? 'critical' : percent <= tuning.condition.damagedMaxPercent ? 'damaged' : 'functional';
-    const actual = oldHealth - component.health; ru.combatStats.damageReceived += actual;
+    const actual = oldHealth - component.health; losses.set(key, actual); ru.combatStats.damageReceived += actual;
     // Attribute actual HP loss across simultaneous contributors proportionally, without overkill credit.
     for (const contributor of hit.contributors) state.ruStates[contributor.ruId]!.combatStats.damageDealt += actual * contributor.amount / hit.total;
     emit({ type: 'component_damaged', ruId: ru.id, fraction: fraction, details: { phase, durabilityFactor, componentId: component.id, componentKind: component.kind, oldHealth, newHealth: component.health, amount: actual, band: component.band, attackIds: hit.attacks } });
@@ -29,4 +30,5 @@ export function commitDamage(config: DeepReadonly<InitialConfiguration>, state: 
     ru.status = 'disabled'; ru.statusReason = ru.driver.health === 0 ? 'driver_disabled' : ru.chariot.health === 0 ? 'chariot_disabled' : 'team_disabled'; ru.speedMps = 0; ru.targetSpeedMps = 0;
     emit({ type: 'ru_disabled', ruId: ru.id, fraction: fraction, details: { phase, reason: ru.statusReason } });
   }
+  return losses;
 }

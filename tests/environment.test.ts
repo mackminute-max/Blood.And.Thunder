@@ -116,10 +116,10 @@ it('uses the full scheduler contact hook after a real blocked transition without
   ru.speedMps = 100; ru.targetSpeedMps = 100; ru.derivedOverrides.maxSpeedMps = 100;
   const output = moveTick(h.config, h.state); expect(output.events.some(e => e.type === 'movement_transition' && e.ruId === ru.id)).toBe(true); expect(output.events.some(e => e.type === 'contact')).toBe(true); expect(ru.tile.segmentId).toBe('seg-01'); assertMovementState(h.state);
 });
-it('AI perceives local hazards only, resets commitment on discovery and retains bounded hazard memory', () => {
+it('AI perceives local hazards only, resets commitment on discovery and invalidates contradicted hazard memory', () => {
   const h = harness(); const ru = h.state.ruStates['ru-player']!; h.state.hazards = [{ ...rough, type: 'debris_spawn', tile: { segmentId: 'seg-01', lane: 0 } }];
   chooseIntents(h.config, h.state, 1, h.emit); expect(ru.aiDecision!.perception.hazards).toHaveLength(1); expect(ru.aiDecision!.chosen.mode).toBe('brake'); expect(ru.aiMemory.hazards).toHaveLength(1);
-  h.state.hazards = [{ ...rough, id: 'unseen', tile: { segmentId: 'seg-20', lane: 0 } }]; chooseIntents(h.config, h.state, 2, h.emit); expect(ru.aiDecision!.perception.hazards).toHaveLength(0); expect(ru.aiMemory.hazards).toHaveLength(1);
+  h.state.hazards = [{ ...rough, id: 'unseen', tile: { segmentId: 'seg-20', lane: 0 } }]; chooseIntents(h.config, h.state, 2, h.emit); expect(ru.aiDecision!.perception.hazards).toHaveLength(0); expect(ru.aiMemory.hazards).toHaveLength(0);
   chooseIntents(h.config, h.state, 20, h.emit); expect(ru.aiMemory.hazards).toHaveLength(0);
 });
 it('replays weather/fatigue/fixture events and cleanup in raw/race modes including countdown', () => {

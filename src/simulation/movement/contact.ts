@@ -1,3 +1,4 @@
+import { traceDiagnostic } from '../core/diagnostics.ts';
 import type { DeepReadonly, InitialConfiguration } from '../../contracts/initialization.ts';
 import type { MovementState, MovementEventInput, MovementDiagnostic } from '../../contracts/movement.ts';
 import { commitDamage } from '../combat/damage.ts';
@@ -9,7 +10,9 @@ import { copyJson } from '../../shared/immutable.ts';
 import { clamp } from '../../shared/math.ts';
 export interface ContactRequest { actorId: string; targetId: string; lateral: boolean; fraction: number; closingSpeed: number }
 /** Resolve each unordered physical pair once per atomic group; commit damage together. */
-export function resolveContacts(config: DeepReadonly<InitialConfiguration>, state: Pick<MovementState, 'tick' | 'ruStates' | 'rngStates'>, requests: readonly ContactRequest[], draw: () => number, emit: (event: MovementEventInput) => void, diagnostics: MovementDiagnostic[], substep: number) {
+export function resolveContacts(config: DeepReadonly<InitialConfiguration>, state: Pick<MovementState, 'tick' | 'ruStates' | 'rngStates'>, requests: readonly ContactRequest[], draw: () => number, emitOutput: (event: MovementEventInput) => void, diagnostics: MovementDiagnostic[], substep: number) {
+  const emitted: MovementEventInput[] = [];
+  const emit = (event: MovementEventInput) => emitted.push(event);
   const tuning = config.content.tuningProfiles.find(t => t.id === config.scenario.tuningProfileId)!; const t = tuning.environment.collision; if (!t.enabled || !requests.length) return;
   const frozen = copyJson(state); const pairs = new Set<string>(); const damage = new Map<string, ComponentHit>(); const impacts: { ids: string[]; factor: number }[] = [];
   const rng = createRng(state.rngStates.combat);
@@ -42,9 +45,24 @@ export function resolveContacts(config: DeepReadonly<InitialConfiguration>, stat
     }
   }
   const healthBefore = new Map([...damage.values()].map(hit=>[hit.ruId,state.ruStates[hit.ruId]!.chariot.health]));
-  commitDamage(config, state, damage, rng, emit, 'collision', Math.max(0, ...requests.map(r => r.fraction)));
+  const actualLosses = commitDamage(config, state, damage, rng, emit, 'collision', Math.max(0, ...requests.map(r => r.fraction)));
   for (const [id,health] of healthBefore) state.ruStates[id]!.environmentStats.collisionDamage += health - state.ruStates[id]!.chariot.health;
   for (const impact of impacts) for (const id of impact.ids) state.ruStates[id]!.speedMps *= impact.factor;
   state.rngStates.combat = [...rng.snapshot()];
-  diagnostics.push({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', message: 'Resolved accidental contact separately from occupancy conflicts', details: { requests, pairs: [...pairs], damage: [...damage.values()] } });
+  for (const event of emitted) {
+    if ('details' in event && (event.type === 'attack_hit' || event.type === 'collision_damage')) {
+      const d = event.details;
+      const ruId = event.type === 'attack_hit' ? String(d.targetRuId) : event.ruId;
+      const kind = event.type === 'attack_hit' ? String(d.componentKind) : 'chariot';
+      const key = `${ruId}:${kind}:${String(d.componentId)}`;
+      const nominalDamage = Number(d.amount);
+      const total = damage.get(key)?.total ?? 0;
+      d.nominalDamage = nominalDamage;
+      d.actualDamage = total > 0 ? (actualLosses.get(key) ?? 0) * nominalDamage / total : 0;
+      d.amount = d.actualDamage;
+    }
+    emitOutput(event);
+  }
+
+  traceDiagnostic(diagnostics, () => ({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', message: 'Resolved accidental contact separately from occupancy conflicts', details: { requests, pairs: [...pairs], damage: [...damage.values()] } }));
 }

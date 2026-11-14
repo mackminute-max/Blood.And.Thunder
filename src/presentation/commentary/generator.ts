@@ -48,7 +48,7 @@ export function createCommentary(config: DeepReadonly<InitialConfiguration>, set
       const ranked = candidates.filter(call => !(call.type === 'lap_crossed' && finished.has(actorId(call.sourceIds[0]!) ?? ''))).sort((a, b) => weight[b.priority] - weight[a.priority] || candidates.indexOf(a) - candidates.indexOf(b));
       let routine = 0;
       const selected = ranked.filter(call => {
-        if (call.priority === 'critical' || call.priority === 'high') return true;
+        if (call.priority === 'critical' || call.priority === 'high' || call.type === 'sign_activated') return true;
         const key = `${call.type}:${actorId(call.sourceIds[0]!) ?? ''}`;
         if (routine >= settings.maxRoutinePerTick || tick - (recent.get(key) ?? -Infinity) < settings.repeatTicks) { suppressed++; return false; }
         recent.set(key, tick); routine++; return true;

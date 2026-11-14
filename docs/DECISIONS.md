@@ -1,5 +1,8 @@
 # Implementation decisions
 
+Current engine 0.9.0 authority/status index: [AUDIT_REMEDIATION.md](AUDIT_REMEDIATION.md). Entries are historical and provisional unless explicitly approved; the final AUD entries below supersede identified implementation defaults, not approved race invariants.
+
+
 Approval of the implementation plan authorizes Gate 0. It does not promote the specification's provisional gameplay baselines to approved rules. The root v0.2 specification remains authoritative.
 
 | ID / date | Subsystem | Status | Decision and authority | Rationale | Configuration/module | Tests | Revisit trigger |
@@ -252,3 +255,21 @@ V03-J01 (PROVISIONAL measurement refinement, supersedes the incident/lead detail
 V03-J02 (PROVISIONAL evidence, not approved balance): fixed 64 compact seeds per variant, 12 reference seeds for baseline/2×, four reference seeds for 1×/4× probes and equalized runs; two rulesets, 18 variants, 584 total cases. Numeric gameplay defaults were not tuned in J. Reference completion and Conserve saturation remain open findings. Baseline/2× utility hypotheses do not imply isolated causation or superiority. All raw configuration/seed/hash inputs are reproducible from scripts/v03-balance.ts; concise measured evidence is checked in.
 
 V03-J03 (PROVISIONAL migration/UI): explicit portable configuration migration accepts only simulation 0.7.0 / schema c2-1 and writes validated 0.8.0 inputs without overwriting files. No historical diagnostic relabeling or mutable-state restoration. A bulk preview cannot overwrite the previous operation's undo snapshot; changes after apply are never silently discarded. Imported malformed target IDs reject before replacing a live run. Final typecheck/lint/build, complete tests and browser checks passed as recorded in V03_BALANCE_REPORT.md.
+
+
+## Independent AUD audit remediation (0.9.0)
+
+Owner request: address all16 findings in the new independent audit. These entries document reversible engineering choices, not permanent gameplay canon. Full rationale, configuration keys, tests and limitations: [AUDIT_REMEDIATION.md](AUDIT_REMEDIATION.md).
+
+| ID | Class | Decision / boundary | Supersedes | Evidence / revisit |
+|---|---|---|---|---|
+| AUD-D01 | PROVISIONAL | Field patches against current validated drafts by stable asset ID; scalar forms plus structural JSON. | Stale whole-draft editor snapshots | Cross-editor Chromium regression; revisit for structural schema editor. |
+| AUD-D02 | PROVISIONAL | Raw finite utility ranking; softmax speed blend within selected legal lane, temperature8; braking remains exclusive. | Clamped score ranking / V03-I03 reduced-weight evidence | Shipped-weight pace tests and legal guard/attack boundary tests; review full distributions before balance targets. |
+| AUD-D03 | PROVISIONAL | Laps/final-lap/cutoff factors (+3/+6), visible-absence hazard invalidation with unseen TTL. | D-081 stale-observation simplification | Context/memory tests; no opponent hidden state. |
+| AUD-D04 | PROVISIONAL | Explicit persistent wrecks never clear; existing watchdogs bound blocked active races. Delayed remains default. | Delay-only wreck modeling | Three-mode lifecycle tests. |
+| AUD-D05 | PROVISIONAL | Neutral weather dimensions/crowd and additive provisioned equipment modifiers; named deferred contracts only. | Missing environmental/equipment/handoff interfaces | Environmental/equipment/handoff tests; no dynamic weather/campaign/magic implementation. |
+| AUD-D06 | PROVISIONAL | Fractional sign-active secondary fatigue exposure, independent of utility scaling. Base exertion remains endpoint/full-dt. | D-072/V03-I01 mixed-sign tick interaction | Fractional exposure and crossing/replay tests. |
+| AUD-D07 | PROVISIONAL | Actual HP damage in hit/contact amounts, nominal field retained; penalties unavailable rather than assessed0. | Ambiguous damage events / V03-J01 penalty labeling | Overkill/radio/result/batch metadata tests. Penalty rules still need definition. |
+| AUD-D08 | PROVISIONAL | Complete endpoint evidence required; supplied history reconstructed; scoped noncryptographic verification, reused comparison executions. | Broad capture-validity label | Tampered/missing evidence tests; no cross-version canonical replay. |
+| AUD-D09 | PROVISIONAL | Diagnostic-only severity/trace/snapshot cadence; bounded recording/workloads, expanded lint clocks/RNG guards. | Display-only filtering and incomplete limits | State/RNG invariance, lazy generation, resource and native tests. |
+| AUD-D10 | PROVISIONAL | Engine0.9.0; explicit portable0.7/0.8 migration; no diagnostic relabeling. Measurement writes presets only by flag; optional assert-identical CLI exit. | V03-J03 current version and unconditional preset writes | Migration/native CLI/26-run evidence. |

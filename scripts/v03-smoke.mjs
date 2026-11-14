@@ -24,7 +24,13 @@ try {
   await page.locator('#bulk-value').fill('101');await page.locator('#bulk-preview').click();assert.equal(await page.locator('#bulk-apply').isDisabled(),true);assert.deepEqual(await output(),liveBefore);
   await page.locator('[data-field="globalStrength"]').fill('3');await page.locator('[data-field="globalStrength"]').press('Tab');
   assert.match(await page.locator('#sign-effective').innerText(),/"effectiveMultiplier": 3/);
+  const editedAsset = await page.locator('#asset-id').inputValue();
+  await page.locator('#numeric-fields [data-field="speed"]').fill('86');
+  await page.locator('#numeric-fields [data-field="speed"]').press('Tab');
+  assert.equal(JSON.parse(await page.locator('#content-json').inputValue()).tuningProfiles[0].ai.signInfluence.globalStrength,3);
+  assert.match(await page.locator('#sign-effective').innerText(),/"effectiveMultiplier": 3/);
   await page.getByRole('button',{name:'Reset globalStrength',exact:true}).click();
+  assert.equal(JSON.parse(await page.locator('#content-json').inputValue()).beasts.find(b=>b.id===editedAsset).speed,86);
   await page.locator('#sign-choice').selectOption('conserve');await page.locator('#raise-sign').click();await page.locator('#step-tick').click();
   assert.equal((await output()).state.ruStates['ru-player'].activeSignId,null);assert.equal((await output()).state.ruStates['ru-player'].pendingSign.signId,'conserve');
   assert.match(await page.locator('#sign-status').innerText(),/Pending: conserve.*next line crossing/);

@@ -1,3 +1,4 @@
+import { traceDiagnostic } from '../core/diagnostics.ts';
 import type { DeepReadonly, InitialConfiguration } from '../../contracts/initialization.ts';
 import type { RaceScenario } from '../../configuration/schemas.ts';
 import type { MovementState, MovementDiagnostic, MovementEventInput } from '../../contracts/movement.ts';
@@ -37,7 +38,7 @@ export function resolveLanes(config: DeepReadonly<InitialConfiguration>, state: 
     else if (attempt.plan.abortIfBlocked && attempt.ru.status === 'active') aborts.add(attempt.ru.id);
     const check = checks.get(attempt.ru.id);
     emit({ type: 'lane_change_resolved', ruId: attempt.ru.id, fraction: 0, from: attempt.from, to: attempt.to, accepted, reason, speedBefore: attempt.speedBefore, speedAfter: attempt.ru.speedMps, probability: check?.probability ?? null, roll: check?.roll ?? null });
-    diagnostics.push({ tick: state.tick, substep: 0, level: 'trace', subsystem: 'movement', ruId: attempt.ru.id, message: 'Resolved tick-start lane intent', details: { plan: attempt.plan, from: attempt.from, to: attempt.to, accepted, reason, progressInSegment: attempt.ru.progressInSegment, check: check ?? null, tieValue: arbitration.ties.get(attempt.ru.id) ?? null, abortForward: aborts.has(attempt.ru.id) } });
+    traceDiagnostic(diagnostics, () => ({ tick: state.tick, substep: 0, level: 'trace', subsystem: 'movement', ruId: attempt.ru.id, message: 'Resolved tick-start lane intent', details: { plan: attempt.plan, from: attempt.from, to: attempt.to, accepted, reason, progressInSegment: attempt.ru.progressInSegment, check: check ?? null, tieValue: arbitration.ties.get(attempt.ru.id) ?? null, abortForward: aborts.has(attempt.ru.id) } }));
   }
   return aborts;
 }

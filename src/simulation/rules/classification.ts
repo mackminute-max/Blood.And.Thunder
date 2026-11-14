@@ -39,6 +39,6 @@ export function buildResult(config: DeepReadonly<InitialConfiguration>, state: R
         stats: { ...ru.raceStats, ...ru.combatStats, ...ru.environmentStats, averageFatigue: ru.environmentStats.fatigueSamples ? ru.environmentStats.fatigueTotal / ru.environmentStats.fatigueSamples : 0, acceptedTransitions: ru.acceptedTransitions, blockedTransitions: ru.blockedTransitions, startLineCrossings: ru.startLineCrossings, signUsage: ru.signUsage, activeSignId: ru.activeSignId, pendingSign: ru.pendingSign, signsUsed: config.scenario.rules.maxSignOpportunities - ru.signOpportunitiesRemaining } };
     }),
     environment: { activatedEvents: state.environment.activatedEvents, skippedEvents: state.environment.skippedEvents, scheduledExternalEvents: state.environment.schedule.filter(incident => incident.source === 'external').length },
-    unavailableStatistics: [],
+    unavailableStatistics: ['penalties: no approved officiating policy; not assessed'],
   };
 }

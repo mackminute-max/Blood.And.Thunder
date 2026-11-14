@@ -7,7 +7,7 @@ import { runMeasuredRace, aggregate, compareBatches, reportCsv } from '../src/di
 import { stateHash } from '../src/diagnostics/state-hash.ts';
 import type { InitialConfiguration } from '../src/contracts/initialization.ts';
 const read=(path:string)=>JSON.parse(readFileSync(path,'utf8')) as unknown;
-const root=resolve(process.argv[2]??'/tmp/bt-v03-evidence');mkdirSync(root,{recursive:true});
+const root=resolve(process.argv.slice(2).find(arg=>!arg.startsWith('--'))??'/tmp/bt-v03-evidence');mkdirSync(root,{recursive:true});
 const quick=process.argv.includes('--quick');const referenceSeeds=Array.from({length:quick?1:12},(_,i)=>`v03-reference-${String(i+1).padStart(3,'0')}`);
 const compactSeeds=Array.from({length:quick?2:64},(_,i)=>`v03-compact-${String(i+1).padStart(3,'0')}`);
 const reference=validateSetup(read('src/content/oval-six-v1.scenario.json'),read('src/content/reference.content.json'));
@@ -24,8 +24,10 @@ equalized=previewBulkEdit(equalized,'entry.preRaceStrategy','balanced').configur
 const presets:Record<string,InitialConfiguration>={};
 for(const style of ['combat','pure'] as const){const config=copyJson(reference);config.scenario.rules.competitionStyle=style;presets[`${style}-baseline`]=config;}
 presets['equalized-rus']=equalized;presets['high-sign-influence']=copyJson(reference);presets['high-sign-influence']!.content.tuningProfiles.find(p=>p.id===reference.scenario.tuningProfileId)!.ai.signInfluence.globalStrength=4;
+if (process.argv.includes('--write-presets')) {
 const presetDir='src/content/scenarios/v03';mkdirSync(presetDir,{recursive:true});
 for(const [name,config] of Object.entries(presets))writeFileSync(`${presetDir}/${name}.configuration.json`,JSON.stringify({kind:'blood-thunder-configuration-a4-1',name,mode:'race',...config},null,2)+'\n');
+}
 type Variant={id:string;track:string;configuration:InitialConfiguration;seeds:string[];runs:ReturnType<typeof runMeasuredRace>[];aggregate:ReturnType<typeof aggregate>};
 const variants:Variant[]=[];
 function measure(track:string,source:InitialConfiguration,style:'combat'|'pure',strength:number|null,seeds:string[]){

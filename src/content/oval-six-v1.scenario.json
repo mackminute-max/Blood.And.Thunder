@@ -1,6 +1,6 @@
 {
   "schemaVersion": "c2-1",
-  "simulationVersion": "0.8.0",
+  "simulationVersion": "0.9.0",
   "id": "oval-six-v1",
   "name": "Six-RU reference initialization",
   "seed": "BT-OVAL-SIX-001",

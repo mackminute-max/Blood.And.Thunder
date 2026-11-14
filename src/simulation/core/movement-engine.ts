@@ -1,3 +1,6 @@
+import { diagnosticBuffer } from './diagnostics.ts';
+import { traceDiagnostic } from './diagnostics.ts';
+import { signExposureForTick } from './sign-exposure.ts';
 import { activatePendingSign } from './signs.ts';
 import { initializeEnvironment, advanceEnvironment, markDisabled, occupiesRu, assertEnvironmentState } from '../environment/lifecycle.ts';
 import { applyFatigue } from '../environment/fatigue.ts';
@@ -31,7 +34,7 @@ export function createMovementEngine(scenarioInput: unknown, contentInput: unkno
   state.environment = initializeEnvironment(config, state);
   assertMovementState(state);
   let current = freezeDeep(state);
-  let last: TickOutput = freezeDeep({ state: current, events: [], diagnostics: [], stateHash: stateHash(current) });
+  let last: TickOutput = freezeDeep({ state: current, events: initialized.events, diagnostics: [], stateHash: stateHash(current) });
   let lastValid = current;
   const commands = createCommandQueue(config); commands.initialize(current);
   return Object.freeze({
@@ -46,7 +49,7 @@ export function createMovementEngine(scenarioInput: unknown, contentInput: unkno
       if (current.phase === 'halted' || current.phase === 'error') throw new Error(`Cannot step ${current.phase} movement harness; reinitialize`);
       const next = copyJson(current) as MovementState;
       next.tick++; next.phase = 'running';
-      const diagnostics: MovementDiagnostic[] = [];
+      const diagnostics: MovementDiagnostic[] = diagnosticBuffer(config.scenario.diagnostics, next.tick);
       const events: MovementEvent[] = [];
       const emit = (event: MovementEventInput) => events.push({ ...event, id: '', tick: next.tick, substep: 0 });
       try {
@@ -54,22 +57,23 @@ export function createMovementEngine(scenarioInput: unknown, contentInput: unkno
         if(current.tick===0) for(const ru of Object.values(next.ruStates)) activatePendingSign(ru,next.tick,0,'starting_signal',emit);
         advanceCooldowns(next);
         advanceEnvironment(config, next, next.tick, emit, diagnostics);
+        const signExposure = signExposureForTick(next.ruStates, config.content.tuningProfiles.find(t=>t.id===config.scenario.tuningProfileId)!.ai.pushFatigueMultiplier);
         const startSpeeds = new Map(Object.values(next.ruStates).filter(ru => ru.status === 'active').map(ru => [ru.id, ru.speedMps]));
         for (const ru of Object.values(next.ruStates)) {
           ru.derived = deriveStats(config, ru, next.hazards);
           ru.targetSpeedMps = ru.derived.maxSpeedMps * config.scenario.targetSpeedRatios[ru.id]!;
-          diagnostics.push({ tick: next.tick, substep: 0, level: 'trace', subsystem: 'stats', ruId: ru.id, message: 'Derived tick-start RU performance', details: { ...ru.derived } });
+          traceDiagnostic(diagnostics, () => ({ tick: next.tick, substep: 0, level: 'trace', subsystem: 'stats', ruId: ru.id, message: 'Derived tick-start RU performance', details: { ...ru.derived } }));
         }
         const plans = config.scenario.controller === 'ai' ? chooseIntents(config, next, next.tick, emit) : undefined;
         const combat = planCombat(config, next, next.tick, emit, diagnostics);
         resolveCombatPhase(config, next, combat.plans, combat.guards, 'preMove', emit, diagnostics);
-        const movement = moveTick(config, next, { onLineCrossing: (event,emit) => activatePendingSign(next.ruStates[event.ruId]!,next.tick,event.fraction,'line_crossing',emit), ...(plans ? { lanePlans: plans } : {}), afterLateral: (contactEmit, trace) => resolveCombatPhase(config, next, combat.plans, combat.guards, 'contact', contactEmit, trace) });
-        for (const ru of Object.values(next.ruStates)) if (ru.aiDecision?.movementTick === next.tick) diagnostics.push({ tick: next.tick, substep: 0, level: 'trace', subsystem: 'ai', ruId: ru.id, message: 'Perception, candidate utility and chosen intent', details: { decision: ru.aiDecision } });
+        const movement = moveTick(config, next, { onLineCrossing: (event,emit) => { const ru = next.ruStates[event.ruId]!; signExposure.crossing(ru.id,event.fraction,ru.pendingSign?.signId ?? ru.activeSignId); activatePendingSign(ru,next.tick,event.fraction,'line_crossing',emit); }, ...(plans ? { lanePlans: plans } : {}), afterLateral: (contactEmit, trace) => resolveCombatPhase(config, next, combat.plans, combat.guards, 'contact', contactEmit, trace) });
+        for (const ru of Object.values(next.ruStates)) if (ru.aiDecision?.movementTick === next.tick) traceDiagnostic(diagnostics, () => ({ tick: next.tick, substep: 0, level: 'trace', subsystem: 'ai', ruId: ru.id, message: 'Perception, candidate utility and chosen intent', details: { decision: ru.aiDecision } }));
         events.push(...movement.events);
         const postSubstep = Math.max(0, ...movement.events.map(event => event.substep)) + 1;
         resolveCombatPhase(config, next, combat.plans, combat.guards, 'postMove', event => events.push({ ...event, id: '', tick: next.tick, substep: postSubstep }), diagnostics, postSubstep);
         const lateEmit = (event: MovementEventInput) => events.push({ ...event, id: '', tick: next.tick, substep: postSubstep });
-        applyFatigue(config, next, startSpeeds, lateEmit); markDisabled(next, next.tick, config, lateEmit);
+        applyFatigue(config, next, startSpeeds, lateEmit, signExposure.values()); markDisabled(next, next.tick, config, lateEmit);
         if (config.scenario.controller === 'ai') recordAiOutcomes(next, movement.events, next.tick, event => events.push({ ...event, id: '', tick: next.tick, substep: Math.max(0, ...movement.events.map(event => event.substep)) + 1 }));
         const sequences = new Map<number, number>();
         for (const event of events) { const sequence = sequences.get(event.substep) ?? 0; event.id = `${next.tick}:${event.substep}:${sequence}`; sequences.set(event.substep, sequence + 1); }

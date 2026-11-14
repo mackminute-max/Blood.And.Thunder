@@ -1,0 +1,1107 @@
+{
+  "kind": "audit-remediation-verification",
+  "simulationVersion": "0.9.0",
+  "command": "node scripts/v03-balance.ts /tmp/bt-audit-fixes-balance --quick",
+  "environment": {
+    "node": "v24.22.1",
+    "platform": "linux",
+    "architecture": "x64"
+  },
+  "totalRaces": 26,
+  "note": "Fresh bounded regression sample, not a balance approval or replacement for historical 584-case evidence. No presets written. Configuration/tuning/final hashes use the existing rounded-eight FNV comparison contract.",
+  "variants": [
+    {
+      "id": "compact-combat-no-sign",
+      "seeds": [
+        "v03-compact-001",
+        "v03-compact-002"
+      ],
+      "configurationHash": "fnv1a32-rounded8:c4a2bb4f",
+      "tuningHash": "fnv1a32-rounded8:d10cc2bd",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 6,
+      "finishRate": 1,
+      "dnfReasons": {},
+      "totals": {
+        "overtakes": 4,
+        "timeLeadingSeconds": 14.004754275281842,
+        "overtakesObserved": 4,
+        "attacks": 12,
+        "hits": 10,
+        "ramAttempts": 4,
+        "collisions": 0,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 0,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 0
+      },
+      "aiModes": {
+        "ru-iron:push": 16,
+        "ru-player:push": 16,
+        "ru-vulture:push": 16
+      },
+      "runs": [
+        {
+          "seed": "v03-compact-001",
+          "configurationHash": "fnv1a32-rounded8:06828fac",
+          "tuningHash": "fnv1a32-rounded8:d10cc2bd",
+          "finalHash": "fnv1a32-rounded8:a76ac11d",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 6,
+          "ramAttempts": 2,
+          "collisions": 0
+        },
+        {
+          "seed": "v03-compact-002",
+          "configurationHash": "fnv1a32-rounded8:542899b5",
+          "tuningHash": "fnv1a32-rounded8:d10cc2bd",
+          "finalHash": "fnv1a32-rounded8:94b3776b",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 6,
+          "ramAttempts": 2,
+          "collisions": 0
+        }
+      ]
+    },
+    {
+      "id": "compact-combat-conserve-1x",
+      "seeds": [
+        "v03-compact-001",
+        "v03-compact-002"
+      ],
+      "configurationHash": "fnv1a32-rounded8:190298da",
+      "tuningHash": "fnv1a32-rounded8:0631f36a",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 6,
+      "finishRate": 1,
+      "dnfReasons": {},
+      "totals": {
+        "overtakes": 4,
+        "timeLeadingSeconds": 14.449419695902675,
+        "overtakesObserved": 4,
+        "attacks": 12,
+        "hits": 10,
+        "ramAttempts": 4,
+        "collisions": 0,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 0,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 2
+      },
+      "aiModes": {
+        "ru-iron:push": 16,
+        "ru-player:conserve": 16,
+        "ru-vulture:push": 16
+      },
+      "runs": [
+        {
+          "seed": "v03-compact-001",
+          "configurationHash": "fnv1a32-rounded8:97502811",
+          "tuningHash": "fnv1a32-rounded8:0631f36a",
+          "finalHash": "fnv1a32-rounded8:61cb6db3",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 6,
+          "ramAttempts": 2,
+          "collisions": 0
+        },
+        {
+          "seed": "v03-compact-002",
+          "configurationHash": "fnv1a32-rounded8:aeea2a58",
+          "tuningHash": "fnv1a32-rounded8:0631f36a",
+          "finalHash": "fnv1a32-rounded8:c13ba1c0",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 6,
+          "ramAttempts": 2,
+          "collisions": 0
+        }
+      ]
+    },
+    {
+      "id": "compact-combat-conserve-2x",
+      "seeds": [
+        "v03-compact-001",
+        "v03-compact-002"
+      ],
+      "configurationHash": "fnv1a32-rounded8:e63b195d",
+      "tuningHash": "fnv1a32-rounded8:d10cc2bd",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 6,
+      "finishRate": 1,
+      "dnfReasons": {},
+      "totals": {
+        "overtakes": 4,
+        "timeLeadingSeconds": 14.449419695902677,
+        "overtakesObserved": 4,
+        "attacks": 10,
+        "hits": 8,
+        "ramAttempts": 4,
+        "collisions": 0,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 0,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 2
+      },
+      "aiModes": {
+        "ru-iron:push": 16,
+        "ru-player:conserve": 18,
+        "ru-vulture:push": 16
+      },
+      "runs": [
+        {
+          "seed": "v03-compact-001",
+          "configurationHash": "fnv1a32-rounded8:692370de",
+          "tuningHash": "fnv1a32-rounded8:d10cc2bd",
+          "finalHash": "fnv1a32-rounded8:497d3472",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 5,
+          "ramAttempts": 2,
+          "collisions": 0
+        },
+        {
+          "seed": "v03-compact-002",
+          "configurationHash": "fnv1a32-rounded8:3b6431c3",
+          "tuningHash": "fnv1a32-rounded8:d10cc2bd",
+          "finalHash": "fnv1a32-rounded8:ac978008",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 5,
+          "ramAttempts": 2,
+          "collisions": 0
+        }
+      ]
+    },
+    {
+      "id": "compact-combat-conserve-4x",
+      "seeds": [
+        "v03-compact-001",
+        "v03-compact-002"
+      ],
+      "configurationHash": "fnv1a32-rounded8:81d514c7",
+      "tuningHash": "fnv1a32-rounded8:b824f727",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 6,
+      "finishRate": 1,
+      "dnfReasons": {},
+      "totals": {
+        "overtakes": 4,
+        "timeLeadingSeconds": 14.449419695902673,
+        "overtakesObserved": 4,
+        "attacks": 10,
+        "hits": 8,
+        "ramAttempts": 4,
+        "collisions": 0,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 0,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 2
+      },
+      "aiModes": {
+        "ru-iron:push": 16,
+        "ru-player:conserve": 18,
+        "ru-vulture:push": 16
+      },
+      "runs": [
+        {
+          "seed": "v03-compact-001",
+          "configurationHash": "fnv1a32-rounded8:b005b734",
+          "tuningHash": "fnv1a32-rounded8:b824f727",
+          "finalHash": "fnv1a32-rounded8:f473a333",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 5,
+          "ramAttempts": 2,
+          "collisions": 0
+        },
+        {
+          "seed": "v03-compact-002",
+          "configurationHash": "fnv1a32-rounded8:92cc5dfd",
+          "tuningHash": "fnv1a32-rounded8:b824f727",
+          "finalHash": "fnv1a32-rounded8:fb0c066f",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 5,
+          "ramAttempts": 2,
+          "collisions": 0
+        }
+      ]
+    },
+    {
+      "id": "compact-pure-no-sign",
+      "seeds": [
+        "v03-compact-001",
+        "v03-compact-002"
+      ],
+      "configurationHash": "fnv1a32-rounded8:fca78b5d",
+      "tuningHash": "fnv1a32-rounded8:d10cc2bd",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 6,
+      "finishRate": 1,
+      "dnfReasons": {},
+      "totals": {
+        "overtakes": 4,
+        "timeLeadingSeconds": 14.00475427528184,
+        "overtakesObserved": 4,
+        "attacks": 0,
+        "hits": 0,
+        "ramAttempts": 0,
+        "collisions": 0,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 0,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 0
+      },
+      "aiModes": {
+        "ru-iron:push": 16,
+        "ru-player:push": 16,
+        "ru-vulture:push": 16
+      },
+      "runs": [
+        {
+          "seed": "v03-compact-001",
+          "configurationHash": "fnv1a32-rounded8:7f8fe2de",
+          "tuningHash": "fnv1a32-rounded8:d10cc2bd",
+          "finalHash": "fnv1a32-rounded8:3557364f",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 0,
+          "ramAttempts": 0,
+          "collisions": 0
+        },
+        {
+          "seed": "v03-compact-002",
+          "configurationHash": "fnv1a32-rounded8:51d0a3c3",
+          "tuningHash": "fnv1a32-rounded8:d10cc2bd",
+          "finalHash": "fnv1a32-rounded8:19aaa869",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 0,
+          "ramAttempts": 0,
+          "collisions": 0
+        }
+      ]
+    },
+    {
+      "id": "compact-pure-conserve-1x",
+      "seeds": [
+        "v03-compact-001",
+        "v03-compact-002"
+      ],
+      "configurationHash": "fnv1a32-rounded8:1b7933f0",
+      "tuningHash": "fnv1a32-rounded8:0631f36a",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 6,
+      "finishRate": 1,
+      "dnfReasons": {},
+      "totals": {
+        "overtakes": 4,
+        "timeLeadingSeconds": 14.426812374558612,
+        "overtakesObserved": 4,
+        "attacks": 0,
+        "hits": 0,
+        "ramAttempts": 0,
+        "collisions": 0,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 0,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 2
+      },
+      "aiModes": {
+        "ru-iron:push": 16,
+        "ru-player:conserve": 16,
+        "ru-vulture:push": 16
+      },
+      "runs": [
+        {
+          "seed": "v03-compact-001",
+          "configurationHash": "fnv1a32-rounded8:d4d20ffb",
+          "tuningHash": "fnv1a32-rounded8:0631f36a",
+          "finalHash": "fnv1a32-rounded8:86f86a76",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 0,
+          "ramAttempts": 0,
+          "collisions": 0
+        },
+        {
+          "seed": "v03-compact-002",
+          "configurationHash": "fnv1a32-rounded8:15db0f96",
+          "tuningHash": "fnv1a32-rounded8:0631f36a",
+          "finalHash": "fnv1a32-rounded8:dae373b6",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 0,
+          "ramAttempts": 0,
+          "collisions": 0
+        }
+      ]
+    },
+    {
+      "id": "compact-pure-conserve-2x",
+      "seeds": [
+        "v03-compact-001",
+        "v03-compact-002"
+      ],
+      "configurationHash": "fnv1a32-rounded8:83c3962f",
+      "tuningHash": "fnv1a32-rounded8:d10cc2bd",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 6,
+      "finishRate": 1,
+      "dnfReasons": {},
+      "totals": {
+        "overtakes": 4,
+        "timeLeadingSeconds": 14.426812374558612,
+        "overtakesObserved": 4,
+        "attacks": 0,
+        "hits": 0,
+        "ramAttempts": 0,
+        "collisions": 0,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 0,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 2
+      },
+      "aiModes": {
+        "ru-iron:push": 16,
+        "ru-player:conserve": 18,
+        "ru-vulture:push": 16
+      },
+      "runs": [
+        {
+          "seed": "v03-compact-001",
+          "configurationHash": "fnv1a32-rounded8:eaa04ccc",
+          "tuningHash": "fnv1a32-rounded8:d10cc2bd",
+          "finalHash": "fnv1a32-rounded8:3228872c",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 0,
+          "ramAttempts": 0,
+          "collisions": 0
+        },
+        {
+          "seed": "v03-compact-002",
+          "configurationHash": "fnv1a32-rounded8:3b68a6d5",
+          "tuningHash": "fnv1a32-rounded8:d10cc2bd",
+          "finalHash": "fnv1a32-rounded8:d3f5a932",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 0,
+          "ramAttempts": 0,
+          "collisions": 0
+        }
+      ]
+    },
+    {
+      "id": "compact-pure-conserve-4x",
+      "seeds": [
+        "v03-compact-001",
+        "v03-compact-002"
+      ],
+      "configurationHash": "fnv1a32-rounded8:a81d0709",
+      "tuningHash": "fnv1a32-rounded8:b824f727",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 6,
+      "finishRate": 1,
+      "dnfReasons": {},
+      "totals": {
+        "overtakes": 4,
+        "timeLeadingSeconds": 14.426812374558612,
+        "overtakesObserved": 4,
+        "attacks": 0,
+        "hits": 0,
+        "ramAttempts": 0,
+        "collisions": 0,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 0,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 2
+      },
+      "aiModes": {
+        "ru-iron:push": 16,
+        "ru-player:conserve": 18,
+        "ru-vulture:push": 16
+      },
+      "runs": [
+        {
+          "seed": "v03-compact-001",
+          "configurationHash": "fnv1a32-rounded8:c7d05f62",
+          "tuningHash": "fnv1a32-rounded8:b824f727",
+          "finalHash": "fnv1a32-rounded8:0dab2ac9",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 0,
+          "ramAttempts": 0,
+          "collisions": 0
+        },
+        {
+          "seed": "v03-compact-002",
+          "configurationHash": "fnv1a32-rounded8:8f013b77",
+          "tuningHash": "fnv1a32-rounded8:b824f727",
+          "finalHash": "fnv1a32-rounded8:c119e9d7",
+          "terminal": "complete",
+          "finished": 3,
+          "entrants": 3,
+          "attacks": 0,
+          "ramAttempts": 0,
+          "collisions": 0
+        }
+      ]
+    },
+    {
+      "id": "reference-combat-no-sign",
+      "seeds": [
+        "v03-reference-001"
+      ],
+      "configurationHash": "fnv1a32-rounded8:4273b8c6",
+      "tuningHash": "fnv1a32-rounded8:f09f20ac",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 1,
+      "finishRate": 0.16666666666666666,
+      "dnfReasons": {
+        "finish_cutoff": 4,
+        "chariot_disabled": 1
+      },
+      "totals": {
+        "overtakes": 8,
+        "timeLeadingSeconds": 159.4523275727202,
+        "overtakesObserved": 8,
+        "attacks": 99,
+        "hits": 55,
+        "ramAttempts": 23,
+        "collisions": 3,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 9,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 0
+      },
+      "aiModes": {
+        "ru-ash:conserve": 620,
+        "ru-bone:conserve": 7,
+        "ru-copper:brake": 3,
+        "ru-iron:push": 898,
+        "ru-player:push": 655,
+        "ru-vulture:push": 798,
+        "ru-copper:conserve": 13,
+        "ru-bone:push": 891,
+        "ru-ash:push": 278,
+        "ru-player:cruise": 157,
+        "ru-copper:cruise": 34,
+        "ru-copper:push": 69,
+        "ru-player:conserve": 86
+      },
+      "runs": [
+        {
+          "seed": "v03-reference-001",
+          "configurationHash": "fnv1a32-rounded8:864a30e9",
+          "tuningHash": "fnv1a32-rounded8:f09f20ac",
+          "finalHash": "fnv1a32-rounded8:a20a0364",
+          "terminal": "complete",
+          "finished": 1,
+          "entrants": 6,
+          "attacks": 99,
+          "ramAttempts": 23,
+          "collisions": 3
+        }
+      ]
+    },
+    {
+      "id": "reference-combat-conserve-2x",
+      "seeds": [
+        "v03-reference-001"
+      ],
+      "configurationHash": "fnv1a32-rounded8:18391c88",
+      "tuningHash": "fnv1a32-rounded8:f09f20ac",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 1,
+      "finishRate": 0.16666666666666666,
+      "dnfReasons": {
+        "chariot_disabled": 3,
+        "finish_cutoff": 2
+      },
+      "totals": {
+        "overtakes": 12,
+        "timeLeadingSeconds": 214.65246818216647,
+        "overtakesObserved": 12,
+        "attacks": 118,
+        "hits": 70,
+        "ramAttempts": 30,
+        "collisions": 1,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 10,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 1
+      },
+      "aiModes": {
+        "ru-ash:conserve": 97,
+        "ru-bone:conserve": 6,
+        "ru-copper:brake": 3,
+        "ru-iron:push": 162,
+        "ru-player:conserve": 1174,
+        "ru-vulture:push": 66,
+        "ru-copper:conserve": 116,
+        "ru-bone:push": 1168,
+        "ru-ash:push": 31,
+        "ru-copper:cruise": 260,
+        "ru-copper:push": 695
+      },
+      "runs": [
+        {
+          "seed": "v03-reference-001",
+          "configurationHash": "fnv1a32-rounded8:a3bcd627",
+          "tuningHash": "fnv1a32-rounded8:f09f20ac",
+          "finalHash": "fnv1a32-rounded8:e1604f20",
+          "terminal": "complete",
+          "finished": 1,
+          "entrants": 6,
+          "attacks": 118,
+          "ramAttempts": 30,
+          "collisions": 1
+        }
+      ]
+    },
+    {
+      "id": "reference-combat-conserve-1x",
+      "seeds": [
+        "v03-reference-001"
+      ],
+      "configurationHash": "fnv1a32-rounded8:a71b7c33",
+      "tuningHash": "fnv1a32-rounded8:50c4836f",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 1,
+      "finishRate": 0.16666666666666666,
+      "dnfReasons": {
+        "chariot_disabled": 3,
+        "finish_cutoff": 2
+      },
+      "totals": {
+        "overtakes": 9,
+        "timeLeadingSeconds": 190.06056585630026,
+        "overtakesObserved": 9,
+        "attacks": 110,
+        "hits": 61,
+        "ramAttempts": 32,
+        "collisions": 1,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 7,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 1
+      },
+      "aiModes": {
+        "ru-ash:conserve": 626,
+        "ru-bone:conserve": 6,
+        "ru-copper:brake": 5,
+        "ru-iron:push": 1050,
+        "ru-player:conserve": 1051,
+        "ru-vulture:push": 54,
+        "ru-copper:conserve": 17,
+        "ru-bone:push": 130,
+        "ru-ash:push": 325,
+        "ru-copper:cruise": 40,
+        "ru-copper:push": 99,
+        "ru-iron:conserve": 1
+      },
+      "runs": [
+        {
+          "seed": "v03-reference-001",
+          "configurationHash": "fnv1a32-rounded8:ec2029b0",
+          "tuningHash": "fnv1a32-rounded8:50c4836f",
+          "finalHash": "fnv1a32-rounded8:ec006403",
+          "terminal": "complete",
+          "finished": 1,
+          "entrants": 6,
+          "attacks": 110,
+          "ramAttempts": 32,
+          "collisions": 1
+        }
+      ]
+    },
+    {
+      "id": "reference-combat-conserve-4x",
+      "seeds": [
+        "v03-reference-001"
+      ],
+      "configurationHash": "fnv1a32-rounded8:c3ee26d6",
+      "tuningHash": "fnv1a32-rounded8:72ccef36",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 1,
+      "finishRate": 0.16666666666666666,
+      "dnfReasons": {
+        "finish_cutoff": 4,
+        "chariot_disabled": 1
+      },
+      "totals": {
+        "overtakes": 9,
+        "timeLeadingSeconds": 150.06449082556293,
+        "overtakesObserved": 9,
+        "attacks": 110,
+        "hits": 58,
+        "ramAttempts": 26,
+        "collisions": 1,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 5,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 1
+      },
+      "aiModes": {
+        "ru-ash:conserve": 621,
+        "ru-bone:conserve": 6,
+        "ru-copper:brake": 3,
+        "ru-iron:push": 130,
+        "ru-player:conserve": 851,
+        "ru-vulture:push": 751,
+        "ru-copper:conserve": 112,
+        "ru-bone:push": 845,
+        "ru-ash:push": 230,
+        "ru-copper:cruise": 204,
+        "ru-copper:push": 532
+      },
+      "runs": [
+        {
+          "seed": "v03-reference-001",
+          "configurationHash": "fnv1a32-rounded8:7ec89f19",
+          "tuningHash": "fnv1a32-rounded8:72ccef36",
+          "finalHash": "fnv1a32-rounded8:21bae868",
+          "terminal": "complete",
+          "finished": 1,
+          "entrants": 6,
+          "attacks": 110,
+          "ramAttempts": 26,
+          "collisions": 1
+        }
+      ]
+    },
+    {
+      "id": "reference-pure-no-sign",
+      "seeds": [
+        "v03-reference-001"
+      ],
+      "configurationHash": "fnv1a32-rounded8:1f5e01bc",
+      "tuningHash": "fnv1a32-rounded8:f09f20ac",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 1,
+      "finishRate": 0.16666666666666666,
+      "dnfReasons": {
+        "finish_cutoff": 5
+      },
+      "totals": {
+        "overtakes": 13,
+        "timeLeadingSeconds": 126.23795313198409,
+        "overtakesObserved": 13,
+        "attacks": 0,
+        "hits": 0,
+        "ramAttempts": 0,
+        "collisions": 1,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 13,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 0
+      },
+      "aiModes": {
+        "ru-ash:conserve": 522,
+        "ru-bone:conserve": 9,
+        "ru-copper:brake": 3,
+        "ru-iron:push": 730,
+        "ru-player:push": 513,
+        "ru-vulture:push": 632,
+        "ru-copper:conserve": 27,
+        "ru-bone:push": 723,
+        "ru-ash:push": 210,
+        "ru-player:cruise": 154,
+        "ru-copper:cruise": 181,
+        "ru-copper:push": 521,
+        "ru-player:conserve": 65,
+        "ru-iron:conserve": 2
+      },
+      "runs": [
+        {
+          "seed": "v03-reference-001",
+          "configurationHash": "fnv1a32-rounded8:069986cb",
+          "tuningHash": "fnv1a32-rounded8:f09f20ac",
+          "finalHash": "fnv1a32-rounded8:d44a4359",
+          "terminal": "complete",
+          "finished": 1,
+          "entrants": 6,
+          "attacks": 0,
+          "ramAttempts": 0,
+          "collisions": 1
+        }
+      ]
+    },
+    {
+      "id": "reference-pure-conserve-2x",
+      "seeds": [
+        "v03-reference-001"
+      ],
+      "configurationHash": "fnv1a32-rounded8:aebbef4a",
+      "tuningHash": "fnv1a32-rounded8:f09f20ac",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 1,
+      "finishRate": 0.16666666666666666,
+      "dnfReasons": {
+        "finish_cutoff": 5
+      },
+      "totals": {
+        "overtakes": 11,
+        "timeLeadingSeconds": 127.02420439570865,
+        "overtakesObserved": 11,
+        "attacks": 0,
+        "hits": 0,
+        "ramAttempts": 0,
+        "collisions": 1,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 5,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 1
+      },
+      "aiModes": {
+        "ru-ash:conserve": 523,
+        "ru-bone:conserve": 8,
+        "ru-copper:brake": 3,
+        "ru-iron:push": 735,
+        "ru-player:conserve": 736,
+        "ru-vulture:push": 636,
+        "ru-copper:conserve": 14,
+        "ru-bone:push": 728,
+        "ru-ash:push": 213,
+        "ru-copper:cruise": 166,
+        "ru-copper:push": 553,
+        "ru-iron:conserve": 1
+      },
+      "runs": [
+        {
+          "seed": "v03-reference-001",
+          "configurationHash": "fnv1a32-rounded8:15ace82d",
+          "tuningHash": "fnv1a32-rounded8:f09f20ac",
+          "finalHash": "fnv1a32-rounded8:7c644c6c",
+          "terminal": "complete",
+          "finished": 1,
+          "entrants": 6,
+          "attacks": 0,
+          "ramAttempts": 0,
+          "collisions": 1
+        }
+      ]
+    },
+    {
+      "id": "reference-pure-conserve-1x",
+      "seeds": [
+        "v03-reference-001"
+      ],
+      "configurationHash": "fnv1a32-rounded8:380bd5a1",
+      "tuningHash": "fnv1a32-rounded8:50c4836f",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 1,
+      "finishRate": 0.16666666666666666,
+      "dnfReasons": {
+        "finish_cutoff": 5
+      },
+      "totals": {
+        "overtakes": 18,
+        "timeLeadingSeconds": 126.37275577952396,
+        "overtakesObserved": 18,
+        "attacks": 0,
+        "hits": 0,
+        "ramAttempts": 0,
+        "collisions": 1,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 7,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 1
+      },
+      "aiModes": {
+        "ru-ash:conserve": 522,
+        "ru-bone:conserve": 9,
+        "ru-copper:brake": 3,
+        "ru-iron:push": 730,
+        "ru-player:conserve": 731,
+        "ru-vulture:push": 632,
+        "ru-copper:conserve": 14,
+        "ru-bone:push": 723,
+        "ru-ash:push": 210,
+        "ru-copper:cruise": 166,
+        "ru-copper:push": 549,
+        "ru-iron:conserve": 2,
+        "ru-player:push": 1
+      },
+      "runs": [
+        {
+          "seed": "v03-reference-001",
+          "configurationHash": "fnv1a32-rounded8:9044493a",
+          "tuningHash": "fnv1a32-rounded8:50c4836f",
+          "finalHash": "fnv1a32-rounded8:eab166b3",
+          "terminal": "complete",
+          "finished": 1,
+          "entrants": 6,
+          "attacks": 0,
+          "ramAttempts": 0,
+          "collisions": 1
+        }
+      ]
+    },
+    {
+      "id": "reference-pure-conserve-4x",
+      "seeds": [
+        "v03-reference-001"
+      ],
+      "configurationHash": "fnv1a32-rounded8:24ad7170",
+      "tuningHash": "fnv1a32-rounded8:72ccef36",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 1,
+      "finishRate": 0.16666666666666666,
+      "dnfReasons": {
+        "finish_cutoff": 5
+      },
+      "totals": {
+        "overtakes": 11,
+        "timeLeadingSeconds": 127.02420439570858,
+        "overtakesObserved": 11,
+        "attacks": 0,
+        "hits": 0,
+        "ramAttempts": 0,
+        "collisions": 1,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 4,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 1
+      },
+      "aiModes": {
+        "ru-ash:conserve": 523,
+        "ru-bone:conserve": 8,
+        "ru-copper:brake": 3,
+        "ru-iron:push": 735,
+        "ru-player:conserve": 736,
+        "ru-vulture:push": 636,
+        "ru-copper:conserve": 14,
+        "ru-bone:push": 728,
+        "ru-ash:push": 213,
+        "ru-copper:cruise": 166,
+        "ru-copper:push": 553,
+        "ru-iron:conserve": 1
+      },
+      "runs": [
+        {
+          "seed": "v03-reference-001",
+          "configurationHash": "fnv1a32-rounded8:67197cef",
+          "tuningHash": "fnv1a32-rounded8:72ccef36",
+          "finalHash": "fnv1a32-rounded8:f0ed8e89",
+          "terminal": "complete",
+          "finished": 1,
+          "entrants": 6,
+          "attacks": 0,
+          "ramAttempts": 0,
+          "collisions": 1
+        }
+      ]
+    },
+    {
+      "id": "equalized-reference-combat-no-sign",
+      "seeds": [
+        "v03-reference-001"
+      ],
+      "configurationHash": "fnv1a32-rounded8:3346554d",
+      "tuningHash": "fnv1a32-rounded8:f09f20ac",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 2,
+      "finishRate": 0.3333333333333333,
+      "dnfReasons": {
+        "finish_cutoff": 3,
+        "chariot_disabled": 1
+      },
+      "totals": {
+        "overtakes": 15,
+        "timeLeadingSeconds": 178.7271512508833,
+        "overtakesObserved": 15,
+        "attacks": 96,
+        "hits": 52,
+        "ramAttempts": 7,
+        "collisions": 1,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 5,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 0
+      },
+      "aiModes": {
+        "ru-ash:push": 775,
+        "ru-bone:conserve": 41,
+        "ru-copper:conserve": 34,
+        "ru-iron:push": 714,
+        "ru-player:push": 647,
+        "ru-vulture:push": 49,
+        "ru-iron:cruise": 152,
+        "ru-player:cruise": 78,
+        "ru-copper:cruise": 164,
+        "ru-bone:push": 753,
+        "ru-bone:cruise": 151,
+        "ru-copper:push": 796,
+        "ru-ash:cruise": 114,
+        "ru-iron:conserve": 128,
+        "ru-ash:conserve": 5,
+        "ru-player:conserve": 269
+      },
+      "runs": [
+        {
+          "seed": "v03-reference-001",
+          "configurationHash": "fnv1a32-rounded8:37733d96",
+          "tuningHash": "fnv1a32-rounded8:f09f20ac",
+          "finalHash": "fnv1a32-rounded8:37426241",
+          "terminal": "complete",
+          "finished": 2,
+          "entrants": 6,
+          "attacks": 96,
+          "ramAttempts": 7,
+          "collisions": 1
+        }
+      ]
+    },
+    {
+      "id": "equalized-reference-pure-no-sign",
+      "seeds": [
+        "v03-reference-001"
+      ],
+      "configurationHash": "fnv1a32-rounded8:7bb053b7",
+      "tuningHash": "fnv1a32-rounded8:f09f20ac",
+      "errors": 0,
+      "entrants": 6,
+      "finished": 6,
+      "finishRate": 1,
+      "dnfReasons": {},
+      "totals": {
+        "overtakes": 38,
+        "timeLeadingSeconds": 174.212096793105,
+        "overtakesObserved": 38,
+        "attacks": 0,
+        "hits": 0,
+        "ramAttempts": 0,
+        "collisions": 0,
+        "fatalities": 0,
+        "injuries": 0,
+        "destroyed": 0,
+        "blockedTransitions": 17,
+        "externalEvents": 1,
+        "activatedEvents": 1,
+        "signsUsed": 0
+      },
+      "aiModes": {
+        "ru-ash:push": 752,
+        "ru-bone:conserve": 111,
+        "ru-copper:conserve": 95,
+        "ru-iron:push": 673,
+        "ru-player:push": 614,
+        "ru-vulture:push": 729,
+        "ru-iron:cruise": 132,
+        "ru-player:cruise": 108,
+        "ru-copper:cruise": 202,
+        "ru-bone:cruise": 193,
+        "ru-copper:push": 603,
+        "ru-bone:push": 604,
+        "ru-vulture:cruise": 124,
+        "ru-ash:cruise": 116,
+        "ru-player:conserve": 182,
+        "ru-iron:conserve": 85,
+        "ru-vulture:conserve": 21,
+        "ru-ash:conserve": 4
+      },
+      "runs": [
+        {
+          "seed": "v03-reference-001",
+          "configurationHash": "fnv1a32-rounded8:b97de524",
+          "tuningHash": "fnv1a32-rounded8:f09f20ac",
+          "finalHash": "fnv1a32-rounded8:13832e9d",
+          "terminal": "complete",
+          "finished": 6,
+          "entrants": 6,
+          "attacks": 0,
+          "ramAttempts": 0,
+          "collisions": 0
+        }
+      ]
+    }
+  ]
+}

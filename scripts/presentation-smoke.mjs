@@ -10,7 +10,7 @@ try {
   const output = async () => JSON.parse(await page.locator('#initial-state').innerText());
   await page.waitForFunction(() => document.querySelector('#viewer').dataset.markerCount === '6'); assert.equal(await page.locator('#live-standings tr').count(), 6); assert.match(await page.locator('#player-race-status').innerText(), /target.*fatigue/); assert.equal(await page.locator('#player-components li').count(), 4);
   await page.locator('#sign-choice').selectOption('conserve'); await page.locator('#raise-sign').click(); assert.equal((await output()).state.ruStates['ru-player'].activeSignId, null);
-  await page.locator('#step-tick').click(); const first = await output(); assert.equal(first.state.ruStates['ru-player'].activeSignId, 'conserve');
+  await page.locator('#step-tick').click(); const first = await output(); assert.equal(first.state.ruStates['ru-player'].activeSignId, 'conserve'); assert.match(await page.locator('#sign-activation-notice').innerText(), /Activated conserve/);
   await page.waitForFunction(() => document.querySelector('#viewer').dataset.tick === '1' && document.querySelector('#viewer').dataset.interpolating === 'false');
   const positions = JSON.parse(await page.locator('#viewer').getAttribute('data-positions')); for (const [id, marker] of Object.entries(positions)) { assert.equal(marker.segmentId, first.state.ruStates[id].tile.segmentId); assert.equal(marker.lane, first.state.ruStates[id].tile.lane); assert.equal(marker.progress, first.state.ruStates[id].progressInSegment); }
   assert.match(await page.locator('#commentary-feed').innerText(), /under way/); assert.ok(JSON.parse(await page.locator('#commentary-feed li').first().getAttribute('data-source-ids')).length);

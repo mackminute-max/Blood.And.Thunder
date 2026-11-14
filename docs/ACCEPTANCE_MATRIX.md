@@ -1,6 +1,6 @@
 # Prototype acceptance and regression map
 
-Simulation 0.8.0 / schema c2-1. Each reference below points to executable coverage; no single seed is treated as balance proof. `npm test` runs the unit/integration suite (including prior 1,000-seed batches). With the dev server running, `npm run test:browser` runs actual Chromium controls/export/replay checks. Batch plans and limitations are in BALANCE_REVIEW.md.
+Current simulation 0.9.0 / schema c2-1. The original matrix below remains a baseline regression index. New audit coverage and current gate qualifications: [AUDIT_REMEDIATION.md](AUDIT_REMEDIATION.md). Each reference below points to executable coverage; no single seed is treated as balance proof. `npm test` runs the unit/integration suite (including prior 1,000-seed batches). With the dev server running, `npm run test:browser` runs actual Chromium controls/export/replay checks. Batch plans and limitations are in BALANCE_REVIEW.md.
 
 | Specification D.4 | Evidence |
 |---|---|

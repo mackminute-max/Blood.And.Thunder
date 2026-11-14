@@ -1,3 +1,5 @@
+import { weatherFactors } from '../environment/weather.ts';
+import { equipmentModifiers, performanceStats } from './equipment.ts';
 import { traitFactors } from '../environment/traits.ts';
 import type { Hazard } from '../../contracts/environment.ts';
 import type { DeepReadonly, InitialConfiguration, InitialRUState } from '../../contracts/initialization.ts';
@@ -32,7 +34,7 @@ export function deriveStats(config: DeepReadonly<InitialConfiguration>, ru: Deep
   const damageFactor = clamp(1 - weightedConditionDamage / t.damage.divisor, t.damage.min, t.damage.max);
   const track = config.content.tracks.find(track => track.id === config.scenario.trackId)!;
   const lane = track.segments.find(segment => segment.id === ru.tile.segmentId)!.lanes.find(lane => lane.index === ru.tile.lane)!;
-  const weather = config.content.weather.find(weather => weather.id === config.scenario.weatherId)!;
+  const weather = weatherFactors(config);
   const roughness = hazards.filter(h => h.type === 'track_roughness' && h.tile.segmentId === ru.tile.segmentId && h.tile.lane === ru.tile.lane).length * tuning.environment.events.roughnessTractionDelta;
   const intrinsicFactor = 1 / (1 + lane.roughness * tuning.attributes.roughnessTractionWeight);
   const traction = clamp((lane.traction * intrinsicFactor + roughness) * weather.traction * traitFactors(config, ru.id).traction, t.braking.tractionMin, t.braking.tractionMax);
@@ -48,6 +50,17 @@ export function deriveStats(config: DeepReadonly<InitialConfiguration>, ru: Deep
     endurance: combine(t.endurance, teamEndurance, 0),
     breakdown: { coordination, teamSpeed, teamPower, teamAgility, teamEndurance, teamToughness, loadFactor, fatigueFactor, teamDamage, weightedConditionDamage, damageFactor, rollingFactor, traction, intrinsicFactor, nerve: driver.nerve, durability: chariot.durability, driving, beastHandling, chariotFactor, ...Object.fromEntries(beasts.map(({ state }) => [`conditionFactor.${state.id}`, factor(state.band)])) },
   };
+  const equipment = equipmentModifiers(config, ru.id);
+  const crowd = tuning.environment.crowd;
+  const crowdFactor = 1 + crowd.morale * crowd.performanceWeight;
+  for (const stat of performanceStats) {
+    const limit = stat === 'handling' || stat === 'stability' || stat === 'endurance' ? 100 : Number.MAX_VALUE;
+    derived[stat] = clamp(derived[stat] + equipment[stat], 0, limit);
+    derived.breakdown[`equipment.${stat}`] = equipment[stat];
+  }
+  derived.maxSpeedMps = disabled ? 0 : derived.maxSpeedMps * crowdFactor;
+  derived.accelMps2 = disabled ? 0 : derived.accelMps2 * crowdFactor;
+  derived.breakdown.crowdFactor = crowdFactor;
   if (!disabled && ru.derivedOverrides?.maxSpeedMps !== undefined) { derived.breakdown['original.maxSpeedMps'] = derived.maxSpeedMps; derived.maxSpeedMps = ru.derivedOverrides.maxSpeedMps; derived.breakdown['override.maxSpeedMps'] = derived.maxSpeedMps; }
   derived.breakdown.safeCornerSpeedMps = laneConditions(config, ru.tile, derived.maxSpeedMps, derived.handling, hazards, ru.id).safeSpeed;
   return derived;

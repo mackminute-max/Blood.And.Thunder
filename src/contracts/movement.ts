@@ -64,7 +64,7 @@ export interface MovementDiagnostic {
 }
 export interface InvariantEvent { id: string; tick: number; substep: number; type: 'invariant_violation'; message: string }
 export interface TickOutput {
-  state: DeepReadonly<MovementState>; events: readonly DeepReadonly<MovementEvent | InvariantEvent>[];
+  state: DeepReadonly<MovementState>; events: readonly DeepReadonly<MovementEvent | InvariantEvent | import('./initialization.ts').InitializationEvent>[];
   diagnostics: readonly DeepReadonly<MovementDiagnostic>[]; stateHash: string;
 }
 export type MovementEventInput = { [K in MovementEvent['type']]: Omit<Extract<MovementEvent, { type: K }>, 'id' | 'tick' | 'substep'> }[MovementEvent['type']];

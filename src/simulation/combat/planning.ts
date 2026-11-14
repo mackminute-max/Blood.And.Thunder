@@ -1,3 +1,4 @@
+import { traceDiagnostic } from '../core/diagnostics.ts';
 import { signStrength } from '../ai/sign-strength.ts';
 import type { DeepReadonly, InitialConfiguration } from '../../contracts/initialization.ts';
 import type { MovementEventInput, MovementDiagnostic } from '../../contracts/movement.ts';
@@ -55,7 +56,7 @@ export function planCombat(config: DeepReadonly<InitialConfiguration>, state: Co
     ru.combatDecision = { movementTick, candidates, selected, guard, guardUtility };
     plans.push(...selected);
     emit({ type: 'combat_intent', ruId, fraction: 0, details: { decision: ru.combatDecision, noneUtility: a.noneUtility } });
-    diagnostics.push({ tick: state.tick, substep: 0, level: 'trace', subsystem: 'combat', ruId, message: 'Combat candidates, channel reservations and guard policy', details: { decision: ru.combatDecision } });
+    traceDiagnostic(diagnostics, () => ({ tick: state.tick, substep: 0, level: 'trace', subsystem: 'combat', ruId, message: 'Combat candidates, channel reservations and guard policy', details: { decision: ru.combatDecision } }));
   }
   return { plans, guards };
 }

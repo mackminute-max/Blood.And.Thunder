@@ -196,3 +196,7 @@ Never claim a feature is finished, tested, or playable without corresponding imp
 ## v0.3 task authority
 
 For owner-authorized v0.3 work, also read `Blood_and_Thunder_v0.3_Codex_Development_Instructions.md`. Its explicit owner decisions supersede earlier rules only where stated. Implement gated milestones F–J; preserve the v0.2 specification and its approved rules otherwise. Track unresolved full-audit requirements in `docs/V03_AUDIT_REMEDIATION.md`. Provisional defaults remain provisional.
+
+## Current independent audit remediation
+
+Current simulation: **0.9.0**, schema `c2-1`. Read `docs/AUDIT_REMEDIATION.md` for the owner's requested responses to all16 independent AUD- findings, current controls, compatibility, provisional formulas and verification. `Prototype_Implementation_Audit.md` and its requirements inventory describe the historical audited revision; older milestone completion claims do not override the current remediation record. The missing historical v0.2 audit is a different document with different IDs. Penalty assessment remains unsupported pending an approved policy; deferred extension contracts do not authorize implementing campaign/magic/alternate-format systems. Same-runtime deterministic evidence does not establish cross-engine floating-point identity.

@@ -1,5 +1,8 @@
 # Blood and Thunder — independent implementation audit
 
+**Historical baseline audit.** Subsequent implementation responses and current verification are tracked in [AUDIT_REMEDIATION.md](AUDIT_REMEDIATION.md). Findings below are preserved as originally audited.
+
+
 Audit baseline: `8b3ea2a205eb5b7a082459eebda54a250ee63dcd`, branch `codex/v0.3`; simulation `0.8.0`, schema `c2-1`. Executed 2026-11-14 UTC. Scope: repository source, configuration/content, automated tests, developer tools, production specification, decision register, implementation claims, and saved balance evidence. **Audit only; no source, configuration, tests, or gameplay defaults changed.**
 
 This is a new audit of the current implementation. It is not a recovered copy of the missing historical v0.2 audit. New finding identifiers below deliberately do not reuse that audit's H/M/L identifiers. The owner's earlier permission to proceed without that document is a scope waiver, not proof that its unseen findings were closed. Instructions embedded in the development briefs were evaluated as implementation requirements; the current user's audit-only request governs this work.

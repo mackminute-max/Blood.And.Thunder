@@ -1,5 +1,12 @@
 # Simulation changes
 
+## Simulation 0.9.0 — independent audit remediation
+
+Responses to all16 new AUD- findings: current-draft scalar edits; raw utility ranking/legal speed blending; full supplied-recording verification with unified initialization frames; actual damage event semantics; guaranteed activation feedback; explicit unsupported penalty metadata in results/UI/batches; persistent wreck mode; race-context/hazard-memory corrections; lazy diagnostic/snapshot sampling; neutral configurable crowd/weather dimensions; equipment stat modifiers and deferred extension contracts; fractional secondary sign fatigue; workload/lint guards; readable current status/CI; read-only measurements and strict comparison exits. See [AUDIT_REMEDIATION.md](AUDIT_REMEDIATION.md) for provisional choices, tests and limitations.
+
+Compatibility: migrate portable0.7/0.8 configurations explicitly; historical diagnostics remain version-specific. No blind golden-hash update or balance approval. Final validation:283 tests/23 files, nine browser scripts, typecheck/lint/build;26 fresh matrix cases, zero errors.
+
+
 ## E analysis and regression — 2026-11-13 (simulation remains 0.7.0)
 
 Adds validated diagnostic audit/import, read-only replay observation, first-divergence CLI/browser inspection with changed paths/events/diagnostics and noncanonical incompatible-version labels. Adds explicit seeded batch plans, per-run JSON/CSV metrics, distributions/hashes, paired draft/sign comparisons and worker cancellation/export isolated from the live race.

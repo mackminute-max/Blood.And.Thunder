@@ -54,11 +54,10 @@ it('multi-tile forward crossings activate once and input reordering replays the 
 });
 it('higher utility influence measurably changes autonomous decisions and does not scale fatigue physics',()=>{
   const f=fixture();const base=f.content.tuningProfiles[0]!.ai;base.noise=0;base.signInfluence.globalStrength=1;
-  for(const mode of ['push','cruise','conserve','brake'] as const)base.signs.conserve[mode]*=.3;
   const low=createRaceEngine({...f.scenario,controller:'ai'},f.content);const state=copyJson(low.snapshot());state.tick=1;state.ruStates['ru-player']!.activeSignId='conserve';
   const before=copyJson(state);chooseIntents(low.initialConfiguration,state,1,()=>{});const baseline=state.ruStates['ru-player']!.aiDecision!;
   base.signInfluence.globalStrength=2;const high=createRaceEngine({...f.scenario,controller:'ai'},f.content);chooseIntents(high.initialConfiguration,before,1,()=>{});const strong=before.ruStates['ru-player']!.aiDecision!;
-  expect(strong.chosen.mode).toBe('conserve');expect(strong.chosen.mode).not.toBe(baseline.chosen.mode);expect(strong.fatigueGainMultiplier).toBe(baseline.fatigueGainMultiplier);
+  expect(strong.chosen.mode).toBe('conserve');expect(before.ruStates['ru-player']!.targetSpeedMps).toBeLessThan(state.ruStates['ru-player']!.targetSpeedMps);expect(strong.fatigueGainMultiplier).toBe(baseline.fatigueGainMultiplier);
 });
 it('an input before the finishing movement activates at that fractional crossing without post-finish actions',()=>{
   const f=circuit();f.scenario.rules.laps=1;const engine=createRaceEngine(f.scenario,f.content);

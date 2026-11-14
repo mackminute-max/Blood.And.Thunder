@@ -12,7 +12,7 @@ it('reports invalid scenario files with a nonzero exit status', () => {
 });
 it('runs fixed movement ticks through native Node and exports reproducible input/state', () => {
   const output: unknown = JSON.parse(execFileSync(process.execPath, ['scripts/movement.ts', '3'], { encoding: 'utf8' }));
-  expect(output).toMatchObject({ kind: 'a2-movement-diagnostic', state: { tick: 3, phase: 'running' }, initialConfiguration: { scenario: { simulationVersion: '0.8.0' } } });
+  expect(output).toMatchObject({ kind: 'a2-movement-diagnostic', state: { tick: 3, phase: 'running' }, initialConfiguration: { scenario: { simulationVersion: '0.9.0' } } });
 });
 it('rejects invalid headless movement tick counts', () => {
   const result = spawnSync(process.execPath, ['scripts/movement.ts', '-1'], { encoding: 'utf8' });

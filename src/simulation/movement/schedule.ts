@@ -1,3 +1,4 @@
+import { diagnosticBuffer, traceDiagnostic } from '../core/diagnostics.ts';
 import { resolveContacts } from './contact.ts';
 import type { ContactRequest } from './contact.ts';
 import { occupiesRu } from '../environment/lifecycle.ts';
@@ -28,7 +29,7 @@ export function moveTick(config: DeepReadonly<InitialConfiguration>, state: Pick
   const tuning = config.content.tuningProfiles.find(profile => profile.id === config.scenario.tuningProfileId)!;
   const track = config.content.tracks.find(track => track.id === config.scenario.trackId)!;
   const budgets = new Map<string, Budget>();
-  const events: MovementEvent[] = []; const diagnostics: MovementDiagnostic[] = [];
+  const events: MovementEvent[] = []; const diagnostics: MovementDiagnostic[] = diagnosticBuffer(config.scenario.diagnostics, state.tick);
   const ids = Object.keys(state.ruStates).sort();
   const blocked = new Set<string>();
   const rng = createRng(state.rngStates.tieBreak);
@@ -61,7 +62,7 @@ export function moveTick(config: DeepReadonly<InitialConfiguration>, state: Pick
     ru.speedMps = integrated.speedMps;
     budgets.set(id, { total: integrated.travelMeters, remaining: integrated.travelMeters, spent: 0, transitions: 0, timeBase: 0, baseBudget: integrated.travelMeters, spentSinceBase: 0 });
     if (aborts.has(id)) { budgets.delete(id); blocked.add(id); }
-    diagnostics.push({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', ruId: id, message: 'Integrated fixed-tick movement intent', details: { abortForward: aborts.has(id), discardedMeters: aborts.has(id) ? integrated.travelMeters : 0, safeCornerSpeed: conditions.safeSpeed, oldSpeed, targetSpeedMps: ru.targetSpeedMps, ...integrated, dt: tuning.tickDurationSeconds } });
+    traceDiagnostic(diagnostics, () => ({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', ruId: id, message: 'Integrated fixed-tick movement intent', details: { abortForward: aborts.has(id), discardedMeters: aborts.has(id) ? integrated.travelMeters : 0, safeCornerSpeed: conditions.safeSpeed, oldSpeed, targetSpeedMps: ru.targetSpeedMps, ...integrated, dt: tuning.tickDurationSeconds } }));
   }
   while (budgets.size) {
     const candidates: Candidate[] = [];
@@ -86,7 +87,7 @@ export function moveTick(config: DeepReadonly<InitialConfiguration>, state: Pick
         const lane = segment.lanes.find(lane => lane.index === ru.tile.lane)!;
         const cost = segment.meters * lane.lengthMultiplier;
         ru.progressInSegment += budget.remaining / cost;
-        diagnostics.push({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', ruId: id, message: 'Retained ordinary fractional progress', details: { meters: budget.remaining, tileCost: cost, progressInSegment: ru.progressInSegment } });
+        traceDiagnostic(diagnostics, () => ({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', ruId: id, message: 'Retained ordinary fractional progress', details: { meters: budget.remaining, tileCost: cost, progressInSegment: ru.progressInSegment } }));
       }
       break;
     }
@@ -116,7 +117,7 @@ export function moveTick(config: DeepReadonly<InitialConfiguration>, state: Pick
         if (reason !== 'hazard' && contactTarget && (outcome === 'brake' || reason === 'contested' || reason === 'reciprocal')) contacts.push({ actorId: candidate.ruId, targetId: contactTarget, lateral: reason !== 'occupied', fraction: candidate.fraction, closingSpeed: Math.abs(groupSpeeds.get(ru.id)! - groupSpeeds.get(contactTarget)!) });
         if (outcome === 'brake') ru.speedMps *= tuning.movement.conflict.brakeFactor;
         emit({ type: 'movement_blocked' , ruId: candidate.ruId, fraction: candidate.fraction, from: candidate.from, to: candidate.to, discardedMeters: budget.remaining, reason, outcome });
-        diagnostics.push({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', ruId: candidate.ruId, message: 'Rejected transition; discarded unused travel and resolved yield/brake before a separate contact check', details: { ...candidate, reason, outcome, closingSpeed, stoppingMeters, discardedMeters: budget.remaining, stability: ru.derived.stability, tieValue: tieValues.get(candidate.ruId) ?? null, acceptedRuIds: [...accepted].sort() } });
+        traceDiagnostic(diagnostics, () => ({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', ruId: candidate.ruId, message: 'Rejected transition; discarded unused travel and resolved yield/brake before a separate contact check', details: { ...candidate, reason, outcome, closingSpeed, stoppingMeters, discardedMeters: budget.remaining, stability: ru.derived.stability, tieValue: tieValues.get(candidate.ruId) ?? null, acceptedRuIds: [...accepted].sort() } }));
         budgets.delete(candidate.ruId);
       } else {
         budget.remaining = Math.max(0, budget.remaining - candidate.needed);
@@ -136,9 +137,9 @@ export function moveTick(config: DeepReadonly<InitialConfiguration>, state: Pick
             budget.timeBase = candidate.fraction; budget.baseBudget = budget.remaining; budget.spentSinceBase = 0;
           }
           emit({ type: 'handling_check', context: 'corner_entry', ruId: ru.id, fraction: candidate.fraction, accepted: check.accepted, probability: check.probability, roll: check.roll, safeSpeed: entered.safeSpeed, speedBefore, speedAfter: ru.speedMps });
-          diagnostics.push({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', ruId: ru.id, message: 'Checked corner entry once', details: { ...check, safeSpeed: entered.safeSpeed, remainingMeters: budget.remaining } });
+          traceDiagnostic(diagnostics, () => ({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', ruId: ru.id, message: 'Checked corner entry once', details: { ...check, safeSpeed: entered.safeSpeed, remainingMeters: budget.remaining } }));
         }
-        diagnostics.push({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', ruId: candidate.ruId, message: 'Accepted intermediate transition', details: { ...candidate, remainingMeters: budget.remaining, tieValue: tieValues.get(candidate.ruId) ?? null } });
+        traceDiagnostic(diagnostics, () => ({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', ruId: candidate.ruId, message: 'Accepted intermediate transition', details: { ...candidate, remainingMeters: budget.remaining, tieValue: tieValues.get(candidate.ruId) ?? null } }));
       }
     }
     // Other RUs have travelled up to this group's timestamp, even if they have

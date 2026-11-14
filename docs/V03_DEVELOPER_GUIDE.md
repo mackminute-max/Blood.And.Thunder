@@ -1,5 +1,8 @@
 # v0.3 developer and playtest workflow
 
+Current engine **0.9.0**: [audit fixes, new controls and compatibility](AUDIT_REMEDIATION.md). Portable 0.7/0.8 configurations require explicit migration; historical diagnostics remain version-specific. New fields use neutral/default values on parsing. Generic forms now support scalar enums/booleans/strings and track fields; adding/removing catalog members or array rows still uses JSON.
+
+
 Run commands from the repository root with Node 24.22.1 / npm 11.9.0. Install with `npm ci` (use `--cache /tmp/bt-npm-cache` if the home cache is not writable), then `npm run dev`. Chromium smoke tests expect that server on port 5173 and `/usr/bin/chromium`, or `CHROMIUM_PATH` set to an installed browser. Run `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, and `npm run test:browser`.
 
 ## Reproducible manual loop
@@ -36,3 +39,5 @@ node scripts/migrate-v02.ts old.configuration.json new.configuration.json
 ```
 
 The output file must not already exist. This validates all inputs and preserves caller/source data, adds Combat as the default ruleset and the new tuning defaults, and moves the scenario to simulation 0.8.0. Review queued-sign semantics and 2× global influence before running; old scripted raises now wait for line activation. Historical v0.2 diagnostics and golden reports cannot be relabeled into canonical v0.3 replay. Keep those artifacts and rerun original scenarios to collect new evidence. No automatic mutable-state migration or restoration is provided.
+
+Measurement commands are read-only with respect to tracked presets unless `--write-presets` is explicitly supplied. `npm run compare -- left.json right.json --assert-identical` returns a failure exit status for invalid, divergent or noncanonical captures.

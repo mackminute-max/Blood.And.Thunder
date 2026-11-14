@@ -1,4 +1,6 @@
-# v0.3 audit remediation — Milestone F in progress
+# Historical v0.3 summary remediation — F–J baseline
+
+Current 0.9.0 dispositions for the **new independent AUD- audit** are in [AUDIT_REMEDIATION.md](AUDIT_REMEDIATION.md). The historical missing v0.2 audit and IDs discussed below remain distinct. These notes are retained at their original baseline.
 
 Baseline: `25e51c22db4a1a325b7104acd9d2bbe33a5db399` (`origin/codex/prototype-a-e` at inspection). Local preservation tag: `v0.2-baseline-25e51c2`; working branch: `codex/v0.3`.
 
