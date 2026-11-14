@@ -41,8 +41,9 @@ export function resolveContacts(config: DeepReadonly<InitialConfiguration>, stat
       emit({ type: 'collision_damage', ruId: id, fraction: request.fraction, details: { pair, severity, amount, componentId: ru.chariot.id, energy } });
     }
   }
-  for (const hit of damage.values()) state.ruStates[hit.ruId]!.environmentStats.collisionDamage += Math.min(state.ruStates[hit.ruId]!.chariot.health, hit.total);
+  const healthBefore = new Map([...damage.values()].map(hit=>[hit.ruId,state.ruStates[hit.ruId]!.chariot.health]));
   commitDamage(config, state, damage, rng, emit, 'collision', Math.max(0, ...requests.map(r => r.fraction)));
+  for (const [id,health] of healthBefore) state.ruStates[id]!.environmentStats.collisionDamage += health - state.ruStates[id]!.chariot.health;
   for (const impact of impacts) for (const id of impact.ids) state.ruStates[id]!.speedMps *= impact.factor;
   state.rngStates.combat = [...rng.snapshot()];
   diagnostics.push({ tick: state.tick, substep, level: 'trace', subsystem: 'movement', message: 'Resolved accidental contact separately from occupancy conflicts', details: { requests, pairs: [...pairs], damage: [...damage.values()] } });

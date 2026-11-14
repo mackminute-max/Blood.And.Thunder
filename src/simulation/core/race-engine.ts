@@ -46,14 +46,14 @@ export function createRaceEngine(scenarioInput: unknown, contentInput: unknown) 
   const base = copyJson(movement.snapshot());
   const initial: RaceState = {
     ...base, phase: 'grid', finishRecords: [], ruStates: {}, countdownRemaining: rules.countdownTicks,
-    raceStartedTick: null, elapsedRaceTicks: 0, firstFinisherRaceTick: null, standings: [], result: null,
+    raceStartedTick: null, elapsedRaceTicks: 0, firstFinisherRaceTick: null, progressOrder: {}, standings: [], result: null,
   };
   for (const ru of Object.values(base.ruStates)) {
     const segmentOrder = track.segments.find(segment => segment.id === ru.tile.segmentId)!.order;
     const relativeOrder = (segmentOrder - boundary.order + track.segments.length) % track.segments.length;
     const origin = relativeOrder === 0 ? 0 : relativeOrder - track.segments.length;
     initial.ruStates[ru.id] = {
-      ...ru, raceStats: { overtakes: 0, timeLeadingSeconds: 0, penalties: 0, incidents: 0 }, initialUnwrappedCoursePosition: origin, hasStartedLap: origin === 0,
+      ...ru, raceStats: { overtakes: 0, timeLeadingSeconds: 0, penalties: 0, incidents: 0, lateralChanges: 0 }, initialUnwrappedCoursePosition: origin, hasStartedLap: origin === 0,
       firstLapStartedAtSeconds: origin === 0 ? 0 : null,
       startLineCrossings: 0, normalizedCoursePosition: origin, acceptedTransitions: 0, blockedTransitions: 0, finishTimeSeconds: null,
     };

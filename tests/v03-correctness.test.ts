@@ -51,3 +51,17 @@ it('counts normalized progress passes and apportions tied lead time from authori
   expect(after.ruStates['ru-player']!.raceStats).toMatchObject({overtakes:1,timeLeadingSeconds:.75,penalties:0});
   expect(after.ruStates['ru-iron']!.raceStats.timeLeadingSeconds).toBeCloseTo(.25);
 });
+it('retains strict prior ordering through an exact tick-boundary tie before crediting a pass',()=>{
+  const f=fixture();const engine=createRaceEngine(f.scenario,f.content);const start=copyJson(engine.snapshot());
+  for(const ru of Object.values(start.ruStates))ru.status='dnf';
+  for(const id of ['ru-player','ru-iron'])start.ruStates[id]!.status='active';
+  start.ruStates['ru-player']!.normalizedCoursePosition=-.2;start.ruStates['ru-iron']!.normalizedCoursePosition=0;
+  const tied=copyJson(start);tied.elapsedRaceTicks=1;tied.ruStates['ru-player']!.normalizedCoursePosition=0;
+  expect(recordRaceStatistics(start,tied,[],1)).toEqual([]);
+  const passed=copyJson(tied);passed.elapsedRaceTicks=2;passed.ruStates['ru-player']!.normalizedCoursePosition=.2;
+  expect(recordRaceStatistics(tied,passed,[],1)).toEqual([{ruId:'ru-player',targetRuId:'ru-iron',fraction:0}]);expect(passed.ruStates['ru-player']!.raceStats.overtakes).toBe(1);
+});
+it('does not credit trailing active racers with lead time after a winner has finished',()=>{
+  const f=fixture();const e=createRaceEngine(f.scenario,f.content);const before=copyJson(e.snapshot());before.finishRecords=[{ruId:'ru-iron',finishTimeSeconds:1,rank:1,tiedWith:[]}];before.ruStates['ru-iron']!.status='finished';
+  const after=copyJson(before);after.elapsedRaceTicks=1;recordRaceStatistics(before,after,[],1);expect(Object.values(after.ruStates).reduce((sum,ru)=>sum+ru.raceStats.timeLeadingSeconds,0)).toBe(0);
+});

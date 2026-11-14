@@ -13,7 +13,7 @@
     "test": "vitest run",
     "build": "npm run typecheck && vite build",
     "headless": "node scripts/headless.ts",
-    "test:browser": "node scripts/browser-smoke.mjs && node scripts/developer-smoke.mjs && node scripts/movement-smoke.mjs && node scripts/ai-smoke.mjs && node scripts/combat-smoke.mjs && node scripts/environment-smoke.mjs && node scripts/presentation-smoke.mjs && node scripts/analysis-smoke.mjs",
+    "test:browser": "node scripts/browser-smoke.mjs && node scripts/developer-smoke.mjs && node scripts/movement-smoke.mjs && node scripts/ai-smoke.mjs && node scripts/combat-smoke.mjs && node scripts/environment-smoke.mjs && node scripts/presentation-smoke.mjs && node scripts/analysis-smoke.mjs && node scripts/v03-smoke.mjs",
     "movement": "node scripts/movement.ts",
     "race": "node scripts/race.ts",
     "replay": "node scripts/replay.ts",

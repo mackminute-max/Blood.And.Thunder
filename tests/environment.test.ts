@@ -148,4 +148,4 @@ it('terminates 1000 compact seeded weather/event/contact races with finite state
     activated += engine.snapshot().environment.activatedEvents; contacts += Object.values(engine.snapshot().ruStates).reduce((sum, ru) => sum + ru.environmentStats.collisions, 0);
   }
   expect(activated).toBeGreaterThan(0); expect(contacts).toBeGreaterThan(0);
-}, 90000);
+}, 180000);

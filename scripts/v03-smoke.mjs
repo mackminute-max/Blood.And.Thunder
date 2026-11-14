@@ -1,6 +1,7 @@
 /* global document */
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
+import { Buffer } from 'node:buffer';
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true, args: ['--no-sandbox'] });
 try {
   const page=await browser.newPage();const errors=[];page.on('pageerror',error=>errors.push(error.message));
@@ -18,6 +19,7 @@ try {
   const changes=JSON.parse(await page.locator('#bulk-changes').innerText());assert.equal(new Set(changes.map(c=>c.ruId)).size,6);assert.equal(changes.length,12);
   await page.locator('#bulk-apply').click();const bulkContent=JSON.parse(await page.locator('#content-json').inputValue());
   assert.ok(bulkContent.beasts.every(b=>b.speed===85));assert.deepEqual(await output(),liveBefore);
+  await page.locator('#bulk-value').fill('80');await page.locator('#bulk-preview').click();
   await page.locator('#bulk-undo').click();assert.ok(JSON.parse(await page.locator('#content-json').inputValue()).beasts.some(b=>b.speed!==85));
   await page.locator('#bulk-value').fill('101');await page.locator('#bulk-preview').click();assert.equal(await page.locator('#bulk-apply').isDisabled(),true);assert.deepEqual(await output(),liveBefore);
   await page.locator('[data-field="globalStrength"]').fill('3');await page.locator('[data-field="globalStrength"]').press('Tab');
@@ -29,5 +31,11 @@ try {
   assert.equal(await page.locator('#raise-sign').isDisabled(),true);
   await page.locator('#lower-sign').click();await page.locator('#step-tick').click();assert.equal((await output()).state.ruStates['ru-player'].pendingSign.signId,'conserve');
   await page.locator('#cancel-pending-sign').click();await page.locator('#step-tick').click();assert.equal((await output()).state.ruStates['ru-player'].pendingSign,null);assert.equal((await output()).state.ruStates['ru-player'].signOpportunitiesRemaining,2);
+  const beforeInvalid=await output();await page.getByRole('tab',{name:'Scenario',exact:true}).click();
+  const invalidScenario=JSON.parse(await page.locator('#scenario-json').inputValue());invalidScenario.scriptedCommands=[{type:'raiseSign',source:'player',commandId:'malformed-target',effectiveTick:1,ruId:'constructor',signId:'conserve'}];
+  const invalid={kind:'blood-thunder-configuration-a4-1',name:'Malformed target',mode:'race',scenario:invalidScenario,content:JSON.parse(await page.locator('#content-json').inputValue())};
+  await page.locator('#import-configuration').setInputFiles({name:'malformed-target.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(invalid))});
+  await page.waitForFunction(()=>document.querySelector('#setup-feedback').textContent.includes('Reserved ID'));
+  assert.deepEqual(await output(),beforeInvalid);
   assert.deepEqual(errors,[]);console.log('v0.3 rulesets, atomic all-RU preview/apply/restore/reject, sign tuning, pending/lower/cancel accounting and live isolation: PASS');
 } finally {await browser.close();}

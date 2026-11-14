@@ -24,7 +24,7 @@ export type RaceState = Omit<MovementState, 'phase' | 'finishRecords' | 'ruState
   phase: 'grid' | 'countdown' | 'running' | 'concluding' | 'complete' | 'error';
   ruStates: Record<string, RaceRU>; countdownRemaining: number; raceStartedTick: number | null;
   elapsedRaceTicks: number; finishRecords: FinishRecord[]; firstFinisherRaceTick: number | null;
-  standings: Standing[]; result: RaceResult | null;
+  progressOrder: Record<string, number>; standings: Standing[]; result: RaceResult | null;
 };
 export interface RaceRuleEvent {
   id: string; tick: number; substep: number;

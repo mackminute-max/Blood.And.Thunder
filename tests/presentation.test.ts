@@ -83,6 +83,7 @@ it('suppresses repetitive routine calls, handles paused duplicates and bounds fe
 });
 it('ignores diagnostics, hidden AI intentions and routine fatigue; signs do not guarantee action', () => {
   const { config } = harness(); const radio = createCommentary(config); radio.append(1, [{ id: 'a', tick: 1, substep: 0, type: 'sign_raised', ruId: 'ru-player', fraction: 0, details: { newValue: 'attack' } }, { id: 'b', tick: 1, substep: 0, type: 'fatigue_changed', ruId: 'ru-player', fraction: 1, details: {} }]); expect(radio.feed()).toHaveLength(1); expect(radio.feed()[0]!.text).toMatch(/attack sign is active; the driver still chooses/);
+  radio.append(2,[{id:'no-pending',tick:2,substep:0,type:'sign_cancelled',ruId:'ru-player',fraction:0,details:{cancelled:null}},{id:'no-active',tick:2,substep:0,type:'sign_lowered',ruId:'ru-player',fraction:0,details:{oldValue:null}}]);expect(radio.feed()).toHaveLength(1);
 });
 it('consumes real race event streams deterministically without changing engine snapshots or results', () => {
   const f = fixture(); f.scenario.rules.maxTicks = 4; const a = createRaceEngine(f.scenario, f.content); const b = createRaceEngine(f.scenario, f.content); const radio = createCommentary(a.initialConfiguration); const repeat = createCommentary(a.initialConfiguration);

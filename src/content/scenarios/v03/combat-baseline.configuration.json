@@ -1,0 +1,4379 @@
+{
+  "kind": "blood-thunder-configuration-a4-1",
+  "name": "combat-baseline",
+  "mode": "race",
+  "scenario": {
+    "schemaVersion": "c2-1",
+    "simulationVersion": "0.8.0",
+    "id": "oval-six-v1",
+    "name": "Six-RU reference initialization",
+    "seed": "BT-OVAL-SIX-001",
+    "controller": "ai",
+    "mode": "interactive",
+    "trackId": "oval-48-4",
+    "entries": [
+      {
+        "id": "ru-ash",
+        "name": "Ash",
+        "isPlayer": false,
+        "driverId": "driver-ash",
+        "chariotId": "chariot-ash",
+        "beastIds": [
+          "beast-ash-1",
+          "beast-ash-2"
+        ],
+        "preRaceStrategy": "endurance",
+        "weaponIds": [
+          "short-sword"
+        ]
+      },
+      {
+        "id": "ru-bone",
+        "name": "Bone",
+        "isPlayer": false,
+        "driverId": "driver-bone",
+        "chariotId": "chariot-bone",
+        "beastIds": [
+          "beast-bone-1",
+          "beast-bone-2"
+        ],
+        "preRaceStrategy": "aggressive",
+        "weaponIds": [
+          "short-sword"
+        ]
+      },
+      {
+        "id": "ru-copper",
+        "name": "Copper",
+        "isPlayer": false,
+        "driverId": "driver-copper",
+        "chariotId": "chariot-copper",
+        "beastIds": [
+          "beast-copper-1",
+          "beast-copper-2"
+        ],
+        "preRaceStrategy": "defensive",
+        "weaponIds": [
+          "short-bow",
+          "short-sword"
+        ]
+      },
+      {
+        "id": "ru-iron",
+        "name": "Iron",
+        "isPlayer": false,
+        "driverId": "driver-iron",
+        "chariotId": "chariot-iron",
+        "beastIds": [
+          "beast-iron-1",
+          "beast-iron-2"
+        ],
+        "preRaceStrategy": "aggressive",
+        "weaponIds": [
+          "short-sword"
+        ]
+      },
+      {
+        "id": "ru-player",
+        "name": "Player",
+        "isPlayer": true,
+        "driverId": "driver-player",
+        "chariotId": "chariot-player",
+        "beastIds": [
+          "beast-player-1",
+          "beast-player-2"
+        ],
+        "preRaceStrategy": "balanced",
+        "weaponIds": [
+          "short-sword"
+        ]
+      },
+      {
+        "id": "ru-vulture",
+        "name": "Vulture",
+        "isPlayer": false,
+        "driverId": "driver-vulture",
+        "chariotId": "chariot-vulture",
+        "beastIds": [
+          "beast-vulture-1",
+          "beast-vulture-2"
+        ],
+        "preRaceStrategy": "sprint",
+        "weaponIds": [
+          "short-bow",
+          "short-sword"
+        ]
+      }
+    ],
+    "startingGrid": {
+      "ru-ash": {
+        "segmentId": "seg-00",
+        "lane": 3
+      },
+      "ru-bone": {
+        "segmentId": "seg-47",
+        "lane": 1
+      },
+      "ru-copper": {
+        "segmentId": "seg-47",
+        "lane": 2
+      },
+      "ru-iron": {
+        "segmentId": "seg-00",
+        "lane": 1
+      },
+      "ru-player": {
+        "segmentId": "seg-00",
+        "lane": 0
+      },
+      "ru-vulture": {
+        "segmentId": "seg-00",
+        "lane": 2
+      }
+    },
+    "combatPlans": [],
+    "environmentPlans": [],
+    "guardPlans": [],
+    "maneuvers": [],
+    "targetSpeedRatios": {
+      "ru-ash": 1,
+      "ru-bone": 1,
+      "ru-copper": 1,
+      "ru-iron": 1,
+      "ru-player": 1,
+      "ru-vulture": 1
+    },
+    "gridRows": [
+      {
+        "id": "front",
+        "segmentId": "seg-00",
+        "ruIds": [
+          "ru-ash",
+          "ru-iron",
+          "ru-player",
+          "ru-vulture"
+        ]
+      },
+      {
+        "id": "rear",
+        "segmentId": "seg-47",
+        "ruIds": [
+          "ru-bone",
+          "ru-copper"
+        ]
+      }
+    ],
+    "weatherId": "clear",
+    "eventIntensity": "occasional",
+    "lethalityProfileId": "dangerous",
+    "tuningProfileId": "baseline-a1",
+    "rules": {
+      "competitionStyle": "combat",
+      "format": "circuit",
+      "countdownTicks": 0,
+      "finishTieToleranceSeconds": 0.000001,
+      "laps": 3,
+      "maxTicks": 6000,
+      "finishCutoffTicks": 100,
+      "disabledRemovalTicks": 10,
+      "combatAllowed": true,
+      "beastTargetingAllowed": true,
+      "maxSignOpportunities": 3,
+      "allowDeveloperSignCommands": false,
+      "maxCommandSubmissions": 10000,
+      "allowStationaryLaneChange": false
+    },
+    "scriptedCommands": []
+  },
+  "content": {
+    "schemaVersion": "c2-1",
+    "tracks": [
+      {
+        "schemaVersion": "c2-1",
+        "id": "oval-48-4",
+        "name": "Reference four-lane oval",
+        "segments": [
+          {
+            "id": "seg-00",
+            "order": 0,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-01",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-01",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-01",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-01",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": true
+          },
+          {
+            "id": "seg-01",
+            "order": 1,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-02",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-02",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-02",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-02",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-02",
+            "order": 2,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-03",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-03",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-03",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-03",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-03",
+            "order": 3,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-04",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-04",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-04",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-04",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-04",
+            "order": 4,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-05",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-05",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-05",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-05",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-05",
+            "order": 5,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-06",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-06",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-06",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-06",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-06",
+            "order": 6,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-07",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-07",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-07",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-07",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-07",
+            "order": 7,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-08",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-08",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-08",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-08",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-08",
+            "order": 8,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-09",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-09",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-09",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-09",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-09",
+            "order": 9,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-10",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-10",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-10",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-10",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-10",
+            "order": 10,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-11",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-11",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-11",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-11",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-11",
+            "order": 11,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-12",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-12",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-12",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-12",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-12",
+            "order": 12,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-13",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-13",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-13",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-13",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-13",
+            "order": 13,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-14",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-14",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-14",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-14",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-14",
+            "order": 14,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-15",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-15",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-15",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-15",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-15",
+            "order": 15,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-16",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-16",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-16",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-16",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-16",
+            "order": 16,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-17",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-17",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-17",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-17",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-17",
+            "order": 17,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-18",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-18",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-18",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-18",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-18",
+            "order": 18,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-19",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-19",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-19",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-19",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-19",
+            "order": 19,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-20",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-20",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-20",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-20",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-20",
+            "order": 20,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-21",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-21",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-21",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-21",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-21",
+            "order": 21,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-22",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-22",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-22",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-22",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-22",
+            "order": 22,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-23",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-23",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-23",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-23",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-23",
+            "order": 23,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-24",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-24",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-24",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-24",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-24",
+            "order": 24,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-25",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-25",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-25",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-25",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-25",
+            "order": 25,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-26",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-26",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-26",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-26",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-26",
+            "order": 26,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-27",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-27",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-27",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-27",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-27",
+            "order": 27,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-28",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-28",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-28",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-28",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-28",
+            "order": 28,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-29",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-29",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-29",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-29",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-29",
+            "order": 29,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-30",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-30",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-30",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-30",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-30",
+            "order": 30,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-31",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-31",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-31",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-31",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-31",
+            "order": 31,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-32",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-32",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-32",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-32",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-32",
+            "order": 32,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-33",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-33",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-33",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-33",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-33",
+            "order": 33,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-34",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-34",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-34",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-34",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-34",
+            "order": 34,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-35",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-35",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-35",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-35",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-35",
+            "order": 35,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-36",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-36",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-36",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-36",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-36",
+            "order": 36,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-37",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-37",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-37",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-37",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-37",
+            "order": 37,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-38",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-38",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-38",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-38",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-38",
+            "order": 38,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-39",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-39",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-39",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-39",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-39",
+            "order": 39,
+            "kind": "straight",
+            "turn": "none",
+            "severity": 0,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-40",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-40",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-40",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1,
+                "cornerSpeedFactor": 1,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-40",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-40",
+            "order": 40,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-41",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-41",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-41",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-41",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-41",
+            "order": 41,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-42",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-42",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-42",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-42",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-42",
+            "order": 42,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-43",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-43",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-43",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-43",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-43",
+            "order": 43,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-44",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-44",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-44",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-44",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-44",
+            "order": 44,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-45",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-45",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-45",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-45",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-45",
+            "order": 45,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-46",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-46",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-46",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-46",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-46",
+            "order": 46,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-47",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-47",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-47",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-47",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          },
+          {
+            "id": "seg-47",
+            "order": 47,
+            "kind": "corner",
+            "turn": "left",
+            "severity": 1,
+            "meters": 10,
+            "lanes": [
+              {
+                "index": 0,
+                "lengthMultiplier": 0.94,
+                "cornerSpeedFactor": 0.72,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-00",
+                  "lane": 0
+                },
+                "lateralNeighbors": [
+                  1
+                ]
+              },
+              {
+                "index": 1,
+                "lengthMultiplier": 0.98,
+                "cornerSpeedFactor": 0.79,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-00",
+                  "lane": 1
+                },
+                "lateralNeighbors": [
+                  0,
+                  2
+                ]
+              },
+              {
+                "index": 2,
+                "lengthMultiplier": 1.02,
+                "cornerSpeedFactor": 0.86,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-00",
+                  "lane": 2
+                },
+                "lateralNeighbors": [
+                  1,
+                  3
+                ]
+              },
+              {
+                "index": 3,
+                "lengthMultiplier": 1.06,
+                "cornerSpeedFactor": 0.93,
+                "traction": 1,
+                "roughness": 0,
+                "next": {
+                  "segmentId": "seg-00",
+                  "lane": 3
+                },
+                "lateralNeighbors": [
+                  2
+                ]
+              }
+            ],
+            "startFinishBoundary": false
+          }
+        ]
+      }
+    ],
+    "beasts": [
+      {
+        "id": "beast-ash-1",
+        "name": "Ash beast 1",
+        "speciesId": "reference-draft-beast",
+        "speed": 67,
+        "power": 65,
+        "agility": 70,
+        "endurance": 92,
+        "discipline": 85,
+        "toughness": 60,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "traits": [],
+        "naturalAttackIds": []
+      },
+      {
+        "id": "beast-ash-2",
+        "name": "Ash beast 2",
+        "speciesId": "reference-draft-beast",
+        "speed": 67,
+        "power": 65,
+        "agility": 70,
+        "endurance": 92,
+        "discipline": 85,
+        "toughness": 60,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "traits": [],
+        "naturalAttackIds": []
+      },
+      {
+        "id": "beast-bone-1",
+        "name": "Bone beast 1",
+        "speciesId": "reference-draft-beast",
+        "speed": 62,
+        "power": 78,
+        "agility": 55,
+        "endurance": 65,
+        "discipline": 65,
+        "toughness": 78,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "traits": [],
+        "naturalAttackIds": [
+          "beast-gore"
+        ]
+      },
+      {
+        "id": "beast-bone-2",
+        "name": "Bone beast 2",
+        "speciesId": "reference-draft-beast",
+        "speed": 62,
+        "power": 78,
+        "agility": 55,
+        "endurance": 65,
+        "discipline": 65,
+        "toughness": 78,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "traits": [],
+        "naturalAttackIds": [
+          "beast-gore"
+        ]
+      },
+      {
+        "id": "beast-copper-1",
+        "name": "Copper beast 1",
+        "speciesId": "reference-draft-beast",
+        "speed": 68,
+        "power": 68,
+        "agility": 62,
+        "endurance": 75,
+        "discipline": 88,
+        "toughness": 75,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "traits": [],
+        "naturalAttackIds": []
+      },
+      {
+        "id": "beast-copper-2",
+        "name": "Copper beast 2",
+        "speciesId": "reference-draft-beast",
+        "speed": 68,
+        "power": 68,
+        "agility": 62,
+        "endurance": 75,
+        "discipline": 88,
+        "toughness": 75,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "traits": [],
+        "naturalAttackIds": []
+      },
+      {
+        "id": "beast-iron-1",
+        "name": "Iron beast 1",
+        "speciesId": "reference-draft-beast",
+        "speed": 58,
+        "power": 90,
+        "agility": 48,
+        "endurance": 78,
+        "discipline": 70,
+        "toughness": 85,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "traits": [],
+        "naturalAttackIds": [
+          "beast-gore"
+        ]
+      },
+      {
+        "id": "beast-iron-2",
+        "name": "Iron beast 2",
+        "speciesId": "reference-draft-beast",
+        "speed": 58,
+        "power": 90,
+        "agility": 48,
+        "endurance": 78,
+        "discipline": 70,
+        "toughness": 85,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "traits": [],
+        "naturalAttackIds": [
+          "beast-gore"
+        ]
+      },
+      {
+        "id": "beast-player-1",
+        "name": "Player beast 1",
+        "speciesId": "reference-draft-beast",
+        "speed": 70,
+        "power": 70,
+        "agility": 65,
+        "endurance": 70,
+        "discipline": 75,
+        "toughness": 65,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "traits": [],
+        "naturalAttackIds": []
+      },
+      {
+        "id": "beast-player-2",
+        "name": "Player beast 2",
+        "speciesId": "reference-draft-beast",
+        "speed": 70,
+        "power": 70,
+        "agility": 65,
+        "endurance": 70,
+        "discipline": 75,
+        "toughness": 65,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "traits": [],
+        "naturalAttackIds": []
+      },
+      {
+        "id": "beast-vulture-1",
+        "name": "Vulture beast 1",
+        "speciesId": "reference-draft-beast",
+        "speed": 90,
+        "power": 58,
+        "agility": 82,
+        "endurance": 55,
+        "discipline": 60,
+        "toughness": 50,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "traits": [],
+        "naturalAttackIds": []
+      },
+      {
+        "id": "beast-vulture-2",
+        "name": "Vulture beast 2",
+        "speciesId": "reference-draft-beast",
+        "speed": 90,
+        "power": 58,
+        "agility": 82,
+        "endurance": 55,
+        "discipline": 60,
+        "toughness": 50,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "traits": [],
+        "naturalAttackIds": []
+      }
+    ],
+    "chariots": [
+      {
+        "id": "chariot-ash",
+        "name": "Ash chariot",
+        "weightKg": 130,
+        "stability": 70,
+        "durability": 70,
+        "protection": 40,
+        "rollingEfficiency": 72,
+        "maneuverability": 70,
+        "capacitySlots": 2,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "equipmentIds": []
+      },
+      {
+        "id": "chariot-bone",
+        "name": "Bone chariot",
+        "weightKg": 165,
+        "stability": 75,
+        "durability": 70,
+        "protection": 70,
+        "rollingEfficiency": 62,
+        "maneuverability": 58,
+        "capacitySlots": 2,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "equipmentIds": []
+      },
+      {
+        "id": "chariot-copper",
+        "name": "Copper chariot",
+        "weightKg": 150,
+        "stability": 88,
+        "durability": 70,
+        "protection": 85,
+        "rollingEfficiency": 65,
+        "maneuverability": 62,
+        "capacitySlots": 2,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "equipmentIds": []
+      },
+      {
+        "id": "chariot-iron",
+        "name": "Iron chariot",
+        "weightKg": 185,
+        "stability": 85,
+        "durability": 70,
+        "protection": 80,
+        "rollingEfficiency": 55,
+        "maneuverability": 45,
+        "capacitySlots": 2,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "equipmentIds": []
+      },
+      {
+        "id": "chariot-player",
+        "name": "Player chariot",
+        "weightKg": 140,
+        "stability": 65,
+        "durability": 70,
+        "protection": 45,
+        "rollingEfficiency": 75,
+        "maneuverability": 70,
+        "capacitySlots": 2,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "equipmentIds": []
+      },
+      {
+        "id": "chariot-vulture",
+        "name": "Vulture chariot",
+        "weightKg": 115,
+        "stability": 50,
+        "durability": 70,
+        "protection": 25,
+        "rollingEfficiency": 90,
+        "maneuverability": 85,
+        "capacitySlots": 2,
+        "maxHealth": 100,
+        "currentHealth": 100,
+        "equipmentIds": []
+      }
+    ],
+    "drivers": [
+      {
+        "id": "driver-ash",
+        "name": "Ash driver",
+        "driving": 72,
+        "beastHandling": 82,
+        "combat": 55,
+        "awareness": 72,
+        "nerve": 70,
+        "personality": {
+          "aggression": 35,
+          "riskTolerance": 35,
+          "patience": 50,
+          "competitiveness": 50,
+          "discipline": 50
+        },
+        "maxHealth": 100,
+        "currentHealth": 100
+      },
+      {
+        "id": "driver-bone",
+        "name": "Bone driver",
+        "driving": 65,
+        "beastHandling": 65,
+        "combat": 90,
+        "awareness": 62,
+        "nerve": 85,
+        "personality": {
+          "aggression": 90,
+          "riskTolerance": 85,
+          "patience": 50,
+          "competitiveness": 50,
+          "discipline": 50
+        },
+        "maxHealth": 100,
+        "currentHealth": 100
+      },
+      {
+        "id": "driver-copper",
+        "name": "Copper driver",
+        "driving": 75,
+        "beastHandling": 78,
+        "combat": 58,
+        "awareness": 80,
+        "nerve": 80,
+        "personality": {
+          "aggression": 30,
+          "riskTolerance": 25,
+          "patience": 50,
+          "competitiveness": 50,
+          "discipline": 50
+        },
+        "maxHealth": 100,
+        "currentHealth": 100
+      },
+      {
+        "id": "driver-iron",
+        "name": "Iron driver",
+        "driving": 60,
+        "beastHandling": 65,
+        "combat": 75,
+        "awareness": 55,
+        "nerve": 80,
+        "personality": {
+          "aggression": 85,
+          "riskTolerance": 75,
+          "patience": 50,
+          "competitiveness": 50,
+          "discipline": 50
+        },
+        "maxHealth": 100,
+        "currentHealth": 100
+      },
+      {
+        "id": "driver-player",
+        "name": "Player driver",
+        "driving": 70,
+        "beastHandling": 70,
+        "combat": 65,
+        "awareness": 70,
+        "nerve": 70,
+        "personality": {
+          "aggression": 55,
+          "riskTolerance": 55,
+          "patience": 50,
+          "competitiveness": 50,
+          "discipline": 50
+        },
+        "maxHealth": 100,
+        "currentHealth": 100
+      },
+      {
+        "id": "driver-vulture",
+        "name": "Vulture driver",
+        "driving": 78,
+        "beastHandling": 60,
+        "combat": 65,
+        "awareness": 75,
+        "nerve": 60,
+        "personality": {
+          "aggression": 70,
+          "riskTolerance": 80,
+          "patience": 50,
+          "competitiveness": 50,
+          "discipline": 50
+        },
+        "maxHealth": 100,
+        "currentHealth": 100
+      }
+    ],
+    "weapons": [
+      {
+        "id": "beast-gore",
+        "name": "Beast Gore",
+        "channel": "beast",
+        "rangeSegments": 1,
+        "rangeMode": "adjacentTile",
+        "allowedArcs": [
+          "front",
+          "side"
+        ],
+        "eligibleTargets": [
+          "beast",
+          "chariot"
+        ],
+        "accuracyBase": 0.55,
+        "minDamage": 7,
+        "maxDamage": 15,
+        "targetWeights": {
+          "driver": 0,
+          "beast": 1,
+          "chariot": 1
+        },
+        "cooldownTicks": 7,
+        "timing": "postMove"
+      },
+      {
+        "id": "short-bow",
+        "name": "Short Bow",
+        "channel": "driver",
+        "rangeSegments": 3,
+        "rangeMode": "segmentDistance",
+        "allowedArcs": [
+          "front",
+          "rear"
+        ],
+        "eligibleTargets": [
+          "beast",
+          "chariot",
+          "driver"
+        ],
+        "accuracyBase": 0.55,
+        "minDamage": 6,
+        "maxDamage": 14,
+        "targetWeights": {
+          "driver": 1,
+          "beast": 1,
+          "chariot": 1
+        },
+        "cooldownTicks": 8,
+        "timing": "preMove"
+      },
+      {
+        "id": "short-sword",
+        "name": "Short Sword",
+        "channel": "driver",
+        "rangeSegments": 0,
+        "rangeMode": "sameSegmentAdjacentLane",
+        "allowedArcs": [
+          "side"
+        ],
+        "eligibleTargets": [
+          "chariot",
+          "driver"
+        ],
+        "accuracyBase": 0.55,
+        "minDamage": 8,
+        "maxDamage": 16,
+        "targetWeights": {
+          "driver": 1,
+          "beast": 0,
+          "chariot": 1
+        },
+        "cooldownTicks": 5,
+        "timing": "postMove"
+      },
+      {
+        "id": "side-ram",
+        "name": "Side Ram",
+        "channel": "ram",
+        "rangeSegments": 0,
+        "rangeMode": "sameSegmentAdjacentLane",
+        "allowedArcs": [
+          "side"
+        ],
+        "eligibleTargets": [
+          "chariot"
+        ],
+        "accuracyBase": 0.55,
+        "minDamage": 10,
+        "maxDamage": 25,
+        "targetWeights": {
+          "driver": 0,
+          "beast": 0,
+          "chariot": 1
+        },
+        "cooldownTicks": 10,
+        "timing": "contact"
+      }
+    ],
+    "speciesIds": [
+      "reference-draft-beast"
+    ],
+    "traitIds": [],
+    "weather": [
+      {
+        "id": "clear",
+        "name": "Clear",
+        "traction": 1,
+        "visibility": 1,
+        "fatigue": 1
+      },
+      {
+        "id": "heat",
+        "name": "Heat",
+        "traction": 0.95,
+        "visibility": 1,
+        "fatigue": 1.2
+      },
+      {
+        "id": "rain",
+        "name": "Rain",
+        "traction": 0.8,
+        "visibility": 0.85,
+        "fatigue": 1.05
+      },
+      {
+        "id": "storm",
+        "name": "Storm",
+        "traction": 0.65,
+        "visibility": 0.65,
+        "fatigue": 1.15
+      }
+    ],
+    "lethalityProfiles": [
+      {
+        "id": "dangerous",
+        "name": "Dangerous",
+        "severeInjuryChance": 0.25,
+        "fatalityChance": 0.02,
+        "destructionChance": 0.15
+      }
+    ],
+    "tuningProfiles": [
+      {
+        "schemaVersion": "c2-1",
+        "id": "baseline-a1",
+        "name": "Provisional A1 baseline",
+        "tickDurationSeconds": 0.2,
+        "condition": {
+          "criticalMaxPercent": 40,
+          "damagedMaxPercent": 70
+        },
+        "stats": {
+          "conditionFactors": {
+            "damaged": 0.9,
+            "critical": 0.65,
+            "disabled": 0.2
+          },
+          "coordination": {
+            "base": 0.65,
+            "gain": 0.35,
+            "min": 0.65,
+            "max": 1
+          },
+          "teamPower": {
+            "referenceTeamSize": 2,
+            "cap": 130
+          },
+          "load": {
+            "referenceKg": 140,
+            "divisor": 600,
+            "min": 0.6,
+            "max": 1.05
+          },
+          "fatigue": {
+            "divisor": 180,
+            "min": 0.45,
+            "max": 1
+          },
+          "damage": {
+            "divisor": 180,
+            "min": 0.45,
+            "max": 1,
+            "beastWeight": 0.5,
+            "chariotWeight": 0.35,
+            "driverWeight": 0.15
+          },
+          "speed": {
+            "base": 5,
+            "perTeamSpeed": 0.12,
+            "rollingBase": 0.7,
+            "rollingScale": 0.3
+          },
+          "acceleration": {
+            "base": 0.6,
+            "perTeamPower": 0.025
+          },
+          "braking": {
+            "base": 1.2,
+            "perTeamAgility": 0.018,
+            "perDriving": 0.01,
+            "tractionMin": 0.45,
+            "tractionMax": 1.1
+          },
+          "handling": {
+            "beast": 0.3,
+            "chariot": 0.25,
+            "driver": 0.25,
+            "beastHandling": 0.2
+          },
+          "stability": {
+            "beast": 0.2,
+            "chariot": 0.5,
+            "driver": 0.3,
+            "beastHandling": 0
+          },
+          "endurance": {
+            "beast": 0.75,
+            "chariot": 0,
+            "driver": 0,
+            "beastHandling": 0.25
+          }
+        },
+        "ai": {
+          "signInfluence": {
+            "globalStrength": 2,
+            "perSign": {
+              "push-hard": 1,
+              "defend-position": 1,
+              "attack": 1,
+              "conserve": 1
+            }
+          },
+          "base": 30,
+          "progressWeight": 25,
+          "overtakeWeight": 18,
+          "collisionWeight": 25,
+          "fatigueWeight": 15,
+          "cornerWeight": 18,
+          "noise": 2,
+          "commitmentTicks": 3,
+          "switchPenalty": 5,
+          "awarenessBase": 2,
+          "awarenessDivisor": 25,
+          "behindRange": 1,
+          "baseExertionCost": 0.1,
+          "aggressionRisk": 6,
+          "riskToleranceRisk": 8,
+          "patienceConserve": 6,
+          "competitiveOvertake": 8,
+          "disciplineSign": 0.25,
+          "speedRatios": {
+            "push": 1,
+            "cruise": 0.85,
+            "conserve": 0.6,
+            "brake": 0
+          },
+          "safetyCollisionRisk": 0.9,
+          "safetyOverspeedRatio": 1.2,
+          "strategies": {
+            "balanced": {
+              "push": 0,
+              "cruise": 0,
+              "conserve": 0,
+              "brake": 0
+            },
+            "aggressive": {
+              "push": 8,
+              "cruise": 0,
+              "conserve": 0,
+              "brake": 0
+            },
+            "defensive": {
+              "push": 0,
+              "cruise": 0,
+              "conserve": 0,
+              "brake": 0
+            },
+            "endurance": {
+              "push": 0,
+              "cruise": 0,
+              "conserve": 10,
+              "brake": 0
+            },
+            "sprint": {
+              "push": 10,
+              "cruise": 0,
+              "conserve": 0,
+              "brake": 0
+            },
+            "opportunistic": {
+              "push": 0,
+              "cruise": 0,
+              "conserve": 0,
+              "brake": 0
+            }
+          },
+          "signs": {
+            "push-hard": {
+              "push": 18,
+              "cruise": 0,
+              "conserve": 0,
+              "brake": 0
+            },
+            "defend-position": {
+              "push": 0,
+              "cruise": 0,
+              "conserve": 0,
+              "brake": 0
+            },
+            "attack": {
+              "push": 0,
+              "cruise": 0,
+              "conserve": 0,
+              "brake": 0
+            },
+            "conserve": {
+              "push": -10,
+              "cruise": 0,
+              "conserve": 18,
+              "brake": 0
+            }
+          },
+          "pushFatigueMultiplier": 1.15,
+          "pushOvertake": 8,
+          "defendStay": 8,
+          "defendRisk": 8,
+          "opportunisticOvertake": 8
+        },
+        "attributes": {
+          "nerveAvoidancePerPoint": 0.001,
+          "durabilityPerPoint": 0.002,
+          "durabilityReference": 70,
+          "roughnessTractionWeight": 0.2,
+          "severitySpeedWeight": 0.15,
+          "severityReference": 1
+        },
+        "environment": {
+          "traitModifiers": [],
+          "fatigue": {
+            "basePerSecond": 0.15,
+            "exertionBase": 0.5,
+            "speedWeight": 0.7,
+            "accelerationWeight": 0.3,
+            "accelerationDivisor": 3,
+            "exertionMin": 0.25,
+            "exertionMax": 1.5,
+            "enduranceBase": 1.2,
+            "enduranceDivisor": 200,
+            "recoverySpeedRatio": 0.35,
+            "recoveryPerSecond": 0.08
+          },
+          "events": {
+            "rates": {
+              "disabled": 0,
+              "rare": 0.15,
+              "occasional": 0.35,
+              "frequent": 0.75,
+              "chaotic": 1.5
+            },
+            "maxEvents": 3,
+            "windowStart": 0.15,
+            "windowEnd": 0.85,
+            "spacingTicks": 20,
+            "placementBufferSegments": 1,
+            "earlyWreckClear": true,
+            "earlyWreckClearBlockedTicks": 20,
+            "animalStepTicks": 3,
+            "roughnessTractionDelta": -0.2,
+            "memoryTicks": 10,
+            "hazardUtilityPenalty": 30,
+            "weights": {
+              "debris_spawn": 1,
+              "track_roughness": 1,
+              "animal_crossing": 1
+            },
+            "durations": {
+              "debris_spawn": 15,
+              "track_roughness": 20,
+              "animal_crossing": 12
+            }
+          },
+          "collision": {
+            "enabled": true,
+            "avoidanceBase": 0.4,
+            "handlingDivisor": 200,
+            "awarenessDivisor": 300,
+            "skillCenter": 50,
+            "avoidanceMin": 0.1,
+            "avoidanceMax": 0.9,
+            "minimumClosingSpeed": 1,
+            "lateralRelativeSpeed": 3,
+            "damage": {
+              "minor": 0,
+              "moderate": 8,
+              "major": 20
+            },
+            "stabilityDivisor": 200
+          }
+        },
+        "combat": {
+          "hitMin": 0.05,
+          "hitMax": 0.95,
+          "attackSkillCoefficient": 0.003,
+          "defenseSkillCoefficient": 0.002,
+          "skillCenter": 50,
+          "visibilityPenalty": 0.2,
+          "positionalBonus": 0,
+          "guardReduction": 0.2,
+          "defenseCooldownTicks": 6,
+          "protectionDivisor": 25,
+          "minimumDamage": 1,
+          "cancelConsumesCooldown": false,
+          "diagonalRanged": false,
+          "rangedRuOcclusion": true,
+          "guardAllowsDriverAttack": true,
+          "beastSkillStat": "discipline",
+          "ramWeaponId": "side-ram",
+          "beastMassEquivalentKg": 300,
+          "ramLateralSpeedMps": 3,
+          "minorImpactEnergy": 5000,
+          "majorImpactEnergy": 25000,
+          "impactSpeedFactor": {
+            "minor": 0.9,
+            "moderate": 0.7,
+            "major": 0.4
+          },
+          "impactDamageFactor": {
+            "minor": 1,
+            "moderate": 1,
+            "major": 1
+          },
+          "ai": {
+            "attackBase": 30,
+            "noneUtility": 25,
+            "aggression": 12,
+            "riskCost": 12,
+            "cooldownCost": 1,
+            "noise": 2,
+            "attackSign": 22,
+            "ramSign": 8,
+            "aggressiveStrategy": 6,
+            "opportunisticStrategy": 8,
+            "defensivePenalty": 6,
+            "guardBase": 10,
+            "guardThreat": 8,
+            "guardRisk": 6,
+            "defendStrategy": 8,
+            "defendSign": 16,
+            "guardAttackPenalty": 6
+          }
+        },
+        "movement": {
+          "maxTransitionsPerTick": 64,
+          "arrivalEpsilon": 1e-9,
+          "respectSafeCornerSpeed": true,
+          "handling": {
+            "favorableTraction": 0.75,
+            "favorableHandling": 40,
+            "tractionScoreWeight": 20,
+            "overspeedScoreWeight": 30,
+            "probabilityBase": 0.5,
+            "scoreCenter": 50,
+            "scoreDivisor": 150,
+            "minProbability": 0.1,
+            "maxProbability": 0.95,
+            "failureSpeedFactor": 0.9,
+            "cornerTractionMin": 0.4,
+            "cornerTractionMax": 1.1,
+            "cornerHandlingBase": 0.8,
+            "cornerHandlingScale": 0.2
+          },
+          "conflict": {
+            "brakeFactor": 0.75,
+            "deadlockWarningTicks": 20,
+            "deadlockRecoveryTicks": 50
+          }
+        }
+      }
+    ]
+  }
+}

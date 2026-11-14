@@ -208,6 +208,7 @@ it.each(['constructor', '__proto__', 'toString', 'hasOwnProperty'])('rejects inh
     expect(engine.submit(input, { paused: true }).accepted).toBe(false);
   }
   expect(engine.snapshot()).toEqual(before);
+  expect(() => createRaceEngine({...setup.scenario,scriptedCommands:[sign('imported-invalid','conserve',1,ruId)]},setup.content)).toThrow(/scenario.scriptedCommands/);
   const frame = engine.step();
   expect(frame.events.filter(event => event.type === 'command_rejected')).toHaveLength(2);
   expect(frame.state.ruStates['ru-player']!.signOpportunitiesRemaining).toBe(3);

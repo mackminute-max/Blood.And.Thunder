@@ -13,7 +13,7 @@ try {
   const variants: { id: string; configuration: ReturnType<typeof validateSetup>; configurationHash: string; seeds: string[]; aggregate: ReturnType<typeof aggregate>; runs: ReturnType<typeof runMeasuredRace>[] }[] = [];
   for (const variant of plan.variants) {
     const config = validateSetup(parseSetupJson(readFileSync(variant.scenarioFile, 'utf8'), 'scenario'), parseSetupJson(readFileSync(variant.contentFile, 'utf8'), 'content'));
-    if (variant.sign) { const player = config.scenario.entries.find(e=>e.isPlayer); if (!player) throw new Error('Sign variant requires a controlled player RU'); config.scenario.scriptedCommands.push({ commandId: 'e-batch-sign', type: 'raiseSign', source: 'player', effectiveTick: config.scenario.rules.countdownTicks+1, ruId: player.id, signId: variant.sign }); }
+    if (variant.sign) { const player = config.scenario.entries.find(e=>e.isPlayer); if (!player) throw new Error('Sign variant requires a controlled player RU'); config.scenario.scriptedCommands.push({ commandId: 'e-batch-sign', type: 'raiseSign', source: 'player', effectiveTick: 1, ruId: player.id, signId: variant.sign }); }
     const runs = [];
     for (const seed of plan.seeds) { const scenario = copyJson(config.scenario); scenario.seed = seed; const run = runMeasuredRace(scenario,config.content); runs.push(run); if (runs.length % 25 === 0 || runs.length === plan.seeds.length) console.error(`${variant.id}: ${runs.length}/${plan.seeds.length}`); }
     variants.push({ id: variant.id, configuration: config, configurationHash: stateHash(config), seeds: plan.seeds, aggregate: aggregate(runs), runs });

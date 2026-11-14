@@ -73,3 +73,8 @@ it('an input submitted after a crossing waits for the next crossing',()=>{
   const f=circuit();const engine=createRaceEngine(f.scenario,f.content);for(let i=0;i<5;i++)engine.step();
   engine.submit(raise('after-line',6));const frame=engine.step();expect(frame.state.ruStates['ru-player']).toMatchObject({activeSignId:null,pendingSign:{signId:'conserve'}});
 });
+it('a disabled RU never activates a retained pending sign',async()=>{
+  const {activatePendingSign}=await import('../src/simulation/core/signs.ts');const f=circuit();const engine=createRaceEngine(f.scenario,f.content);const state=copyJson(engine.snapshot());const ru=state.ruStates['ru-player']!;
+  ru.status='disabled';ru.pendingSign={signId:'conserve',queuedAtTick:1,commandId:'pending-before-disable',source:'player'};const events:unknown[]=[];
+  activatePendingSign(ru,2,.5,'line_crossing',event=>events.push(event));expect(events).toEqual([]);expect(ru.activeSignId).toBeNull();expect(ru.pendingSign.signId).toBe('conserve');
+});

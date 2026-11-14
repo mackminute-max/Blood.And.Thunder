@@ -104,3 +104,13 @@ it.each([[2, .8], [1.25, .8], [4, .8], [2, .4]])('integrates impact time for act
   expect(result.events).toEqual(other.events); expect(state).toEqual(reordered);
   assertMovementState(state);
 });
+it('preserves a time-correct fractional finish crossing after earlier contact',()=>{
+  const setup=groupFixture();const t=setup.content.tuningProfiles[0]!;t.environment.collision.enabled=true;t.environment.collision.avoidanceMin=0;t.environment.collision.avoidanceMax=0;t.environment.collision.damage={minor:0,moderate:0,major:0};t.stats.braking.base=.1;t.stats.braking.perDriving=0;t.stats.braking.perTeamAgility=0;t.combat.impactSpeedFactor={minor:.5,moderate:.5,major:.5};
+  setup.content.tracks[0]!.segments.forEach(s=>{s.meters=1;s.kind='straight';s.turn='none';s.lanes.forEach(l=>{l.lengthMultiplier=1;});});
+  const {config,state}=prepared(setup);const actor=state.ruStates['ru-player']!;const target=state.ruStates['ru-iron']!;
+  actor.tile={segmentId:'seg-46',lane:0};actor.speedMps=2;actor.targetSpeedMps=2;
+  target.tile={segmentId:'seg-47',lane:0};target.progressInSegment=.8;target.speedMps=.3;target.targetSpeedMps=.3;
+  const result=moveTick(config,state,{onTransition:event=>{if(event.ruId===target.id&&event.crossedStartLine){target.status='finished';target.speedMps=0;}}});
+  const crossing=result.events.find(e=>e.type==='movement_transition'&&e.ruId===target.id);
+  expect(crossing).toMatchObject({crossedStartLine:true});expect(crossing!.fraction).toBeCloseTo(5/6,12);expect(target.progressInSegment).toBe(0);assertMovementState(state);
+});

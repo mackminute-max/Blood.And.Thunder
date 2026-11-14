@@ -134,7 +134,7 @@ export function mountSetupInspector(scenarioJson: string, contentJson: string, r
       const state = live.state as { ruStates: Record<string, { status: string; pendingSign: {signId:string;queuedAtTick:number} | null; activeSignId: string | null; signOpportunitiesRemaining: number; aiDecision: { chosen: { mode: string } } | null }> };
       const controlled = session?.controlledRuId ? state.ruStates[session.controlledRuId] : undefined;
       get('sign-status').textContent = controlled ? `Active sign: ${controlled.activeSignId ?? 'none'} · Pending: ${controlled.pendingSign?.signId ?? 'none'}${controlled.pendingSign ? ' (activates at next line crossing; queued tick '+controlled.pendingSign.queuedAtTick+')' : ''} · Opportunities: ${controlled.signOpportunitiesRemaining} · Driver behavior: ${controlled.aiDecision?.chosen.mode ?? 'fixture / awaiting decision'}` : 'No controlled player RU.';
-      for (const id of ['raise-sign', 'lower-sign', 'cancel-pending-sign']) get<HTMLButtonElement>(id).disabled = !controlled || controlled.status !== 'active' || id === 'raise-sign' && (controlled.signOpportunitiesRemaining === 0 || controlled.pendingSign !== null) || ['complete', 'error', 'halted'].includes(framePhase(live));
+      for (const id of ['raise-sign', 'lower-sign', 'cancel-pending-sign']) get<HTMLButtonElement>(id).disabled = !controlled || controlled.status !== 'active' || id === 'raise-sign' && (controlled.signOpportunitiesRemaining === 0 || controlled.pendingSign !== null) || id === 'cancel-pending-sign' && controlled.pendingSign === null || ['complete', 'error', 'halted'].includes(framePhase(live));
     }
     get('history-summary').textContent = JSON.stringify(recording.summary()); renderLogs();
   };
@@ -181,17 +181,20 @@ export function mountSetupInspector(scenarioJson: string, contentJson: string, r
   };
   let pendingBulk: ReturnType<typeof previewBulkEdit> | null = null; let bulkBefore: {scenario:string;content:string} | null = null;
   let bulkAfter: {scenario:string;content:string} | null = null;
+  let pendingBulkBefore: {scenario:string;content:string} | null = null;
+  for(const id of ['bulk-field','bulk-value']) get(id).addEventListener('input',()=>{pendingBulk=null;pendingBulkBefore=null;get<HTMLButtonElement>('bulk-apply').disabled=true;});
   get('bulk-preview').addEventListener('click', () => void attempt(() => {
-    pendingBulk=null;get<HTMLButtonElement>('bulk-apply').disabled=true;
+    pendingBulk=null;pendingBulkBefore=null;get<HTMLButtonElement>('bulk-apply').disabled=true;
     const raw=get<HTMLInputElement>('bulk-value').value; let value:unknown=raw;
     try {value=JSON.parse(raw) as unknown;} catch { /* Enum input may be plain text. */ }
     const draft=validateSetup(parseSetupJson(scenario.value,'scenario'),parseSetupJson(content.value,'content'));
     pendingBulk=previewBulkEdit(draft,get<HTMLSelectElement>('bulk-field').value,value);
-    bulkBefore={scenario:scenario.value,content:content.value}; get('bulk-changes').textContent=JSON.stringify(pendingBulk.changes,null,2);get<HTMLButtonElement>('bulk-apply').disabled=false;
+    pendingBulkBefore={scenario:scenario.value,content:content.value}; get('bulk-changes').textContent=JSON.stringify(pendingBulk.changes,null,2);get<HTMLButtonElement>('bulk-apply').disabled=false;
   }));
   get('bulk-apply').addEventListener('click', () => void attempt(() => {
-    if(!pendingBulk||!bulkBefore)throw new Error('Preview the bulk edit first');
-    if(scenario.value!==bulkBefore.scenario||content.value!==bulkBefore.content)throw new Error('Draft changed after preview; preview again');
+    if(!pendingBulk||!pendingBulkBefore)throw new Error('Preview the bulk edit first');
+    if(scenario.value!==pendingBulkBefore.scenario||content.value!==pendingBulkBefore.content)throw new Error('Draft changed after preview; preview again');
+    bulkBefore=pendingBulkBefore;pendingBulkBefore=null;
     scenario.value=JSON.stringify(pendingBulk.configuration.scenario,null,2);content.value=JSON.stringify(pendingBulk.configuration.content,null,2);
     bulkAfter={scenario:scenario.value,content:content.value};pendingBulk=null;get<HTMLButtonElement>('bulk-apply').disabled=true;get<HTMLButtonElement>('bulk-undo').disabled=false;
     refreshNumeric();showPreview();get('draft-status').textContent='Unsaved bulk edit applied to draft. Active race is unchanged.';
@@ -199,7 +202,7 @@ export function mountSetupInspector(scenarioJson: string, contentJson: string, r
   get('bulk-undo').addEventListener('click', () => void attempt(() => {
     if(!bulkBefore||!bulkAfter)throw new Error('No bulk edit to restore');
     if(scenario.value!==bulkAfter.scenario||content.value!==bulkAfter.content)throw new Error('Further edits exist; restore a saved scenario or undo those edits first');
-    scenario.value=bulkBefore.scenario;content.value=bulkBefore.content;bulkAfter=null;pendingBulk=null;refreshNumeric();showPreview();get<HTMLButtonElement>('bulk-undo').disabled=true;get<HTMLButtonElement>('bulk-apply').disabled=true;get('draft-status').textContent='Original values restored to draft.';
+    scenario.value=bulkBefore.scenario;content.value=bulkBefore.content;bulkAfter=null;pendingBulk=null;pendingBulkBefore=null;refreshNumeric();showPreview();get<HTMLButtonElement>('bulk-undo').disabled=true;get<HTMLButtonElement>('bulk-apply').disabled=true;get('draft-status').textContent='Original values restored to draft.';
   }));
   get('raise-sign').addEventListener('click', () => submit('raiseSign'));
   get('lower-sign').addEventListener('click', () => submit('lowerSign'));
