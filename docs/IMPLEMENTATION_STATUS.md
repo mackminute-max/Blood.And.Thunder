@@ -1,5 +1,7 @@
 # Implementation status
 
+Current: v0.3 milestones F–J are implemented against the supplied brief and the owner-directed full-audit waiver. See [V03_DEVELOPER_GUIDE.md](V03_DEVELOPER_GUIDE.md), [V03_BALANCE_REPORT.md](V03_BALANCE_REPORT.md) and [V03_AUDIT_REMEDIATION.md](V03_AUDIT_REMEDIATION.md). Balance approval and unseen audit definitions remain open; the historical A–E notes below are retained.
+
 Gate 0 and increments A1/A2 are implemented. A3 is implemented with the owner-approved common-clock rear-row rule. A4 developer tooling is implemented for current core mechanics; Gate A checks pass; B1/B2 are implemented; current Gate B checks pass. C1/C2 combat and environmental mechanics and D presentation are implemented; E regression/comparison tooling and baseline review are complete.
 
 ## Available
@@ -144,3 +146,11 @@ All-RU numeric/nested personality/beast/strategy edits support validated old/new
 Implemented pending/active sign state, line/common-start activation, retained active replacements, no-refund cancellation, free lowering with pending retained, second-pending rejection, opportunity counters, final/late crossing ordering and preserved terminal pending state. Global sign utility strength defaults to provisional 2×. Per-RU results export queued/activated/replaced/lowered/cancelled counts and final sign states. AI traces show effective utility multipliers.
 
 Validation: 61 relevant tests passed (one existing seeded batch intentionally excluded for this targeted run); typecheck/lint/build passed. Chromium AI/v0.3 checks passed, covering pending UI, cancellation accounting, tuning, live isolation, queue journal export and Node replay. Three old immediate-activation assertions were replaced with explicit v0.3 pending/crossing assertions; golden mechanics were not blindly accepted.
+
+## v0.3 J — release-candidate workflow
+
+Implemented reproducible paired mode/sign-strength/equalized measurement, full per-RU outcome aggregates, portable presets, explicit v0.2 configuration migration and a documented manual loop. Persistent strict ordering fixes passes through tick-boundary ties; lead time ends at the first finisher; incident counters include contact participants. Incidental damage metrics use actual post-durability HP loss. Bulk restoration preserves its undo snapshot even after a new preview, and no-op sign controls do not invent commentary events.
+
+Validation: complete `npm test` passed 21 files / 261 tests, including all four 1,000-seed safety suites. Final affected analysis/bulk/presentation checks passed 34 tests; six targeted identifier/migration/radio checks passed. Typecheck, lint and production build passed; all nine Chromium scripts passed, with a final targeted v0.3 check for repeated preview/undo and malicious target imports. Four exported presets validated, initialized and stepped. Existing Phaser bundle warning remains.
+
+Measured 584 races / 18 variants with zero simulation errors. All 292 Pure cases had zero attacks/ram attempts; incidental contacts still caused damage. Full-reference finish rates remain low and Conserve 1×/2× can saturate. All seeds/hashes/metrics and the written interpretation are in the balance report and checked summary. These are reproducible development capabilities and evidence, not balance approval. No campaign work or publication was performed.

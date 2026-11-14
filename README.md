@@ -1,6 +1,6 @@
 # Blood and Thunder
 
-Browser-first chariot racing prototype. Read AGENTS.md and Blood_and_Thunder_Prototype_Development_Spec_v0.2.md before development. Approved gameplay and provisional appendix baselines remain distinct.
+Browser-first chariot racing prototype. Read AGENTS.md and Blood_and_Thunder_Prototype_Development_Spec_v0.2.md before development. Approved gameplay and provisional appendix baselines remain distinct. Current v0.3 behavior, presets, migration and playtest instructions are in [V03_DEVELOPER_GUIDE.md](docs/V03_DEVELOPER_GUIDE.md); the owner-directed brief is at the repository root.
 
 ## Development
 
@@ -14,7 +14,7 @@ Use Node 24.22.1 (see .node-version) and npm 11.9.0. Install with `npm ci`.
 
 ## Core movement harness
 
-`src/content/oval-six-v1.scenario.json` and `src/content/reference.content.json` provide explicit versioned fixture data. Schema `c2-1` and simulation `0.7.0` require formula coefficients, movement limits and complete per-RU `targetSpeedRatios`. A ratio is a pre-race developer setting, not a player driving command. Reinitialize to apply JSON edits; the current run's configuration is immutable.
+`src/content/oval-six-v1.scenario.json` and `src/content/reference.content.json` provide explicit versioned fixture data. Schema `c2-1` and simulation `0.8.0` require formula coefficients, movement limits and complete per-RU `targetSpeedRatios`. A ratio is a pre-race developer setting, not a player driving command. Reinitialize to apply JSON edits; the current run's configuration is immutable.
 
 Derived max speed, acceleration, braking, handling, stability and endurance expose their input factors in `derived.breakdown`. Each step advances one fixed `tickDurationSeconds` (default 0.20). Movement accounts for each tile's lane-specific travel cost, checks every intermediate boundary and discards remaining budget on a blocked transition. Simultaneous forward departures/merges resolve before atomic position commitment. B1 supports adjacent lane changes and corner handling as described below. Damaging contact remains for C1.
 
@@ -28,7 +28,7 @@ Simulation and shared configuration/contracts cannot import Phaser, presentation
 
 The raw A2 movement harness does not credit laps. The A3 race controller applies the approved start-line accounting described below. Combat, fatigue accumulation, event scheduling, wreck cleanup, commentary, persistence and campaign features remain future phases. Current movement is a developer harness, not a playable race.
 
-See docs/DECISIONS.md, docs/CHANGELOG.md and docs/IMPLEMENTATION_STATUS.md for provisional formulas, validation evidence and scope. Unknown versions are rejected; no scenario migrations are implemented.
+See docs/DECISIONS.md, docs/CHANGELOG.md and docs/IMPLEMENTATION_STATUS.md for provisional formulas, validation evidence and scope. Unknown versions are rejected. Explicit portable v0.2 configuration migration is available via `node scripts/migrate-v02.ts old.json new.json`; historical diagnostic replay cannot migrate.
 
 ## A3 circuit lifecycle
 
@@ -40,9 +40,9 @@ The approved rule uses **one common start clock**. Front-row racers begin lap 1 
 
 `rules.countdownTicks` is 0 in the fixture; positive values delay the common race clock without consuming the race watchdog. `finishTieToleranceSeconds` is 1e-6 in the fixture. Finish times use fractional tick timing, finishers stop/leave occupancy, and shared ties receive competition ranks. Cutoff is checked at the end of the winner's race tick plus `finishCutoffTicks`; zero permits other finishes in that same tick. No active entrants remain after completion; cutoff/watchdog DNFs preserve their reason.
 
-Normalized standings use signed initial position plus accepted segment transitions and fraction, independent of physical lane meters. The controller supports nonzero finish indices and multiple aligned rear rows. Results distinguish supported statistics from unavailable combat/incident/leading metrics. Optional retirement thresholds and disabled-wreck cleanup remain later work; existing disabled components retain their reason, and active units with zero propulsion retire automatically.
+Normalized standings use signed initial position plus accepted segment transitions and fraction, independent of physical lane meters. The controller supports nonzero finish indices and multiple aligned rear rows. Results share authoritative combat, incident, overtake, lead-time and sign counters with exports and batch tooling. Delayed wreck cleanup and bounded deadlock retirement are implemented; existing disabled components retain their reason, and active units with zero propulsion retire automatically.
 
-Gate A, B1/B2 and C1/C2 combat and environmental mechanics are implemented; D viewer/commentary is implemented; E regression/comparison tools and initial balance evidence are implemented. Formula choices and numeric defaults remain provisional except where explicitly approved. Input schema is c2-1, simulation 0.7.0; older simulation versions are rejected rather than silently reinterpreted.
+Gate A, B1/B2 and C1/C2 combat and environmental mechanics are implemented; D viewer/commentary is implemented; E regression/comparison tools and initial balance evidence are implemented. Formula choices and numeric defaults remain provisional except where explicitly approved. Input schema is c2-1, simulation 0.8.0; older simulation versions are rejected rather than silently reinterpreted.
 
 ## A4 developer workflow
 
@@ -56,7 +56,7 @@ Logs supports tick range, RU/actor ID, subsystem, level, event type and text fil
 
 Default retention is 200 tick snapshots and 50,000 log records, configurable before initialization. Capture IDs distinguish error snapshots at an unchanged committed tick. Dropped counts are visible. The list displays at most 300 matching rows; **Export diagnostics** includes all retained unfiltered rows and snapshots, input configuration, last valid state and latest result. Exports are capped at 20 MiB; **Export latest / crash snapshot** remains available without buffered history if a full trace is too large. Reduce retention and rerun for a smaller trace. They provide reproducible inputs and diagnostic history, not full replay restoration.
 
-The portable configuration marker is `blood-thunder-configuration-a4-1`; buffered trace metadata uses `a4-1`. The developer artifact format is independent of the current simulation version (`0.7.0`). Selected paused developer overrides now use the command queue below. Combat inspects implemented actions; Environment inspects conditions/events; Comparison labels later capabilities.
+The portable configuration marker is `blood-thunder-configuration-a4-1`; buffered trace metadata uses `a4-1`. The developer artifact format is independent of the current simulation version (`0.8.0`). Selected paused developer overrides now use the command queue below. Combat inspects implemented actions; Environment inspects conditions/events; Comparison labels later capabilities.
 
 ## B1 lane and corner fixtures
 
@@ -68,7 +68,7 @@ Safe corner speed and shorter inner/longer outer travel costs appear in derived 
 
 Conflicts produce yield or brake without inventing damage. All unused blocked movement is discarded. Brake uses a provisional relative stopping-distance heuristic and configurable brakeFactor; no automatic penalty applies to a clean yield. Repeated blocking warns at the configured threshold and retires the stuck active RU at recovery threshold, without moving it into occupied space. Disabled-wreck cleanup remains C2.
 
-Movement inspection shows attempts/results, rolls/probabilities, safe speeds, budgets, all intermediate transitions and discarded progress; Logs recognizes all lane/handling event types as movement. Formula/rate values remain editable in RUs → Formula and movement tuning. See D-043–D-050 for provisional semantics. Schema c2-1 / simulation 0.7.0 include these changes; no automatic migration exists.
+Movement inspection shows attempts/results, rolls/probabilities, safe speeds, budgets, all intermediate transitions and discarded progress; Logs recognizes all lane/handling event types as movement. Formula/rate values remain editable in RUs → Formula and movement tuning. See D-043–D-050 for provisional semantics. Schema c2-1 / simulation 0.8.0 include these changes; no automatic migration exists.
 
 ## B2 AI, Strategy Signs and commands
 
@@ -76,15 +76,15 @@ The reference scenario uses `controller: "ai"`. Choose the controller draft in S
 
 The AI panel shows each RU's perceived objects, all 12 rejected/legal candidates, utility factors, chosen intent and actual outcome for the selected tick. RUs → Formula and movement tuning includes the AI weights, speed ratios, commitment and sign/strategy parameters. RUs → Drivers edits personality and skills. Candidate features and numerical defaults are PROVISIONAL (D-051–D-060).
 
-Use the persistent Strategy Signs panel to raise/replace/lower signs, including while paused. Queued commands do not change active state until the next global simulation tick. Raising or replacing costs one opportunity, lowering is free; the active sign persists. The panel distinguishes queued/applied/rejected commands, active sign, remaining opportunities and actual driver mode. Safety constraints may defeat a sign preference. Attack and Defend influence combat choices; Push Hard multiplies fatigue gain by the configured 1.15 baseline.
+Use the persistent Strategy Signs panel to raise/replace/lower signs, including while paused. Commands process at the next valid tick, but accepted raises remain pending until the next forward start/finish-line crossing (or the common starting signal for pre-race signs). Raising or replacing consumes one opportunity when queued; active signs persist while replacements wait. Lowering is free and keeps pending intact; explicit cancellation has no refund and second pending raises reject. The panel distinguishes queued/applied/rejected commands, active sign, remaining opportunities and actual driver mode. Safety constraints may defeat a sign preference. Attack and Defend influence combat choices; Push Hard multiplies fatigue gain by the configured 1.15 baseline.
 
 In RUs, selected developer overrides are available while paused: `maxSpeedMps` (temporary derived override) and `teamFatigue`, each in [0,100]. Queue/reset applies at the next tick and logs old/new/target/source/time; initial configuration remains unchanged. Active max-speed overrides are labeled in state and derivation breakdown. Other fields require pre-race editing/reinitialization. Public engine calls use `submit(command, {paused:true})` for overrides; signs need no pause. `source:"developer"` signs targeting opponents additionally require the pre-race allowDeveloperSignCommands rule.
 
-Commands contain commandId, source, effectiveTick, ruId and the typed payload (`raiseSign`/signId, `lowerSign`, or `developerOverride`/field/value). Command ticks include countdown; B1 maneuver ticks do not. Same-tick submission order is preserved. Scripted commands use the same validation and are automatically queued at initialization. A queue receipt is not an application guarantee: inactive targets or depleted sign budget can reject at the tick boundary. Duplicate/stale/unknown/unauthorized commands are refused. Null override values reset; lowering with no active sign is a free no-op. Re-raising the same active sign costs one opportunity.
+Commands contain commandId, source, effectiveTick, ruId and the typed payload (`raiseSign`/signId, `lowerSign`, `cancelPendingSign`, or `developerOverride`/field/value). Command ticks include countdown; B1 maneuver ticks do not. Same-tick submission order is preserved. Scripted commands use the same validation and are automatically queued at initialization. A queue receipt is not an application guarantee: inactive targets or depleted sign budget can reject at the tick boundary. Duplicate/stale/unknown/unauthorized commands are refused. Null override values reset; lowering with no active sign is a free no-op. Re-raising the same active sign costs one opportunity.
 
 Diagnostic exports now include commandJournal, pending/overflow summary, initial inputs and current/last-valid state. `npm run replay -- path/to/diagnostic.json` re-executes either raw movement or race inputs plus live journal and reports matchesExportedHash. This is deterministic input replay, not mutable-state restoration or a polished replay viewer. Pending future and rejected inputs are retained within the command submission bound; replay uses origin/tick/phase/pause context. Journals cap at 10,000 submissions by default; additional attempts are rejected with an overflow counter.
 
-Current inputs use c2-1 / 0.7.0. Older files are rejected explicitly; no automatic migration is implemented. Recovery, campaign systems and full mutable snapshot restoration remain future work.
+Current inputs use c2-1 / 0.8.0. Older files are rejected explicitly; no automatic migration is implemented. Recovery, campaign systems and full mutable snapshot restoration remain future work.
 
 
 ## C1 combat
@@ -109,7 +109,7 @@ These systems complete the current Gate C mechanics checks. D now supplies Phase
 
 ## D race viewer and Race radio
 
-The browser opens an initialized, paused circuit race. Use **Play**, **Step one tick**, and 1×/2×/4× playback above the track. **Start / restart reference race** resets the reference scenario. Strategy Signs remain visible above the course; queued signs activate at the next valid tick and do not guarantee obedience. Movement harness is still available in Developer tools for raw mechanic inspection.
+The browser opens an initialized, paused circuit race. Use **Play**, **Step one tick**, and 1×/2×/4× playback above the track. **Start / restart reference race** resets the reference scenario. Strategy Signs remain visible above the course; queued signs activate at the common starting signal or next forward line crossing and do not guarantee obedience. Movement harness is still available in Developer tools for raw mechanic inspection.
 
 The Phaser full-track schematic shows lanes, start line, racing/stopped/finished markers, hazards and confirmed hit/contact cues. Click a marker or select an RU; Follow selected RU zooms the camera. Animation follows accepted intermediate transitions; pausing shows the exact committed state. The diagram is a schematic of topology, not a physical-distance chart.
 
@@ -117,7 +117,7 @@ Live standings show normalized course progress/NCU gaps and official finishing r
 
 Race radio is a separate deterministic event-template consumer with critical/high/medium/low priorities, repeat suppression, bounded feed/highlights and source references. Attempts, misses and canceled plans never become confirmed hits; fatalities and victory require explicit outcomes. Routine display updates are buffered at accelerated playback; pause to read. The terminal results section shows official classification, highlights and individual component outcomes. Restart clears it; inspecting developer history leaves live presentation untouched.
 
-D changes no simulation version or mechanics: inputs remain c2-1 /0.7.0. Existing diagnostic exports and Node input replay verify authoritative hashes independently of render/camera/playback. The presentation module baselines are documented in D-082–D-088; settings live in src/presentation/commentary/settings.ts. Milestone E tooling and baseline review are available below; audio, polished art, full replay UI and campaign recovery are deferred.
+The original D presentation increment changed no engine mechanics; current v0.3 inputs use c2-1 /0.8.0. Existing diagnostic exports and Node input replay verify authoritative hashes independently of render/camera/playback. The presentation module baselines are documented in D-082–D-088; settings live in src/presentation/commentary/settings.ts. Milestone E tooling and baseline review are available below; audio, polished art, full replay UI and campaign recovery are deferred.
 
 
 ## E regression, batch reports and Comparison

@@ -18,3 +18,13 @@ No race-format, bulk-edit, queued-sign, balance tuning or campaign changes have 
 - Signs now have separate active/pending state. Accepted raises consume at command processing; activation occurs at the common signal or next forward line crossing. Lowering does not cancel pending. Cancellation gives no refund and second pending submissions reject. Mid-movement activations affect subsequent AI decisions. UI/radio never call a merely pending sign active.
 - Default global influence is provisional 2×; per-sign defaults 1×, ranges 0–8 each. Only utility contributions scale. Existing Push Hard fatigue is separate.
 - Simulation 0.8.0 rejects canonical replay of 0.7.0 diagnostic histories: contact, counters, sign semantics and defaults changed. Do not relabel old histories to pretend replay compatibility. Historical v0.2 reports remain unchanged.
+
+
+## J and validation
+
+- Added deterministic paired reference/compact/equalized evidence generation, per-mode/per-RU aggregates (including finish times, DNFs, blocks, fatigue, contacts, condition distributions and sign usage), four portable presets and a manual guide.
+- Corrected strict pass counting through exact tick-boundary ties and ended lead credit at first finish. Incidents count both contact participants; incidental damage reports actual HP loss.
+- Added explicit v0.2 portable configuration migration; preserves source files, rejects diagnostic histories and refuses output overwrite.
+- Bulk undo survives subsequent previews; no-op pending/lower controls do not invent radio facts. Imported reserved target IDs cannot replace the current live run.
+- Complete suite: 261 tests / 21 files; nine Chromium flows; typecheck/lint/build passed, with focused final refinements checked separately. 584 balance cases across 18 variants produced zero simulation errors. Existing Phaser bundle warning remains.
+- Balance remains unapproved: low reference completion, high Combat attrition and Conserve strength saturation are documented. Complete audit definitions remain unavailable under the explicit proceed-without-it instruction.

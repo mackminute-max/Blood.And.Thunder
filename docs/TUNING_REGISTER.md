@@ -545,3 +545,19 @@ The complete per-segment/per-lane topology, meters, lengthMultiplier, cornerSpee
 Commentary display limits and priorities are presentation-only baselines in [settings.ts](../src/presentation/commentary/settings.ts); visual geometry is in [geometry.ts](../src/presentation/phaser/geometry.ts). They do not alter race mechanics. The compact E stress fixture deliberately changes circuit size, entrant count, dt and watchdog; it is engineering coverage, not a candidate balance replacement.
 
 No defaults were tuned in E. See BALANCE_REVIEW.md for measured sample results, limitations and reviewable follow-up recommendations.
+
+
+## v0.3 additions (provisional)
+
+| Tuning | Shipped value / bounds | Mechanical role / editor |
+|---|---|---|
+| `attributes.nerveAvoidancePerPoint` | .001, [0,.01] | Driver nerve relative to collision skill center changes avoidance probability; final chance keeps existing bounds |
+| `attributes.durabilityPerPoint` / `durabilityReference` | .002 / 70; [0,.01] / [0,100] | Chariot actual HP damage divided by max(.1,1+coefficient×(durability−reference)); protection remains separate |
+| `attributes.roughnessTractionWeight` | .2, [0,1] | Intrinsic base traction factor 1/(1+roughness×weight), then separate hazard deltas |
+| `attributes.severitySpeedWeight` / `severityReference` | .15 / 1; [0,1] / finite ≥0 | Corner safe-speed factor 1/max(.1,1+(severity−reference)×weight) |
+| `ai.signInfluence.globalStrength` | 2, [0,8] | Utility-only multiplier relative to v0.2 sign contributions |
+| `ai.signInfluence.perSign.*` | 1 each, [0,8] | Per-sign multiplier; dedicated RUs controls show effective global×per-sign and reset defaults |
+| `rules.competitionStyle` | combat / pure; default combat | Persisted selector in Rules; offense validation distinct from physical contact |
+| Pending cancellation / second pending | No refund / reject | Provisional interaction defaults, not balance canon; free lowering retains pending |
+
+All attributes/sign coefficients are editable through RUs numeric tuning; global/per-sign influence also has dedicated controls. Reinitialize to apply. Push Hard fatigue remains its separate existing multiplier. The 584-case report shows saturation and low reference completion; no official DNF/finish-gap/attack-rate targets were invented. See V03_BALANCE_REPORT.md before proposing new defaults.

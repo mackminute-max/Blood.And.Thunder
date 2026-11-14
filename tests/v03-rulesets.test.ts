@@ -31,7 +31,9 @@ it('retains reproducible incidental contact consequences in Pure Racing',()=>{
   const actor=state.ruStates['ru-player']!;actor.speedMps=10;actor.targetSpeedMps=10;
   actor.tile={segmentId:'seg-00',lane:0};state.ruStates['ru-iron']!.tile={segmentId:'seg-01',lane:0};
   f.content.tracks[0]!.segments[0]!.meters=1;
-  const configured=createRaceEngine(f.scenario,f.content);const result=moveTick(configured.initialConfiguration,state);
+  const withoutContact=copyJson(state);const configured=createRaceEngine(f.scenario,f.content);const result=moveTick(configured.initialConfiguration,state);
+  t.environment.collision.enabled=false;moveTick(createRaceEngine(f.scenario,f.content).initialConfiguration,withoutContact);
+  expect(actor.speedMps).toBeLessThan(withoutContact.ruStates['ru-player']!.speedMps);
   expect(result.events).toContainEqual(expect.objectContaining({type:'contact',details:expect.objectContaining({actionKind:'incidental_contact'})}));
   expect(state.ruStates['ru-iron']!.speedMps).toBe(0);
   expect(Object.values(state.ruStates).reduce((sum,ru)=>sum+ru.environmentStats.collisions,0)).toBeGreaterThan(0);
