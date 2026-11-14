@@ -1,3 +1,4 @@
+import { signStrength } from './sign-strength.ts';
 import { occupiesRu } from '../environment/lifecycle.ts';
 import type { DeepReadonly, InitialConfiguration } from '../../contracts/initialization.ts';
 import type { MovementState, MovementEventInput, MovementEvent } from '../../contracts/movement.ts';
@@ -74,7 +75,7 @@ export function chooseIntents(config: DeepReadonly<InitialConfiguration>, state:
       let sign = ru.activeSignId && !(ru.activeSignId === 'attack' && config.scenario.rules.competitionStyle === 'pure') ? t.signs[ru.activeSignId][mode] : 0;
       if (ru.activeSignId === 'push-hard') sign += t.pushOvertake * overtake;
       if (ru.activeSignId === 'defend-position') sign += delta === 0 && ahead ? t.defendStay : -t.defendRisk * risk;
-      sign *= 1 + t.disciplineSign * trait(p.discipline);
+      sign *= (1 + t.disciplineSign * trait(p.discipline)) * signStrength(config, ru.activeSignId);
       const draw = noiseBudget[candidateIndex++]!;
       const noise = rejected ? 0 : (draw * 2 - 1) * t.noise;
       const switching = !ru.aiMemory.reevaluate && !ru.aiMemory.lastFailed && ru.aiMemory.targetLane !== null && laneIndex !== ru.aiMemory.targetLane ? -t.switchPenalty : 0;

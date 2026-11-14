@@ -3517,10 +3517,10 @@
       "name": "Player chariot",
       "weightKg": 140,
       "stability": 65,
+      "durability": 70,
       "protection": 45,
       "rollingEfficiency": 75,
       "maneuverability": 70,
-      "durability": 70,
       "capacitySlots": 2,
       "maxHealth": 100,
       "currentHealth": 100,
@@ -3531,10 +3531,10 @@
       "name": "Iron chariot",
       "weightKg": 185,
       "stability": 85,
+      "durability": 70,
       "protection": 80,
       "rollingEfficiency": 55,
       "maneuverability": 45,
-      "durability": 70,
       "capacitySlots": 2,
       "maxHealth": 100,
       "currentHealth": 100,
@@ -3545,10 +3545,10 @@
       "name": "Vulture chariot",
       "weightKg": 115,
       "stability": 50,
+      "durability": 70,
       "protection": 25,
       "rollingEfficiency": 90,
       "maneuverability": 85,
-      "durability": 70,
       "capacitySlots": 2,
       "maxHealth": 100,
       "currentHealth": 100,
@@ -3559,10 +3559,10 @@
       "name": "Ash chariot",
       "weightKg": 130,
       "stability": 70,
+      "durability": 70,
       "protection": 40,
       "rollingEfficiency": 72,
       "maneuverability": 70,
-      "durability": 70,
       "capacitySlots": 2,
       "maxHealth": 100,
       "currentHealth": 100,
@@ -3573,10 +3573,10 @@
       "name": "Bone chariot",
       "weightKg": 165,
       "stability": 75,
+      "durability": 70,
       "protection": 70,
       "rollingEfficiency": 62,
       "maneuverability": 58,
-      "durability": 70,
       "capacitySlots": 2,
       "maxHealth": 100,
       "currentHealth": 100,
@@ -3587,10 +3587,10 @@
       "name": "Copper chariot",
       "weightKg": 150,
       "stability": 88,
+      "durability": 70,
       "protection": 85,
       "rollingEfficiency": 65,
       "maneuverability": 62,
-      "durability": 70,
       "capacitySlots": 2,
       "maxHealth": 100,
       "currentHealth": 100,
@@ -3712,8 +3712,8 @@
       "id": "short-sword",
       "name": "Short Sword",
       "channel": "driver",
-      "rangeMode": "sameSegmentAdjacentLane",
       "rangeSegments": 0,
+      "rangeMode": "sameSegmentAdjacentLane",
       "allowedArcs": [
         "side"
       ],
@@ -3724,20 +3724,20 @@
       "accuracyBase": 0.55,
       "minDamage": 8,
       "maxDamage": 16,
-      "cooldownTicks": 5,
-      "timing": "postMove",
       "targetWeights": {
         "driver": 1,
         "beast": 0,
         "chariot": 1
-      }
+      },
+      "cooldownTicks": 5,
+      "timing": "postMove"
     },
     {
       "id": "short-bow",
       "name": "Short Bow",
       "channel": "driver",
-      "rangeMode": "segmentDistance",
       "rangeSegments": 3,
+      "rangeMode": "segmentDistance",
       "allowedArcs": [
         "front",
         "rear"
@@ -3750,20 +3750,20 @@
       "accuracyBase": 0.55,
       "minDamage": 6,
       "maxDamage": 14,
-      "cooldownTicks": 8,
-      "timing": "preMove",
       "targetWeights": {
         "driver": 1,
         "beast": 1,
         "chariot": 1
-      }
+      },
+      "cooldownTicks": 8,
+      "timing": "preMove"
     },
     {
       "id": "beast-gore",
       "name": "Beast Gore",
       "channel": "beast",
-      "rangeMode": "adjacentTile",
       "rangeSegments": 1,
+      "rangeMode": "adjacentTile",
       "allowedArcs": [
         "front",
         "side"
@@ -3775,20 +3775,20 @@
       "accuracyBase": 0.55,
       "minDamage": 7,
       "maxDamage": 15,
-      "cooldownTicks": 7,
-      "timing": "postMove",
       "targetWeights": {
         "driver": 0,
         "beast": 1,
         "chariot": 1
-      }
+      },
+      "cooldownTicks": 7,
+      "timing": "postMove"
     },
     {
       "id": "side-ram",
       "name": "Side Ram",
       "channel": "ram",
-      "rangeMode": "sameSegmentAdjacentLane",
       "rangeSegments": 0,
+      "rangeMode": "sameSegmentAdjacentLane",
       "allowedArcs": [
         "side"
       ],
@@ -3798,13 +3798,13 @@
       "accuracyBase": 0.55,
       "minDamage": 10,
       "maxDamage": 25,
-      "cooldownTicks": 10,
-      "timing": "contact",
       "targetWeights": {
         "driver": 0,
         "beast": 0,
         "chariot": 1
-      }
+      },
+      "cooldownTicks": 10,
+      "timing": "contact"
     }
   ],
   "speciesIds": [
@@ -3931,33 +3931,16 @@
           "beastHandling": 0.25
         }
       },
-      "movement": {
-        "maxTransitionsPerTick": 64,
-        "arrivalEpsilon": 1e-09,
-        "respectSafeCornerSpeed": true,
-        "handling": {
-          "favorableTraction": 0.75,
-          "favorableHandling": 40,
-          "tractionScoreWeight": 20,
-          "overspeedScoreWeight": 30,
-          "probabilityBase": 0.5,
-          "scoreCenter": 50,
-          "scoreDivisor": 150,
-          "minProbability": 0.1,
-          "maxProbability": 0.95,
-          "failureSpeedFactor": 0.9,
-          "cornerTractionMin": 0.4,
-          "cornerTractionMax": 1.1,
-          "cornerHandlingBase": 0.8,
-          "cornerHandlingScale": 0.2
-        },
-        "conflict": {
-          "brakeFactor": 0.75,
-          "deadlockWarningTicks": 20,
-          "deadlockRecoveryTicks": 50
-        }
-      },
       "ai": {
+        "signInfluence": {
+          "globalStrength": 1,
+          "perSign": {
+            "push-hard": 1,
+            "defend-position": 1,
+            "attack": 1,
+            "conserve": 1
+          }
+        },
         "base": 30,
         "progressWeight": 25,
         "overtakeWeight": 18,
@@ -4048,11 +4031,82 @@
             "brake": 0
           }
         },
+        "pushFatigueMultiplier": 1.15,
         "pushOvertake": 8,
         "defendStay": 8,
         "defendRisk": 8,
-        "opportunisticOvertake": 8,
-        "pushFatigueMultiplier": 1.15
+        "opportunisticOvertake": 8
+      },
+      "attributes": {
+        "nerveAvoidancePerPoint": 0.001,
+        "durabilityPerPoint": 0.002,
+        "durabilityReference": 70,
+        "roughnessTractionWeight": 0.2,
+        "severitySpeedWeight": 0.15,
+        "severityReference": 1
+      },
+      "environment": {
+        "traitModifiers": [],
+        "fatigue": {
+          "basePerSecond": 0.15,
+          "exertionBase": 0.5,
+          "speedWeight": 0.7,
+          "accelerationWeight": 0.3,
+          "accelerationDivisor": 3,
+          "exertionMin": 0.25,
+          "exertionMax": 1.5,
+          "enduranceBase": 1.2,
+          "enduranceDivisor": 200,
+          "recoverySpeedRatio": 0.35,
+          "recoveryPerSecond": 0.08
+        },
+        "events": {
+          "rates": {
+            "disabled": 0,
+            "rare": 0.15,
+            "occasional": 0.35,
+            "frequent": 0.75,
+            "chaotic": 1.5
+          },
+          "maxEvents": 3,
+          "windowStart": 0.15,
+          "windowEnd": 0.85,
+          "spacingTicks": 20,
+          "placementBufferSegments": 1,
+          "earlyWreckClear": true,
+          "earlyWreckClearBlockedTicks": 20,
+          "animalStepTicks": 3,
+          "roughnessTractionDelta": -0.2,
+          "memoryTicks": 10,
+          "hazardUtilityPenalty": 30,
+          "weights": {
+            "debris_spawn": 1,
+            "track_roughness": 1,
+            "animal_crossing": 1
+          },
+          "durations": {
+            "debris_spawn": 15,
+            "track_roughness": 20,
+            "animal_crossing": 12
+          }
+        },
+        "collision": {
+          "enabled": true,
+          "avoidanceBase": 0.4,
+          "handlingDivisor": 200,
+          "awarenessDivisor": 300,
+          "skillCenter": 50,
+          "avoidanceMin": 0.1,
+          "avoidanceMax": 0.9,
+          "minimumClosingSpeed": 1,
+          "lateralRelativeSpeed": 3,
+          "damage": {
+            "minor": 0,
+            "moderate": 8,
+            "major": 20
+          },
+          "stabilityDivisor": 200
+        }
       },
       "combat": {
         "hitMin": 0.05,
@@ -4068,6 +4122,7 @@
         "minimumDamage": 1,
         "cancelConsumesCooldown": false,
         "diagonalRanged": false,
+        "rangedRuOcclusion": true,
         "guardAllowsDriverAttack": true,
         "beastSkillStat": "discipline",
         "ramWeaponId": "side-ram",
@@ -4103,71 +4158,33 @@
           "defendStrategy": 8,
           "defendSign": 16,
           "guardAttackPenalty": 6
-        },
-        "rangedRuOcclusion": true
+        }
       },
-      "environment": {
-        "fatigue": {
-          "basePerSecond": 0.15,
-          "exertionBase": 0.5,
-          "speedWeight": 0.7,
-          "accelerationWeight": 0.3,
-          "accelerationDivisor": 3,
-          "exertionMin": 0.25,
-          "exertionMax": 1.5,
-          "enduranceBase": 1.2,
-          "enduranceDivisor": 200,
-          "recoverySpeedRatio": 0.35,
-          "recoveryPerSecond": 0.08
+      "movement": {
+        "maxTransitionsPerTick": 64,
+        "arrivalEpsilon": 1e-9,
+        "respectSafeCornerSpeed": true,
+        "handling": {
+          "favorableTraction": 0.75,
+          "favorableHandling": 40,
+          "tractionScoreWeight": 20,
+          "overspeedScoreWeight": 30,
+          "probabilityBase": 0.5,
+          "scoreCenter": 50,
+          "scoreDivisor": 150,
+          "minProbability": 0.1,
+          "maxProbability": 0.95,
+          "failureSpeedFactor": 0.9,
+          "cornerTractionMin": 0.4,
+          "cornerTractionMax": 1.1,
+          "cornerHandlingBase": 0.8,
+          "cornerHandlingScale": 0.2
         },
-        "events": {
-          "rates": {
-            "disabled": 0,
-            "rare": 0.15,
-            "occasional": 0.35,
-            "frequent": 0.75,
-            "chaotic": 1.5
-          },
-          "maxEvents": 3,
-          "windowStart": 0.15,
-          "windowEnd": 0.85,
-          "spacingTicks": 20,
-          "placementBufferSegments": 1,
-          "animalStepTicks": 3,
-          "roughnessTractionDelta": -0.2,
-          "memoryTicks": 10,
-          "hazardUtilityPenalty": 30,
-          "weights": {
-            "debris_spawn": 1,
-            "track_roughness": 1,
-            "animal_crossing": 1
-          },
-          "durations": {
-            "debris_spawn": 15,
-            "track_roughness": 20,
-            "animal_crossing": 12
-          },
-          "earlyWreckClear": true,
-          "earlyWreckClearBlockedTicks": 20
-        },
-        "collision": {
-          "enabled": true,
-          "avoidanceBase": 0.4,
-          "handlingDivisor": 200,
-          "awarenessDivisor": 300,
-          "skillCenter": 50,
-          "avoidanceMin": 0.1,
-          "avoidanceMax": 0.9,
-          "minimumClosingSpeed": 1,
-          "lateralRelativeSpeed": 3,
-          "damage": {
-            "minor": 0,
-            "moderate": 8,
-            "major": 20
-          },
-          "stabilityDivisor": 200
-        },
-        "traitModifiers": []
+        "conflict": {
+          "brakeFactor": 0.75,
+          "deadlockWarningTicks": 20,
+          "deadlockRecoveryTicks": 50
+        }
       }
     }
   ]

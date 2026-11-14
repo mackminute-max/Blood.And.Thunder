@@ -229,3 +229,9 @@ The owner authorized F–J and explicitly directed proceeding without the unavai
 ## v0.3 G
 
 V03-G01 (APPROVED, owner v0.3 brief): `rules.competitionStyle` is `combat` (default) or `pure`. Pure prohibits offensive candidates and authoritative attack/ram execution, while existing contact physics and environmental rules remain shared. `combatAllowed` remains an additional restriction in Combat Racing. Results, UI and batch outputs identify the ruleset. V03-G02 (PROVISIONAL): Pure rejects Attack sign submissions without charging; configuration imports containing scripted Attack signs reject with an actionable error rather than silently clearing. Tests: v03-rulesets.test.ts, existing combat tests and v03-smoke.mjs.
+
+## v0.3 H
+
+V03-H01 (PROVISIONAL UI contract): bulk-edit supported numeric driver/personality/chariot/beast attributes or `entry.preRaceStrategy` in the pre-race draft. `beasts.*` means all beasts assigned to all scenario RUs; never an implicit beast slot. Preview lists RU/asset/path/old/new; full schema/reference validation precedes atomic apply. IDs/rosters/equipment/track/global fields cannot be selected. Restore preserves the complete pre-edit draft and refuses to overwrite subsequent edits. No live bulk command is offered. Tests: v03-bulk.test.ts and v03-smoke.mjs.
+
+V03-H02 (PROVISIONAL tuning): global and per-sign influence multiply only sign-specific utility contributions, including legal combat/guard preference contributions. Ranges 0–8; original per-mode/sign weights remain separate. Existing Push Hard fatigue multiplier is not scaled. Dedicated controls show effective multipliers, bounds and default resets; numeric definition controls remain available. H retains 1× until I's measured 2× hypothesis.

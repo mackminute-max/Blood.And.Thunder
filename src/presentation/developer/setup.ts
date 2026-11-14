@@ -1,3 +1,4 @@
+import { bulkFields, previewBulkEdit } from '../../configuration/bulk-edit.ts';
 import { mountComparison } from './comparison.ts';
 import type { DeepReadonly, InitialConfiguration } from '../../contracts/initialization.ts';
 import type { ViewFrame } from '../race/model.ts';
@@ -68,6 +69,21 @@ export function mountSetupInspector(scenarioJson: string, contentJson: string, r
         const scenarioDraft = parseSetupJson(scenario.value, 'scenario') as Record<string, unknown>; scenarioDraft.rules = changed;
         scenario.value = JSON.stringify(scenarioDraft, null, 2); showPreview(); get('draft-status').textContent = 'Draft changed. Reinitialize to apply; active run is unchanged.';
       }, ['$scenario', 'rules'], defaultScenario.rules);
+      const bulkField = get<HTMLSelectElement>('bulk-field'); const selectedBulk = bulkField.value; bulkField.replaceChildren();
+      for (const field of bulkFields(setup)) bulkField.add(new Option(field, field));
+      if (bulkFields(setup).includes(selectedBulk)) bulkField.value = selectedBulk;
+      const tuningIndex = setup.content.tuningProfiles.findIndex(p=>p.id===setup.scenario.tuningProfileId);
+      const influence = setup.content.tuningProfiles[tuningIndex]!.ai.signInfluence;
+      const describeInfluence = (value: typeof influence) => { get('sign-effective').textContent = JSON.stringify(Object.fromEntries(Object.entries(value.perSign).map(([key,strength])=>[key,{ global: value.globalStrength, perSign: strength, effectiveMultiplier: value.globalStrength*strength }])),null,2); };
+      mountNumericEditor(get('sign-tuning-fields'), influence, changed => {
+        try {
+        const next = validateSetup(parseSetupJson(scenario.value,'scenario'),parseSetupJson(content.value,'content'));
+        next.content.tuningProfiles[tuningIndex]!.ai.signInfluence = changed as typeof influence;
+        validateSetup(next.scenario,next.content); content.value=JSON.stringify(next.content,null,2); describeInfluence(changed as typeof influence); showPreview();
+        get('draft-status').textContent='Sign tuning draft changed. Reinitialize to apply.';
+        } catch (error) { feedback.textContent=errorMessage(error); }
+      }, ['tuningProfiles',String(tuningIndex),'ai','signInfluence'], (defaultContent.tuningProfiles?.find(p=>p.id===setup.scenario.tuningProfileId) as unknown as {ai?:{signInfluence?:unknown}})?.ai?.signInfluence ?? influence);
+      describeInfluence(influence);
       const planRU = get<HTMLSelectElement>('maneuver-ru'); const priorRU = planRU.value; planRU.replaceChildren();
       for (const entry of setup.scenario.entries) planRU.add(new Option(entry.id, entry.id));
       if (setup.scenario.entries.some(entry => entry.id === priorRU)) planRU.value = priorRU;
@@ -163,6 +179,28 @@ export function mountSetupInspector(scenarioJson: string, contentJson: string, r
     const receipt = session.submit(command, { paused: !playing });
     get('command-feedback').textContent = receipt.accepted ? `Queued ${type} for tick ${effectiveTick}; active state changes only at that boundary.` : receipt.reason;
   };
+  let pendingBulk: ReturnType<typeof previewBulkEdit> | null = null; let bulkBefore: {scenario:string;content:string} | null = null;
+  let bulkAfter: {scenario:string;content:string} | null = null;
+  get('bulk-preview').addEventListener('click', () => void attempt(() => {
+    pendingBulk=null;get<HTMLButtonElement>('bulk-apply').disabled=true;
+    const raw=get<HTMLInputElement>('bulk-value').value; let value:unknown=raw;
+    try {value=JSON.parse(raw) as unknown;} catch { /* Enum input may be plain text. */ }
+    const draft=validateSetup(parseSetupJson(scenario.value,'scenario'),parseSetupJson(content.value,'content'));
+    pendingBulk=previewBulkEdit(draft,get<HTMLSelectElement>('bulk-field').value,value);
+    bulkBefore={scenario:scenario.value,content:content.value}; get('bulk-changes').textContent=JSON.stringify(pendingBulk.changes,null,2);get<HTMLButtonElement>('bulk-apply').disabled=false;
+  }));
+  get('bulk-apply').addEventListener('click', () => void attempt(() => {
+    if(!pendingBulk||!bulkBefore)throw new Error('Preview the bulk edit first');
+    if(scenario.value!==bulkBefore.scenario||content.value!==bulkBefore.content)throw new Error('Draft changed after preview; preview again');
+    scenario.value=JSON.stringify(pendingBulk.configuration.scenario,null,2);content.value=JSON.stringify(pendingBulk.configuration.content,null,2);
+    bulkAfter={scenario:scenario.value,content:content.value};pendingBulk=null;get<HTMLButtonElement>('bulk-apply').disabled=true;get<HTMLButtonElement>('bulk-undo').disabled=false;
+    refreshNumeric();showPreview();get('draft-status').textContent='Unsaved bulk edit applied to draft. Active race is unchanged.';
+  }));
+  get('bulk-undo').addEventListener('click', () => void attempt(() => {
+    if(!bulkBefore||!bulkAfter)throw new Error('No bulk edit to restore');
+    if(scenario.value!==bulkAfter.scenario||content.value!==bulkAfter.content)throw new Error('Further edits exist; restore a saved scenario or undo those edits first');
+    scenario.value=bulkBefore.scenario;content.value=bulkBefore.content;bulkAfter=null;pendingBulk=null;refreshNumeric();showPreview();get<HTMLButtonElement>('bulk-undo').disabled=true;get<HTMLButtonElement>('bulk-apply').disabled=true;get('draft-status').textContent='Original values restored to draft.';
+  }));
   get('raise-sign').addEventListener('click', () => submit('raiseSign'));
   get('lower-sign').addEventListener('click', () => submit('lowerSign'));
   get('queue-override').addEventListener('click', () => submit('developerOverride'));

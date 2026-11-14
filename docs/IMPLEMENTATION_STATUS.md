@@ -134,3 +134,7 @@ Owner explicitly authorized proceeding without the unavailable full audit. This 
 ## v0.3 G
 
 Implemented shared-engine Combat/Pure rulesets, default Combat, persisted selector/result/batch labels, AI candidate suppression plus authoritative enforcement, Attack sign rejection and explicit intentional/incidental diagnostic classification. Four paired/negative/contact tests and browser selector/sign enforcement passed; typecheck/lint/build passed. Existing combat checks retain their assertions; full final regression follows I/J.
+
+## v0.3 H
+
+All-RU numeric/nested personality/beast/strategy edits support validated old/new preview, atomic apply, guarded restoration and unsaved-draft status; per-RU controls remain. Sign utility influence has dedicated global/per-sign controls with effective values/reset, persisted in configuration; additional attribute tuning is materialized in shipped content for normal editors. Nine bulk/developer tests passed; Chromium verified 12 beasts across six RUs, apply/restore/invalid rejection, influence edits/reset and active-race isolation. Typecheck/lint/build passed.
